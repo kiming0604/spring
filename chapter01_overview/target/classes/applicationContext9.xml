@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	
+	<!-- 
+		해당 xml 파일 생성 방법
+		1. Spring Bean Configuration File
+		2. 하단 탭 중 Namespaces 에서 Context 체크 -> 상단 Beans 태그에 context 추가
+	 -->
+	
+	
+	<!-- spring bean configuration file -->
+	<!-- bean 생성 방법 1
+	<bean id="객체명(인스턴스명)" class="클래스명">
+		<property name="필드명1">
+			<value>값1</value>						// 문자든 숫자든 큰 따옴표 없이 그냥 적어준다.
+		</property>
+		<property name="필드명2" value="값2"/>			// 문자든 숫자든 큰 따옴표로 적어둔다.
+		** property를 이용하여 set 주입
+		
+		<constructor-arg name="필드명3" value="값3"/>
+		** constructor를 이용하여 생성자 주입
+	</bean>
+	-->
+	
+	<!-- scope : singleton, prototype
+		 singleton : 객체를 하나만 만든다.
+		 prototype : 객체를 만들라고 하면 계속 새롭게 만든다.
+		 default값은 singleton이다.
+	 -->
+	<!-- 
+	     생성자 인젝션을 위해 <constructor - arg/> 태그를 추가하고
+	     생성자 인자로 전달 할 객체의 아이디를 ref 속성으로 참조한다
+	 -->
+	
+      <bean id="cBean1" class="org.jae.DI_9.CollectionBean">
+      <property name="addressList">
+          <list>
+            <value>이상한 나라</value>
+            <value>나니아</value>
+            <value>호빗골</value>
+          </list>
+      </property>
+      </bean>
+      <bean id="cBean2" class="org.jae.DI_9.CollectionBean">
+	<property name="addressSet">
+		<set>
+			 <value>이상한 나라</value>
+            <value>나니아</value>
+            <value>호빗골</value>
+		</set>
+	</property>
+      </bean>
+      <bean id="cBean3" class="org.jae.DI_9.CollectionBean">
+      <property name="addressMap">
+        <map>
+           <entry>
+               <key><value>앨리스</value> </key>
+                    <value>이상한 나라</value>
+           </entry>
+           <entry>
+               <key><value>아슬란</value> </key>
+                    <value>나니아</value>
+           </entry>
+             <entry>
+               <key><value>프로도 배긴스</value> </key>
+                    <value>호빗골</value>
+           </entry>
+        </map>
+      </property>
+      </bean>
+
+	
+</beans>
