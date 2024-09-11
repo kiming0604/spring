@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+해당 xml 문서의 구조가 마이바티스의 매퍼를 구성하는 구조로 나타나 있음을 알려주는 설정
+특히 이 설정은 configure 부분의 xml과 다르므로 설정시 주의 필요 
+-->
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.jae.mapper.ReplyMapper"> <!-- 마이바티스 환경 설정 xml에 사용할 이름 -->
+ 
+  <insert id="insert" parameterType="org.jae.domain.ReplyVO">
+   insert into tbl_reply(RNO , BNO, REPLY, REPLYER, REPLYDATE ,UPDATEDATE)
+   values(seq_reply.nextval,#{bno}, #{reply}, #{replyer}, sysdate , sysdate)
+   </insert>
+   
+   <select id="getList"  parameterType="int" resultType="org.jae.domain.ReplyVO">
+   SELECT rno , reply , replyer , replydate , updatedate FROM tbl_reply WHERE bno = #{bno}
+   </select>
+    
+   <select id="read"  parameterType="int" resultType="org.jae.domain.ReplyVO">
+   SELECT * FROM tbl_reply WHERE rno = #{rno}
+   </select>
+   
+   <delete id="delete" parameterType="int">
+      DELETE FROM tbl_reply WHERE rno = #{rno}
+   </delete>
+     
+    <update id="update" parameterType="org.jae.domain.ReplyVO">
+   UPDATE tbl_reply
+   SET reply = #{reply}, updatedate = sysdate
+   WHERE rno = #{rno}
+   
+   </update>
+ 
+</mapper>

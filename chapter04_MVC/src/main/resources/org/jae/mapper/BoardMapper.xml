@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+해당 xml 문서의 구조가 마이바티스의 매퍼를 구성하는 구조로 나타나 있음을 알려주는 설정
+특히 이 설정은 configure 부분의 xml과 다르므로 설정시 주의 필요 
+-->
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.jae.mapper.BoardMapper"> <!-- 마이바티스 환경 설정 xml에 사용할 이름 -->
+
+   
+   <insert id="insert" parameterType="org.jae.domain.BoardVO">
+   insert into tbl_board(bno, title, content, writer)
+   values(seq_board.nextval, #{title}, #{content}, #{writer})
+   </insert>
+    
+    <select id="read" resultType="org.jae.domain.BoardVO">
+   SELECT * FROM TBL_BOARD WHERE bno = #{bno}
+   </select>
+   
+   <delete id="delete" parameterType="org.jae.domain.BoardVO">
+      DELETE FROM tbl_board WHERE bno = #{bno}
+   </delete>
+   
+   <update id="update" parameterType="org.jae.domain.BoardVO">
+   UPDATE tbl_board
+   SET title = #{title}, content = #{content}, writer = #{writer}
+   WHERE bno = #{bno}
+   
+   </update>
+  <select id="getList" 
+  parameterType="org.jae.domain.Criteria" 
+  resultType="org.jae.domain.BoardVO">
+  
+     <![CDATA[
+   select bno , writer, title , regdate
+      from (
+         select rownum rn, bno, title, writer , regdate
+         from (
+            select *
+               from TBL_BOARD
+               order by bno desc
+               )
+            where rownum <= #{pageNum} * #{amount}
+         )
+         where rn > (#{pageNum} -1) * #{amount}
+     ]]>
+ 
+ </select>
+ 
+ <select id="getTotal" resultType="int">
+    SELECT COUNT(*) FROM TBL_BOARD
+ </select>
+ 
+</mapper>
