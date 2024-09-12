@@ -54,8 +54,8 @@ const replyService = (function() {
 	    });
 	}
 	
-	function update(rno, rvo, callback) {
-	    fetch('/reply/' + rno, {
+	function update(rvo, callback) {
+	    fetch('/reply/' + rvo.rno , {
 	        method: 'PUT', // HTTP PUT 메서드를 사용
 	        body: JSON.stringify(rvo), // 전송할 데이터를 JSON 형식으로 변환
 	        headers: {
