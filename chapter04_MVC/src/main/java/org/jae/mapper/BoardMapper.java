@@ -2,6 +2,7 @@ package org.jae.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.jae.domain.BoardVO;
 import org.jae.domain.Criteria;
 
@@ -18,6 +19,9 @@ public interface BoardMapper {
      public int update(BoardVO bvo);
 	 
      public List<BoardVO> getList(Criteria cri);
-	
+	// 전체 게시글 수
      public int getTotal();
+     // 댓글 수 수정
+     public int updateReplyCnt(@Param("amount") int amount, @Param("bno") int bno);
+
 }

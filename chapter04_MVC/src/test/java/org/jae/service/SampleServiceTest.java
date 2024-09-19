@@ -1,33 +1,31 @@
 package org.jae.service;
 
-import org.junit.Test; 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import lombok.extern.log4j.Log4j;
-
-
 @Log4j
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+
 public class SampleServiceTest {
 	@Autowired
-	private SampleService service;
+	private SampleTxService service;
 	
 	@Test
-	public void testClass() {
-		log.info(service);
-		log.info(service.getClass().getName());
+	public void testLong() {
+		String str = "Starry\r\n" ;
+		
+		log.info(str.getBytes().length);
+		
+		service.addData(str);
+		
 	}
-	@Test
-	public void testDoAdd() throws Exception{
-		log.info(service.doAdd("123", "456"));
-	}
-	@Test
-	public void testDoAddError() throws Exception{
-		log.info(service.doAdd("123", "abc"));
-	}
+	
 
 }

@@ -34,9 +34,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   resultType="org.jae.domain.BoardVO">
   
      <![CDATA[
-   select bno , writer, title , regdate
+   select bno , writer, title , regdate , replycnt
       from (
-         select rownum rn, bno, title, writer , regdate
+         select rownum rn, bno, title, writer , regdate , replycnt
          from (
             select *
                from TBL_BOARD
@@ -52,5 +52,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  <select id="getTotal" resultType="int">
     SELECT COUNT(*) FROM TBL_BOARD
  </select>
+ 
+ <update id="updateReplyCnt">
+     UPDATE TBL_BOARD
+     SET
+         replycnt = replycnt + #{amount}
+     WHERE
+         BNO = #{bno}
+ </update>
  
 </mapper>
