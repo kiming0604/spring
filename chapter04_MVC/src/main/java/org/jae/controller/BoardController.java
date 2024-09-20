@@ -1,17 +1,27 @@
 package org.jae.controller;
 
+import java.util.List;
+
+import org.jae.domain.BoardAttachVO;
 import org.jae.domain.BoardVO;
 import org.jae.domain.Criteria;
 import org.jae.domain.PageDTO;
 import org.jae.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.sun.jdi.connect.AttachingConnector;
 
 import lombok.extern.log4j.Log4j;
 
@@ -61,6 +71,10 @@ public class BoardController {
 		
 		service.register(vo);
 		
+		if (vo.getAttachList() != null) {
+			vo.getAttachList().forEach(attach -> log.info("잘 넘어옵니다 : " + attach));
+		}
+		
 		rttr.addFlashAttribute("result" , "success");
 		
 		return "redirect:/board/list";
@@ -95,5 +109,14 @@ public class BoardController {
 		log.info("remove..." + bno);
 		service.remove(bno); // 불러주고
 		return "redirect:/board/list"; // 기존의 path
+	}
+	
+	// 첨부 파일 리스트 조회
+	
+	@ResponseBody
+	@GetMapping(value = "/getAttachList/{bno}" , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<BoardAttachVO>> getAttachList(@PathVariable("bno") int bno){
+		log.info("getAttachList..." + bno);
+		return new ResponseEntity<List<BoardAttachVO>>(service.getAttachList(bno) ,HttpStatus.OK);
 	}
 }

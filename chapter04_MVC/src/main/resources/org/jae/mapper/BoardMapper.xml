@@ -10,11 +10,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="org.jae.mapper.BoardMapper"> <!-- 마이바티스 환경 설정 xml에 사용할 이름 -->
 
    
-   <insert id="insert" parameterType="org.jae.domain.BoardVO">
-   insert into tbl_board(bno, title, content, writer)
-   values(seq_board.nextval, #{title}, #{content}, #{writer})
-   </insert>
-    
+<insert id="insert" parameterType="org.jae.domain.BoardVO">
+           <selectKey keyProperty="bno" resultType="int" order="BEFORE"> 
+              SELECT seq_board.nextval FROM dual
+           </selectKey>
+    INSERT INTO tbl_board (bno, writer, title, content, regdate)
+    VALUES (#{bno}, #{writer}, #{title}, #{content}, SYSDATE)
+</insert>
+
+
+
     <select id="read" resultType="org.jae.domain.BoardVO">
    SELECT * FROM TBL_BOARD WHERE bno = #{bno}
    </select>
@@ -29,6 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    WHERE bno = #{bno}
    
    </update>
+   
+   
   <select id="getList" 
   parameterType="org.jae.domain.Criteria" 
   resultType="org.jae.domain.BoardVO">
