@@ -9,17 +9,13 @@ document.querySelectorAll('.menu a').forEach(a => {
 		
 		event.preventDefault(); 
 		
-		let hrefValue = a.getAttribute('href'); 
-		
-		console.log(hrefValue);
-		
+		let hrefValue = a.getAttribute('href'); 	
 		
 		if (hrefValue === 'boardList') {
-			let pageData = getStorageData();
-        	let sendData = `pageNum=${pageData.pageNum}&amount=${pageData.amount}`
-			
-		    location.href = "/board/list?" + sendData;
-		}
+				location.href = "/board/list";
+			}
+
+		
 	});
 });
 
@@ -43,7 +39,7 @@ function setStorageData(pageNum,amount) {
 		pageNum : pageNum,
 		amount : amount
 	}
-	localStorage.setItem('page_data' , JSON.stringify(pageData));
+	localStorage.setItem('page_data', JSON.stringify(pageData));
 }
 
 function getStorageData() {

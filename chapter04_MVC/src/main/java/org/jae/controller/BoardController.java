@@ -62,6 +62,7 @@ public class BoardController {
 		int total = service.getTotal();
 		model.addAttribute("pageMaker", new PageDTO(cri,total));
 		model.addAttribute("list" , service.getList(cri));
+		System.out.println("--" + cri.getPageNum());
 		return "board/list";
 	}
 	//게시글 등록
