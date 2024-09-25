@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.jae.mapper.MemberMapper">
+
+    <resultMap type="org.jae.domain.MemberVO" id="memberMap">
+        <result property="userId" column="userId"/>
+        <result property="userPw" column="userPw"/>
+        <result property="userName" column="userName"/>
+        <result property="regDate" column="regDate"/>
+        <result property="updateDate" column="updateDate"/>
+        <collection property="authList" resultMap="authMap"/>
+    </resultMap>
+
+    <resultMap type="org.jae.domain.AuthVO" id="authMap">
+        <result property="userId" column="userId"/>
+        <result property="auth" column="auth"/>
+    </resultMap>
+
+    <select id="read" resultMap="memberMap">
+        SELECT
+            mem.*, auth.auth
+        FROM 
+            tbl_member mem LEFT JOIN tbl_member_auth auth
+        ON 
+            mem.userid = auth.userid
+        WHERE
+            mem.userid = #{userId} <!-- 파라미터 이름이 userId로 일치해야 함 -->
+    </select>
+
+</mapper>
