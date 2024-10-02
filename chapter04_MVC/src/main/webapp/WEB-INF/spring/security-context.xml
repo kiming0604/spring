@@ -19,14 +19,15 @@
         <security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />
 
         <!-- 로그인 폼 설정 -->
-        <security:form-login login-page="/customLogin"
-                             authentication-success-handler-ref="customLoginSuccess" />
-
+       <!-- <security:form-login login-page="/customLogin"
+                             authentication-success-handler-ref="customLoginSuccess" />-->
+            <security:form-login login-page="/customLogin"/>
         <!-- 로그아웃 설정 -->
-        <security:logout logout-url="/customLogout" 
-        invalidate-session="true" 
-        delete-cookies="remember-me"
-        />
+       <security:logout logout-url="/customLogout" 
+                 logout-success-url="/" 
+                 invalidate-session="true" 
+                 delete-cookies="remember-me" />
+
 
         <!-- 접근 거부 핸들러 설정 -->
         <security:access-denied-handler ref="customAccessDenied" />

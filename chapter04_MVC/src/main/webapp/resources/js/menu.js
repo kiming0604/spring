@@ -14,6 +14,7 @@ document.querySelectorAll('.menu a').forEach(a => {
 		if (hrefValue === 'boardList') {
 				location.href = "/board/list";
 			}
+		
 
 		
 	});
@@ -45,4 +46,15 @@ function setStorageData(pageNum,amount) {
 function getStorageData() {
 	return JSON.parse(localStorage.getItem('page_data'));
 	
+}
+
+function loginPage(){
+	location.href = "/customLogin";
+	
+}
+function logoutPage(){
+	location.href="/customLogout";
+}
+function joinPage() {
+	location.href="/sample/memberRegister"
 }

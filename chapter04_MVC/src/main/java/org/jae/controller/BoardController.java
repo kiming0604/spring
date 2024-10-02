@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,10 +81,10 @@ public class BoardController {
 		
 		return "redirect:/board/list";
 	}
-	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/register")
-	public String register2() {
-		log.info("register...2");
+	public String register() {
+		log.info("register...");
 	
 		return "/board/register";
 	}
@@ -120,4 +121,5 @@ public class BoardController {
 		log.info("getAttachList..." + bno);
 		return new ResponseEntity<List<BoardAttachVO>>(service.getAttachList(bno) ,HttpStatus.OK);
 	}
+	
 }
