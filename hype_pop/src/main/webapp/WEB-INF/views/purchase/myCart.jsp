@@ -17,5 +17,5 @@
  <jsp:include page="layout/popUpFooter.jsp" />
  <jsp:include page="layout/goodsNavBar.jsp" />
 </body>
-<script type="text/javascript" src="/resources/goodsJs/myCart.js"></script>
+<script type="text/javascript" src="/resources/purchaseJs/myCart.js"></script>
 </html>

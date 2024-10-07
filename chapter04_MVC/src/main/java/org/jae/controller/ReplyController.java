@@ -31,35 +31,35 @@ public class ReplyController {
 	private ReplyService service;
 	
 	/*
-	    * 동작에 따른 url 방법(http 전송 방식)
-	    * 1. 등록 - /reply/new - POST
-	    * 2. 조회 - /reply/:rno - GET
-	    * 3. 삭제 - /reply/:rno - DELETE
-	    * 4. 수정 - /reply/:rno - PUT or PATCH
-	    * 5. 전체 댓글 - /reply/pages/:bno - GET
-	    *             : 은 경로에 데이터 실어서 보내겠다는 뜻 즉 bno를 보내겠다
+	    * �룞�옉�뿉 �뵲瑜� url 諛⑸쾿(http �쟾�넚 諛⑹떇)
+	    * 1. �벑濡� - /reply/new - POST
+	    * 2. 議고쉶 - /reply/:rno - GET
+	    * 3. �궘�젣 - /reply/:rno - DELETE
+	    * 4. �닔�젙 - /reply/:rno - PUT or PATCH
+	    * 5. �쟾泥� �뙎湲� - /reply/pages/:bno - GET
+	    *             : �� 寃쎈줈�뿉 �뜲�씠�꽣 �떎�뼱�꽌 蹂대궡寃좊떎�뒗 �쑜 利� bno瑜� 蹂대궡寃좊떎
 	    * 
-	    * == REST 방식으로 설계할 땐 PK 기준으로 작성하는 것이 좋다. PK 만으로 CRUD가 가능하기 때문
-	    * == 다만 댓글 목록은 PK 만으론 안되고 bno와 페이지 번호 정보가 필요
+	    * == REST 諛⑹떇�쑝濡� �꽕怨꾪븷 �븧 PK 湲곗��쑝濡� �옉�꽦�븯�뒗 寃껋씠 醫뗫떎. PK 留뚯쑝濡� CRUD媛� 媛��뒫�븯湲� �븣臾�
+	    * == �떎留� �뙎湲� 紐⑸줉�� PK 留뚯쑝濡� �븞�릺怨� bno�� �럹�씠吏� 踰덊샇 �젙蹂닿� �븘�슂
 	    */
 	
-	// 1.등록
-	                                    //전달 받은 데이터의 타입  json타입이라는 뜻                 // 응답하는 데이터의 타입
+	// 1.�벑濡�
+	                                    //�쟾�떖 諛쏆� �뜲�씠�꽣�쓽 ���엯  json���엯�씠�씪�뒗 �쑜                 // �쓳�떟�븯�뒗 �뜲�씠�꽣�쓽 ���엯
 	@PostMapping(value = "/new" , consumes = "application/json" , produces = MediaType.TEXT_PLAIN_VALUE)
-	                                      // 전달받은 json을 자바에서 쓰기위해 받을때 바로 변환 매우 편함
+	                                      // �쟾�떖諛쏆� json�쓣 �옄諛붿뿉�꽌 �벐湲곗쐞�빐 諛쏆쓣�븣 諛붾줈 蹂��솚 留ㅼ슦 �렪�븿
 	public ResponseEntity<String> create(@RequestBody ReplyVO rvo) {
 		log.info("replyVO : " + rvo);
 		
 		int insertCount = service.register(rvo);
 		
 		log.info("insertCount : " + insertCount);
-		                                 //response엔티티를 사용하면 success와같은 상태를 보내줄수있다
+		                                 //response�뿏�떚�떚瑜� �궗�슜�븯硫� success��媛숈� �긽�깭瑜� 蹂대궡以꾩닔�엳�떎
 		return insertCount == 1 ? new ResponseEntity<String>("success" , HttpStatus.OK) :
 								  new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	// 2.댓글 목록                 // bno값을 받겠다는 의미
-	@GetMapping(value = "pages/{bno}" ,   //미디어 타입으로 응답 타입을 xml와 json둘다 하겠다는 뜻
+	// 2.�뙎湲� 紐⑸줉                 // bno媛믪쓣 諛쏄쿋�떎�뒗 �쓽誘�
+	@GetMapping(value = "pages/{bno}" ,   //誘몃뵒�뼱 ���엯�쑝濡� �쓳�떟 ���엯�쓣 xml�� json�몮�떎 �븯寃좊떎�뒗 �쑜
 			    produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
 				            MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<List<ReplyVO>> getList(
@@ -69,14 +69,14 @@ public class ReplyController {
 	}
 	
 	
-	// 3.댓글 조회
-	// 맨 위 주석을 보면 	    * 2. 조회 - /reply/:rno - GET 따라서 위 처럼  pages는 필요없음
+	// 3.�뙎湲� 議고쉶
+	// 留� �쐞 二쇱꽍�쓣 蹂대㈃ 	    * 2. 議고쉶 - /reply/:rno - GET �뵲�씪�꽌 �쐞 泥섎읆  pages�뒗 �븘�슂�뾾�쓬
 	@GetMapping(value = "/{rno}" ,
 			    produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
 			                MediaType.APPLICATION_XML_VALUE})
-	 // replyVO 타입만 있으면 되니까 List는 빼주고
+	 // replyVO ���엯留� �엳�쑝硫� �릺�땲源� List�뒗 鍮쇱＜怨�
 	public ResponseEntity<ReplyVO> get(
-			                       // rno 받아준다
+			                       // rno 諛쏆븘以��떎
 			                      @PathVariable("rno") int rno) {
 		log.info("get......." + rno);
 		
@@ -85,19 +85,19 @@ public class ReplyController {
 		return result;
 		
 	}
-	// 4. 삭제  /reply/:rno - DELETE
-     // 딜리트 매핑으로 바로 딜리트 동작 수행 가능
+	// 4. �궘�젣  /reply/:rno - DELETE
+     // �뵜由ы듃 留ㅽ븨�쑝濡� 諛붾줈 �뵜由ы듃 �룞�옉 �닔�뻾 媛��뒫
 	@DeleteMapping(value = "/{rno}", produces = MediaType.TEXT_PLAIN_VALUE )
 	public ResponseEntity<String> remove(@PathVariable("rno") int rno){
 		log.info("remove......." + rno);
 		return service.remove(rno) == 1 ?
-				  // 1이면 성공 보내주고
+				  // 1�씠硫� �꽦怨� 蹂대궡二쇨퀬
 				  new ResponseEntity<String>("success" , HttpStatus.OK) :
-				  // 아니면 서버에러 띄워준다
+				  // �븘�땲硫� �꽌踰꾩뿉�윭 �쓣�썙以��떎
 				  new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	// 5. 수정 /reply/:rno - PUT or PATCH
+	// 5. �닔�젙 /reply/:rno - PUT or PATCH
 	
 	@RequestMapping(method = {RequestMethod.PUT , RequestMethod.PATCH},
 					value = "/{rno}" ,
@@ -114,9 +114,9 @@ public class ReplyController {
 		log.info("modifyCount : " + modifyCount);
 		
 		return modifyCount == 1 ? 
-				  // 1이면 성공 보내주고
+				  // 1�씠硫� �꽦怨� 蹂대궡二쇨퀬
 				  new ResponseEntity<String>("success" , HttpStatus.OK) :
-				  // 아니면 서버에러 띄워준다
+				  // �븘�땲硫� �꽌踰꾩뿉�윭 �쓣�썙以��떎
 				  new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	

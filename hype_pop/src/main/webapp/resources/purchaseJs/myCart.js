@@ -4,7 +4,7 @@ document.querySelectorAll('button').forEach(a => {
 
         if (buttonName === "purchaseBTN") {
             
-        	location.href = "/goodsStore/goPurchase";
+        	location.href = "/purchase/goPurchase";
             }
       
     });

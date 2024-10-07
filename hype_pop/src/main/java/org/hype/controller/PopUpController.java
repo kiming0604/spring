@@ -50,7 +50,8 @@ public class PopUpController {
     // 검색 데이터가 없을 경우 처리하는 메서드
     @GetMapping("/calendar") // 다른 URL 경로로 매핑
     public String popUpCalendar() {
-        // 검색 데이터가 없는 경우의 처리
+       
+    	// 팝업 스토어 정보 받아오는 로직 필요합니다!
         
         return "/popUp/calendar"; // 검색 결과를 보여줄 JSP 페이지 이름
     }

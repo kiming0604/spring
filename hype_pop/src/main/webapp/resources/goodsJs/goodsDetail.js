@@ -131,11 +131,11 @@ document.querySelectorAll('.actionButtons button').forEach(a => {
 
         if (buttonName === "addToCart") {
             if (confirm("장바구니로 이동하시겠습니까?")) {
-                location.href = "/goodsStore/goCart";
+                location.href = "/purchase/goCart";
             }
         } else if (buttonName === "directPurchase") {
             console.log("바로 결제");
-            location.href = "/goodsStore/goPurchase";
+            location.href = "/purchase/goPurchase";
         }
     });
 });

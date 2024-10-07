@@ -24,31 +24,34 @@ public class GoodsController {
         
         return "/goodsStore/goodsDetails"; // 검색 결과를 보여줄 JSP 페이지 이름
     }
-    @GetMapping("/goCart")
-    public String goCart() {
-         
-         log.info("장바구니로");
-        
-        return "/goodsStore/myCart"; // 검색 결과를 보여줄 JSP 페이지 이름
-    }
-    @GetMapping("/goPurchase")
-    public String goPurchase() {
-         
-         log.info("결제정보 입력창으로");
-        
-        return "/goodsStore/goodsPurchase"; // 검색 결과를 보여줄 JSP 페이지 이름
-    }
+ 
+
     @GetMapping("/goodsMain")
     public String goodsMain() {
+    	
+    	// 굿즈들 정보 받아오는 로직 필요
          
          log.info("굿즈 메인페이지로");
         
         return "/goodsStore/goodsMain"; // 검색 결과를 보여줄 JSP 페이지 이름
     }
-    
+//    @GetMapping("/goodsMain")
+//    public String goodsMain(Model model) {
+//        log.info("굿즈 메인페이지로");
+//
+//        // 서비스에서 굿즈 리스트를 받아옴
+//        List<Goods> goodsList = goodsService.getGoodsList();
+//        
+//        // 모델에 굿즈 리스트 추가
+//        model.addAttribute("goodsList", goodsList);
+//        
+//        return "/goodsStore/goodsMain"; // 메인 페이지로 이동
+//    }
     @GetMapping("/goodsSearch")
     public String goodsSearch() {
          
+    	// 굿즈들 정보 받아오는 로직 필요
+    	
          log.info("굿즈 검색페이지로");
         
         return "/goodsStore/goodsSearch"; // 검색 결과를 보여줄 JSP 페이지 이름
