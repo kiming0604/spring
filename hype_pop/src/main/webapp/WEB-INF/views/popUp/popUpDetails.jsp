@@ -152,8 +152,9 @@
 
 	<!-- 푸터 포함 -->
     <jsp:include page="layout/popUpFooter.jsp" />
+    <jsp:include page="layout/popUpNavBar.jsp" />
 
     <!-- JavaScript 파일 연결 -->
-    <script type="text/javascript" src="/resources/js/popUpDetails.js"></script>
+    <script type="text/javascript" src="/resources/popUpJs/popUpDetails.js"></script>
 </body>
 </html>

@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/goodsStore/*")
 public class GoodsController {
     @GetMapping("/goodsDetails")
-    public String search(@RequestParam("goodsName") String goodsName, Model model) {
+    public String goodsSearch(@RequestParam("goodsName") String goodsName, Model model) {
         // searchData를 사용하여 검색 로직을 처리
         System.out.println("검색 데이터: " + goodsName);
         
@@ -24,6 +24,33 @@ public class GoodsController {
         
         return "/goodsStore/goodsDetails"; // 검색 결과를 보여줄 JSP 페이지 이름
     }
+    @GetMapping("/goCart")
+    public String goCart() {
+         
+         log.info("장바구니로");
+        
+        return "/goodsStore/myCart"; // 검색 결과를 보여줄 JSP 페이지 이름
+    }
+    @GetMapping("/goPurchase")
+    public String goPurchase() {
+         
+         log.info("결제정보 입력창으로");
+        
+        return "/goodsStore/goodsPurchase"; // 검색 결과를 보여줄 JSP 페이지 이름
+    }
+    @GetMapping("/goodsMain")
+    public String goodsMain() {
+         
+         log.info("굿즈 메인페이지로");
+        
+        return "/goodsStore/goodsMain"; // 검색 결과를 보여줄 JSP 페이지 이름
+    }
     
-  
+    @GetMapping("/goodsSearch")
+    public String goodsSearch() {
+         
+         log.info("굿즈 검색페이지로");
+        
+        return "/goodsStore/goodsSearch"; // 검색 결과를 보여줄 JSP 페이지 이름
+    }
 }

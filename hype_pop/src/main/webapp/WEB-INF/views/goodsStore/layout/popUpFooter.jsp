@@ -29,5 +29,5 @@
     <div class="footer-bottom">
         <p>&copy; 2024 Your Company Name. 모든 권리 보유.</p>
     </div>
-<script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
+<script type="text/javascript" src="/resources/goodsJs/goodsMain.js"></script>
 </html>

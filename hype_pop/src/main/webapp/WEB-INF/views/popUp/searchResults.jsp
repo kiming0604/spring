@@ -69,6 +69,7 @@
 </div>
 
   <jsp:include page="layout/popUpFooter.jsp" />
+  <jsp:include page="layout/popUpNavBar.jsp" />
 </body>
-<script type="text/javascript" src="/resources/js/searchResults.js"></script>
+<script type="text/javascript" src="/resources/popUpJs/searchResults.js"></script>
 </html>

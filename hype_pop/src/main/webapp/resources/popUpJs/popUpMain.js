@@ -27,3 +27,20 @@ document.querySelectorAll('.popUpHeader span').forEach(a => {
 	}
   });
 });
+
+
+document.querySelectorAll('.popUpRecommend span').forEach(a => {
+	  a.addEventListener('click', (event) => {
+	    event.preventDefault(); 
+	    
+	    let popUpStoreName = a.textContent; // 텍스트 가져오기
+
+        console.log(popUpStoreName);
+
+        // GET 방식으로 보내줍니다
+        location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(popUpStoreName)}`;
+	    
+	  
+	  });
+	});
+
