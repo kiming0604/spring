@@ -3,7 +3,8 @@ package org.hype.controller;
 import java.util.List;
 import java.util.Locale;
 
-
+import org.hype.domain.popStoreVO; // popStoreVO í´ë˜ìŠ¤ import
+import org.hype.service.PopUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,17 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class HomeController {
 
-
+    @Autowired
+    PopUpService service;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Locale locale, Model model) {
         
-        // ÆË¾÷ ½ºÅä¾î ¸®½ºÆ®¸¦ ¼­ºñ½º¿¡¼­ ¹Ş¾Æ¿À´Â ÄÚµå ÇÊ¿ä
-    
+        List<popStoreVO> popUps = service.getPopularPopUps(); // ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
+        model.addAttribute("popUps", popUps); // ëª¨ë¸ì— ì¶”ê°€
         
-        // ¸ğµ¨¿¡ ÆË¾÷ ½ºÅä¾î ¸®½ºÆ®¸¦ Ãß°¡ÇÏ¿© JSP¿¡ Àü´Ş ÇÏ´Â ÄÚµå ÇÊ¿ä
-        
-
-        return "popUp/popUpMain"; // ¸ŞÀÎ È­¸é JSP·Î ÀÌµ¿
+        return "popUp/popUpMainPage"; 
     }
 }

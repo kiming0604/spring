@@ -1,5 +1,9 @@
 package org.hype.mapper;
 
-public interface PopUpMapper {
+import java.util.List;
 
+import org.hype.domain.popStoreVO;
+
+public interface PopUpMapper {
+	public List<popStoreVO> getPopularPopUps();
 }

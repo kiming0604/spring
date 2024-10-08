@@ -1,5 +1,6 @@
 package org.hype.controller;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,47 +13,48 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/hypePop")
 public class PopUpController {
-    
-    // °Ë»ö µ¥ÀÌÅÍ°¡ ÀÖÀ» °æ¿ì Ã³¸®ÇÏ´Â ¸Ş¼­µå
-    @GetMapping("/search") // URL °æ·Î¸¦ ¿©±â¼­ Á÷Á¢ ÁöÁ¤
+	
+
+    // ê²€ìƒ‰ ê²°ê³¼ë¥¼ ë³´ì—¬ì£¼ëŠ” ë©”ì„œë“œ
+    @GetMapping("/search") // URL ë§¤í•‘ì— í•´ë‹¹í•˜ëŠ” ë©”ì„œë“œ
     public String search(@RequestParam("searchData") String searchData, Model model) {
-        // searchData¸¦ »ç¿ëÇÏ¿© °Ë»ö ·ÎÁ÷À» Ã³¸®
-        System.out.println("°Ë»ö µ¥ÀÌÅÍ: " + searchData);
+        // searchDataë¥¼ ë°›ì•„ ê²€ìƒ‰ ê²°ê³¼ë¥¼ ì²˜ë¦¬
+        System.out.println("ê²€ìƒ‰ ë°ì´í„°: " + searchData);
         
-        // DB¿¡¼­ Á¤º¸ ¹Ş¾Æ¿À´Â ·ÎÁ÷ÀÌ ¿©±âÀÖ¾î¾ßÇÔ
+        // DBì—ì„œ ê²€ìƒ‰ ê²°ê³¼ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë¡œì§ ì‘ì„±
         
-        // searchData¸¦ ¸ğµ¨¿¡ Ãß°¡ÇÏ¿© JSP·Î Àü´Ş
+        // searchDataë¥¼ JSPì— ì „ë‹¬
         model.addAttribute("searchData", searchData);
         
-        return "/popUp/searchResults"; // °Ë»ö °á°ú¸¦ º¸¿©ÁÙ JSP ÆäÀÌÁö ÀÌ¸§
+        return "/popUp/searchResults"; // ê²€ìƒ‰ ê²°ê³¼ë¥¼ ë³´ì—¬ì£¼ëŠ” JSP ê²½ë¡œ
     }
- 
-    // °Ë»ö µ¥ÀÌÅÍ°¡ ¾øÀ» °æ¿ì Ã³¸®ÇÏ´Â ¸Ş¼­µå
-    @GetMapping("/search/noData") // ´Ù¸¥ URL °æ·Î·Î ¸ÅÇÎ
+
+    // ê²€ìƒ‰ ê²°ê³¼ê°€ ì—†ëŠ” ê²½ìš°ë¥¼ ì²˜ë¦¬í•˜ëŠ” ë©”ì„œë“œ
+    @GetMapping("/search/noData") // íŠ¹ì • URL ë§¤í•‘
     public String searchWithoutData() {
-        // °Ë»ö µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ìÀÇ Ã³¸®
+        // ê²€ìƒ‰ ê²°ê³¼ê°€ ì—†ëŠ” ê²½ìš° ì²˜ë¦¬ ë¡œì§
         
-        return "/popUp/searchResults"; // °Ë»ö °á°ú¸¦ º¸¿©ÁÙ JSP ÆäÀÌÁö ÀÌ¸§
+        return "/popUp/searchResults"; // ê²€ìƒ‰ ê²°ê³¼ë¥¼ ë³´ì—¬ì£¼ëŠ” JSP ê²½ë¡œ
     }
 
     @GetMapping("/popUpDetails")
     public String popUpDetails(@RequestParam("storeName") String storeName, Model model) {
-        // storeNameÀ» »ç¿ëÇÏ¿© °Ë»ö ·ÎÁ÷À» Ã³¸®
-        System.out.println("½ºÅä¾î ÀÌ¸§: " + storeName);
+        // storeNameì„ ë°›ì•„ ìƒì„¸ ì •ë³´ë¥¼ ì²˜ë¦¬
+        System.out.println("ìŠ¤í† ì–´ ì´ë¦„: " + storeName);
         
-        // DB¿¡¼­ Á¤º¸ ¹Ş¾Æ¿À´Â ·ÎÁ÷ÀÌ ¿©±âÀÖ¾î¾ßÇÔ
+        // DBì—ì„œ ìƒì„¸ ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë¡œì§ ì‘ì„±
         
-        // storeNameÀ» ¸ğµ¨¿¡ Ãß°¡ÇÏ¿© JSP·Î Àü´Ş
+        // storeNameì„ JSPì— ì „ë‹¬
         model.addAttribute("storeName", storeName);
         
-        return "/popUp/popUpDetails"; // ½ºÅä¾î ¼¼ºÎ Á¤º¸¸¦ º¸¿©ÁÙ JSP ÆäÀÌÁö ÀÌ¸§
+        return "/popUp/popUpDetailsPage"; // ìƒì„¸ ì •ë³´ë¥¼ ë³´ì—¬ì£¼ëŠ” JSP ê²½ë¡œ
     }
-    // °Ë»ö µ¥ÀÌÅÍ°¡ ¾øÀ» °æ¿ì Ã³¸®ÇÏ´Â ¸Ş¼­µå
-    @GetMapping("/calendar") // ´Ù¸¥ URL °æ·Î·Î ¸ÅÇÎ
+
+    // ìº˜ë¦°ë”ë¥¼ ë³´ì—¬ì£¼ëŠ” ë©”ì„œë“œ
+    @GetMapping("/calendar") // íŠ¹ì • URL ë§¤í•‘
     public String popUpCalendar() {
-       
-    	// ÆË¾÷ ½ºÅä¾î Á¤º¸ ¹Ş¾Æ¿À´Â ·ÎÁ÷ ÇÊ¿äÇÕ´Ï´Ù!
+        // ìº˜ë¦°ë” ì²˜ë¦¬ ë¡œì§
         
-        return "/popUp/calendar"; // °Ë»ö °á°ú¸¦ º¸¿©ÁÙ JSP ÆäÀÌÁö ÀÌ¸§
+        return "/popUp/calendar"; // ìº˜ë¦°ë”ë¥¼ ë³´ì—¬ì£¼ëŠ” JSP ê²½ë¡œ
     }
 }

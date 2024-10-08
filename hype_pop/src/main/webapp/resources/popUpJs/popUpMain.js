@@ -1,46 +1,49 @@
-// 헤더 스팬 클릭 이벤트
-document.querySelectorAll('.popUpHeader span').forEach(a => {
-  a.addEventListener('click', (event) => {
-    event.preventDefault(); 
-    
-    let headerClick = a.id;
-    let searchVal = document.querySelector("#popUpSearchBox").value; // ID 수정
-    let sendSearchData = `searchData=${encodeURIComponent(searchVal)}`; // 한국어로 검색할 가능성이 높아서 인코딩 처리를 따로 해 줘야 함
+document.addEventListener("DOMContentLoaded", () => {
+    // 헤더 스팬 클릭 이벤트
+    document.querySelectorAll('.popUpHeader span').forEach(a => {
+        a.addEventListener('click', (event) => {
+            event.preventDefault(); 
 
-    console.log(sendSearchData);
-    
-    if (headerClick === "hamburgerBTN") {
-      // 햄버거 버튼 클릭 시 메뉴 토글
-      console.log("햄버거 버튼");
-      const menuItems = document.querySelectorAll("ul li"); // li들 불러오고
-      menuItems.forEach(function(item) {
-        item.classList.toggle("show"); //토글로 껐다 켰다 할수있게 만들기
-      });
-      
-    } else if (headerClick === "searchBTN") {
-      location.href = `/hypePop/search?${sendSearchData}`; // 검색 버튼 클릭 시 이동
+            let headerClick = a.id;
+            let searchVal = document.querySelector("#popUpSearchBox").value; 
+            let sendSearchData = `searchData=${encodeURIComponent(searchVal)}`; 
 
-    } else if (headerClick === "notice") {
-      console.log("알림 아이콘");
-    }else if (headerClick === "mainLogo") {
-		location.href = "/"
-	}
-  });
+            console.log(sendSearchData);
+            
+            if (headerClick === "searchBTN") {
+                location.href = `/hypePop/search?${sendSearchData}`; 
+            } else if (headerClick === "notice") {
+                console.log("알림 아이콘");
+            } else if (headerClick === "mainLogo") {
+                location.href = "/"; 
+            } else if (headerClick === "goodsMainLogo") {
+                // 추가적인 행동 필요 시 작성
+            }
+        });
+    });
+
+    // 햄버거 메뉴 클릭 시 리스트 표시
+    document.getElementById('hamburgerBTN').addEventListener('click', () => {
+        const hamburgerList = document.getElementById('hamburgerList').querySelector('ul'); // hamburgerList ul 요소 가져오기
+        console.log('햄버거 버튼 클릭됨');
+
+        if (hamburgerList.style.display === "block") {
+            hamburgerList.style.display = "none"; // 현재가 block이면 none으로 변경
+        } else {
+            hamburgerList.style.display = "block"; // 현재가 block이 아니면 block으로 변경
+        }
+    });
+
+
+    // 추천 팝업 스팬 클릭 이벤트
+    document.querySelectorAll('.popUpRecommend span').forEach(a => {
+        a.addEventListener('click', (event) => {
+            event.preventDefault(); 
+            
+            let popUpStoreName = a.textContent; 
+            console.log(popUpStoreName);
+            location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(popUpStoreName)}`;
+        });
+    });
 });
-
-
-document.querySelectorAll('.popUpRecommend span').forEach(a => {
-	  a.addEventListener('click', (event) => {
-	    event.preventDefault(); 
-	    
-	    let popUpStoreName = a.textContent; // 텍스트 가져오기
-
-        console.log(popUpStoreName);
-
-        // GET 방식으로 보내줍니다
-        location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(popUpStoreName)}`;
-	    
-	  
-	  });
-	});
 

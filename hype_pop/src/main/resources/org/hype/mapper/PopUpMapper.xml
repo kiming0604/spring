@@ -1,1 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.hype.mapper.PopUpMapper"> <!-- 정확한 Mapper 인터페이스 경로 -->
+
+  <select id="getPopularPopUps" resultType="org.hype.domain.popStoreVO">
+    <![CDATA[
+        SELECT * 
+        FROM pop_main_tbl 
+        WHERE PSNO IN (
+            SELECT PSNO 
+            FROM (
+                SELECT PSNO 
+                FROM pop_main_tbl 
+                WHERE PSSTARTDATE <= SYSDATE 
+                  AND PSENDDATE >= SYSDATE 
+                ORDER BY LIKECOUNT DESC
+            ) 
+            WHERE ROWNUM <= 8
+        )
+        ORDER BY LIKECOUNT DESC
+    ]]>
+</select>
+
+
+</mapper>

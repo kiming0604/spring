@@ -5,7 +5,7 @@
 
 	<!-- The definition of the Root Spring Container shared by all Servlets 
 		and Filters -->
-	<context-param>
+		<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/root-context.xml</param-value>
 	</context-param>
@@ -27,6 +27,8 @@
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+
+
 		<multipart-config>
 			<location>C:\\upload</location>
 			<max-file-size>20971520</max-file-size>
@@ -39,7 +41,6 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-
 	<!-- 추가. 인코딩 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
