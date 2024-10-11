@@ -2,6 +2,7 @@ package org.hype.controller;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.hype.domain.popStoreVO; // popStoreVO 클래스 import
 import org.hype.service.PopUpService;
@@ -15,14 +16,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HomeController {
 
     @Autowired
-    PopUpService service;
+    private PopUpService service;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Locale locale, Model model) {
-        
-        List<popStoreVO> popUps = service.getPopularPopUps(); // 데이터 가져오기
-        model.addAttribute("popUps", popUps); // 모델에 추가
-        
-        return "popUp/popUpMainPage"; 
+        int userno = 5; // 임의의 사용자 번호 (예: 로그인한 사용자의 번호)
+
+        // 인기 팝업 스토어 조회
+        List<popStoreVO> popularPopUps = service.getPopularPopUps(); 
+        model.addAttribute("popularPopUps", popularPopUps); // 모델에 인기 팝업 추가
+
+        // 사용자 관심사에 따른 상위 스토어 조회
+        Map<String, List<popStoreVO>> topStoresByInterest = service.getTopStoresByInterests(userno);
+        model.addAttribute("topStoresByInterest", topStoresByInterest); // 모델에 관심사별 상위 스토어 추가
+
+        return "popUp/popUpMainPage"; // JSP 페이지 이름 반환
     }
 }

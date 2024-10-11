@@ -1,4 +1,16 @@
+
+
 document.addEventListener("DOMContentLoaded", function () {
+	 var linkElement = document.createElement("link");
+	    
+	    // <link> 요소의 속성 설정
+	    linkElement.rel = "stylesheet";
+	    linkElement.type = "text/css";
+	    linkElement.href = "/resources/css/popUpStoreDetails.css";  // 경로를 여기에 입력
+	    
+	    // <head> 또는 <body>에 <link> 요소 추가
+	    document.head.appendChild(linkElement);  // <head>에 추가
+	
     const reviews = [
         { rating: 4, comment: "여기 정말 좋았어요!", isMine: true },
         { rating: 5, comment: "최고의 경험이었어요!", isMine: false },

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <div class="popUpbanner">
     <table>
         <tr>
@@ -7,7 +8,7 @@
                     <span id="bannerImg">팝업스토어 배너</span>
                 </h1>
             </td>
-            <td><span id="totalLikeCount">좋아요 수: 100</span></td>
+            <td><span id="totalLikeCount">좋아요 수: ${storeInfo.likeCount}</span></td>
         </tr>
     </table>
 </div>
@@ -15,17 +16,17 @@
 <table class="popUpStoreInfo">
     <tr>
         <td id="popUpStoreInfo">
-            <span id="popUpName">${storeName}</span>
+            <span id="popUpName">${storeInfo.psName}</span>
             <span id="likeCount">좋아요 버튼</span>
             <h3 id="category">
-                관심사: <span>관심사 1</span>, <span>관심사 2</span>, <span>관심사 3</span>
+                관심사: <span>${storeInfo.interest}</span> <!-- 관심사 -->
             </h3>
-            <h3 id="popUpStoreAdd">팝업스토어 주소</h3>
+            <h3 id="popUpStoreAdd">${storeInfo.psAddress}</h3>
         </td>
     </tr>
     <tr>
         <td>
-            <h3>설명글 작성</h3>
+            <h3>${storeInfo.psExp}</h3> <!-- 설명글 -->
         </td>
     </tr>
 </table>
@@ -33,10 +34,10 @@
 <div id="popUpMap">팝업스토어가 포커스되어있는 지도</div>
 
 <div id="popUpETCInfo">
-    <h3>주최사 정보</h3>
-    <h3>팝업스토어 교통편</h3>
-    <h3>근처 주차장 정보</h3>
-    <h3>팝업스토어 SNS 주소</h3>
+    <h3>주최사 정보: ${storeInfo.comInfo}</h3> <!-- 주최사 정보 -->
+    <h3>교통편: ${storeInfo.transInfo}</h3> <!-- 교통편 -->
+    <h3>주차 가능 여부: ${storeInfo.parkingInfo}</h3> <!-- 주차 가능 여부 -->
+    <h3>팝업스토어 SNS 주소: ${storeInfo.snsAd}</h3> <!-- SNS 주소 -->
 </div>
 
 <!-- 리뷰 작성 폼 -->
@@ -49,7 +50,7 @@
         <span data-value="5">★</span>
     </div>
     <p id="selectedRating">선택한 별점: 0</p>
-    <textarea id="reviewText" name="reviewText" placeholder="후기를 작성해주세요..." rows="5" cols="50"></textarea>
+    <textarea id="reviewText" name="reviewText" placeholder="후기를 작성해주세요..." rows="5"></textarea>
     <input type="hidden" id="rating" name="rating" value="0">
     <input type="submit" value="등록하기">
 </form>
@@ -73,6 +74,3 @@
         <td id="popUpGoodsInfo3">많이 비싼 굿즈 3 40000원</td>
     </tr>
 </table>
-
-
-

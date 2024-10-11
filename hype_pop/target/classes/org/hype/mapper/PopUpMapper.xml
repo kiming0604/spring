@@ -3,8 +3,47 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.hype.mapper.PopUpMapper"> <!-- 정확한 Mapper 인터페이스 경로 -->
+<mapper namespace="org.hype.mapper.PopUpMapper">
 
+  <!-- 특정 유저의 관심사를 가져오는 쿼리 -->
+  <select id="getUserInterests" parameterType="java.lang.Integer" resultType="java.lang.String">
+    <![CDATA[
+        SELECT interest
+        FROM (
+            SELECT 'HEALTHBEAUTY' AS interest FROM member_cat_tbl WHERE USERNO = #{userno} AND HEALTHBEAUTY = 1 UNION ALL
+            SELECT 'GAME' FROM member_cat_tbl WHERE USERNO = #{userno} AND GAME = 1 UNION ALL
+            SELECT 'CULTURE' FROM member_cat_tbl WHERE USERNO = #{userno} AND CULTURE = 1 UNION ALL
+            SELECT 'SHOPPING' FROM member_cat_tbl WHERE USERNO = #{userno} AND SHOPPING = 1 UNION ALL
+            SELECT 'SUPPLY' FROM member_cat_tbl WHERE USERNO = #{userno} AND SUPPLY = 1 UNION ALL
+            SELECT 'KIDS' FROM member_cat_tbl WHERE USERNO = #{userno} AND KIDS = 1 UNION ALL
+            SELECT 'DESIGN' FROM member_cat_tbl WHERE USERNO = #{userno} AND DESIGN = 1 UNION ALL
+            SELECT 'FOODS' FROM member_cat_tbl WHERE USERNO = #{userno} AND FOODS = 1 UNION ALL
+            SELECT 'INTERIOR' FROM member_cat_tbl WHERE USERNO = #{userno} AND INTERIOR = 1 UNION ALL
+            SELECT 'POLICY' FROM member_cat_tbl WHERE USERNO = #{userno} AND POLICY = 1 UNION ALL
+            SELECT 'CHARACTER' FROM member_cat_tbl WHERE USERNO = #{userno} AND CHARACTER = 1 UNION ALL
+            SELECT 'EXPERIENCE' FROM member_cat_tbl WHERE USERNO = #{userno} AND EXPERIENCE = 1 UNION ALL
+            SELECT 'COLLABORATION' FROM member_cat_tbl WHERE USERNO = #{userno} AND COLLABORATION = 1 UNION ALL
+            SELECT 'ENTERTAINMENT' FROM member_cat_tbl WHERE USERNO = #{userno} AND ENTERTAINMENT = 1
+        )
+    ]]>
+  </select>
+
+<select id="getTopStoresByInterest" parameterType="java.lang.String" resultType="org.hype.domain.popStoreVO">
+    SELECT PSNAME, LIKECOUNT
+    FROM (
+        SELECT pop_main_tbl.PSNAME, pop_main_tbl.LIKECOUNT,
+               ROW_NUMBER() OVER (ORDER BY pop_main_tbl.LIKECOUNT DESC) AS rn
+        FROM pop_main_tbl
+        JOIN pop_cat_tbl ON pop_main_tbl.PSNO = pop_cat_tbl.PSNO
+        WHERE pop_cat_tbl.${value} = 1
+    )
+    WHERE rn BETWEEN 1 AND 8
+</select>
+
+
+
+
+ <!-- 인기 팝업 스토어를 가져오는 쿼리 -->
   <select id="getPopularPopUps" resultType="org.hype.domain.popStoreVO">
     <![CDATA[
         SELECT * 
@@ -22,6 +61,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
         ORDER BY LIKECOUNT DESC
     ]]>
+  </select>
+  
+
+
+<select id="getStoreInfoByName" parameterType="String" resultType="org.hype.domain.popStoreVO">
+    SELECT p.*, 
+           (SELECT CASE WHEN HEALTHBEAUTY = 1 THEN 'HEALTHBEAUTY' 
+                        WHEN GAME = 1 THEN 'Game' 
+                        WHEN CULTURE = 1 THEN 'Culture' 
+                        WHEN SHOPPING = 1 THEN 'Shopping' 
+                        WHEN SUPPLY = 1 THEN 'Supply' 
+                        WHEN KIDS = 1 THEN 'Kids' 
+                        WHEN DESIGN = 1 THEN 'Design' 
+                        WHEN FOODS = 1 THEN 'Foods' 
+                        WHEN INTERIOR = 1 THEN 'Interior' 
+                        WHEN POLICY = 1 THEN 'Policy' 
+                        WHEN CHARACTER = 1 THEN 'Character' 
+                        WHEN EXPERIENCE = 1 THEN 'Experience' 
+                        WHEN COLLABORATION = 1 THEN 'Collaboration' 
+                        WHEN ENTERTAINMENT = 1 THEN 'Entertainment' 
+                        ELSE NULL END 
+            FROM pop_cat_tbl WHERE PSNO = p.PSNO AND ROWNUM = 1) AS interest
+    FROM pop_main_tbl p
+    WHERE p.PSNAME = #{storeName}
 </select>
 
 

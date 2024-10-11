@@ -1,117 +1,110 @@
-/* popUpStore.css */
-
 /* 전체 레이아웃 설정 */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #141414; /* 어두운 배경 */
-    color: white; /* 글자색 흰색 */
+    color: #e5e5e5; /* 회색 글자색 */
     margin: 0;
     padding: 0;
 }
 
+/* 팝업 배너 스타일 */
 .popUpbanner {
     background-color: #e50914; /* 넷플릭스 레드 */
     padding: 20px;
     text-align: center;
 }
 
+.popUpbanner h1 {
+    font-size: 2.5rem;
+    color: white;
+}
+
+/* 팝업 스토어 정보 */
 .popUpStoreInfo {
     background-color: #181818; /* 어두운 회색 배경 */
     border-radius: 8px;
     padding: 20px;
-    margin: 20px;
+    margin: 20px auto;
+    max-width: 900px; /* 너비 제한 */
 }
 
-h1, h2, h3 {
+#popUpStoreInfo {
+    color: #e5e5e5; /* 연한 회색 텍스트 */
+}
+
+#popUpName {
+    font-size: 2rem;
     font-weight: bold;
 }
 
-h3 {
-    margin: 10px 0;
+#category span {
+    color: #b3b3b3; /* 관심사 텍스트 회색 */
 }
 
-/* 별점 스타일 */
-.userStarRating {
-    font-size: 24px;
+#popUpStoreAdd {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: #b3b3b3; /* 주소 텍스트 */
 }
 
-.userStarRating span {
-    cursor: pointer;
-    font-size: 24px;
-    color: gray; /* 기본 상태 */
-    transition: color 0.3s; /* 색상 변화 효과 */
-}
-
-.userStarRating span.selected {
-    color: gold; /* 선택된 별 */
-}
-
-.StarRating {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin-bottom: 10px;
-}
-
-/* 케밥 메뉴 스타일 */
-.kebabMenu {
-    position: relative;
+/* 좋아요 버튼 스타일 */
+#likeCount {
     display: inline-block;
+    background-color: #e50914;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    margin-left: 15px;
     cursor: pointer;
-    z-index: 10; /* 다른 요소보다 위에 보이도록 설정 */
+    transition: background-color 0.3s;
 }
 
-.kebabMenu span {
-    font-size: 24px; /* 케밥 아이콘 크기 */
+#likeCount:hover {
+    background-color: #f40612; /* hover 시 밝은 레드 */
 }
 
-.kebabMenuOptions {
-    display: none;
-    position: absolute;
-    top: 30px;
-    right: 0;
-    background: #fff;
-    border: 1px solid #ccc;
-    list-style-type: none;
-    padding: 5px;
-    margin: 0;
-    z-index: 100; /* 메뉴가 다른 요소 위에 보이도록 설정 */
+/* 지도 및 기타 정보 */
+#popUpMap {
+    background-color: #000;
+    height: 300px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 900px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.kebabMenuOptions.visible {
-    display: block;
+#popUpETCInfo {
+    background-color: #181818;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 900px;
 }
 
-.kebabMenuOptions li {
-    padding: 5px;
-    cursor: pointer;
-    color: black; /* 메뉴 항목 글자색 */
-}
-
-.kebabMenuOptions li:hover {
-    background-color: #f0f0f0; /* 마우스 오버 시 배경색 */
-}
-
-/* 리뷰 작성 폼 스타일 */
+/* 리뷰 폼 스타일 */
 #reviewForm {
     background-color: #222; /* 어두운 배경 */
     padding: 20px;
     border-radius: 8px;
-    margin: 20px 0;
+    margin: 20px auto;
+    max-width: 900px;
 }
 
-textarea {
+#reviewText {
     width: 100%;
     padding: 10px;
-    border: 1px solid #555;
+    border: none;
     border-radius: 4px;
-    background-color: #333; /* 어두운 회색 */
-    color: white; /* 글자색 흰색 */
+    background-color: #333;
+    color: white;
 }
 
 input[type="submit"] {
     background-color: #e50914; /* 넷플릭스 레드 */
-    color: white; /* 글자색 흰색 */
+    color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -120,5 +113,43 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #f00606; /* 마우스 오버 시 색상 변화 */
+    background-color: #f40612;
+}
+
+/* 리뷰 별점 스타일 */
+.StarRating span {
+    cursor: pointer;
+    font-size: 2rem;
+    color: gray; /* 기본 상태 */
+    transition: color 0.3s;
+}
+
+.StarRating span.selected {
+    color: gold; /* 선택된 별 */
+}
+
+#selectedRating {
+    color: #b3b3b3;
+}
+
+/* 인기 상품 배너 */
+.hitGoods {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 900px;
+    text-align: center;
+}
+
+.hitGoods td {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.hitGoods td span {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
 }

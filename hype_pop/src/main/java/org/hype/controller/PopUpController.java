@@ -1,6 +1,9 @@
 package org.hype.controller;
 
 
+import org.hype.domain.popStoreVO;
+import org.hype.service.PopUpService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,8 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/hypePop")
 public class PopUpController {
+	@Autowired
+	PopUpService service;
 	
 
     // 검색 결과를 보여주는 메서드
@@ -43,9 +48,10 @@ public class PopUpController {
         System.out.println("스토어 이름: " + storeName);
         
         // DB에서 상세 정보를 가져오는 로직 작성
+        popStoreVO vo = service.getStoreInfoByName(storeName);
         
         // storeName을 JSP에 전달
-        model.addAttribute("storeName", storeName);
+        model.addAttribute("storeInfo", vo);
         
         return "/popUp/popUpDetailsPage"; // 상세 정보를 보여주는 JSP 경로
     }
