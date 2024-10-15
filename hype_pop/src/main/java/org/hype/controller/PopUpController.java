@@ -1,14 +1,25 @@
 package org.hype.controller;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hype.domain.likeVO;
 import org.hype.domain.popStoreVO;
+import org.hype.domain.psReplyVO;
 import org.hype.service.PopUpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.log4j.Log4j;
 
@@ -63,4 +74,57 @@ public class PopUpController {
         
         return "/popUp/calendar"; // 캘린더를 보여주는 JSP 경로
     }
+    @PostMapping(value = "/likeCount", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> LikeCount(@RequestBody likeVO likeVO) {
+        int psNo = likeVO.getPsNo();
+        int userNo = likeVO.getUserNo();
+
+        System.out.println("Received psNo: " + psNo + ", userNo: " + userNo);
+        
+        // 서비스 호출하여 좋아요 상태 업데이트
+        likeVO result = service.likeCount(psNo, userNo);
+
+        // 결과 처리
+        Map<String, Object> response = new HashMap<>();
+        if (result != null) {
+            response.put("status", "liked"); // 좋아요가 추가된 경우
+            response.put("psNo", psNo);
+            response.put("userNo", userNo);
+            response.put("message", "Like added successfully");
+        } else {
+            response.put("status", "unliked"); 
+            response.put("psNo", psNo);
+            response.put("userNo", userNo);
+            response.put("message", "Like removed successfully");
+        }
+
+        return ResponseEntity.ok(response); 
+    }
+    
+    
+
+    @PostMapping(value = "/getLikeCount", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateLikeCount(@RequestBody likeVO likeVO) {
+        int psNo = likeVO.getPsNo();
+
+        System.out.println("Received psNo: " + psNo);
+
+        // 서비스 호출하여 좋아요 수 가져오기
+        Integer likeCount = service.getLikeCount(psNo);
+
+        // 결과 처리
+        Map<String, Object> response = new HashMap<>();
+        if (likeCount != null) {
+            response.put("status", "success");
+            response.put("likeCount", likeCount); // likeCount 추가
+        } else {
+            response.put("status", "failure");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 }
+  

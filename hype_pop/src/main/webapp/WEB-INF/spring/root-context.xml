@@ -24,6 +24,7 @@
       <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@192.168.0.129:1521:XE"></property>
       <property name="username" value="hypepop"></property>
       <property name="password" value="1234"></property>
+      <property name="autoCommit" value="true"/> <!-- 오토커밋 활성화 -->
 </bean>
 
 <!-- HikariCP configuration -->

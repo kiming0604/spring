@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.hype.mapper.PopUpReplyMapper">
+
+    <insert id="insertPopUpReply" parameterType="org.hype.domain.psReplyVO">
+     INSERT INTO pop_reply_tbl 
+    (psReplyNo, psNo, userNo, psComment, psScore, psRegDate)
+    VALUES 
+    (psReplyNo_seq.NEXTVAL, #{psNo}, #{userNo}, #{psComment}, #{psScore}, SYSDATE)
+    </insert>
+   
+   <select id="getUserReviews" parameterType="map" resultType="org.hype.domain.psReplyVO">
+    SELECT * FROM pop_reply_tbl 
+    WHERE psNo = #{psNo} AND userNo = #{userNo}
+</select>
+
+
+</mapper>

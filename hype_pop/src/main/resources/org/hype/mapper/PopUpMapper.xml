@@ -88,4 +88,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 
+
+    <select id="checkLikeStatus" parameterType="map" resultType="int">
+        SELECT count(*) FROM like_list_tbl
+        WHERE psNo = #{psNo} AND userNo = #{userNo}
+    </select>
+
+    <insert id="insertLike" parameterType="org.hype.domain.likeVO">
+        INSERT INTO like_list_tbl (psNo, userNo, likeDate)
+        VALUES (#{psNo}, #{userNo}, sysdate)
+    </insert>
+
+    <update id="incrementLikeCount" parameterType="int">
+        UPDATE pop_main_tbl
+        SET likeCount = likeCount + 1
+        WHERE psNo = #{psNo}
+    </update>
+
+    <update id="decrementLikeCount" parameterType="int">
+        UPDATE pop_main_tbl
+        SET likeCount = likeCount - 1
+        WHERE psNo = #{psNo}
+    </update>
+
+    <delete id="deleteLike" parameterType="org.hype.domain.likeVO">
+        DELETE FROM like_list_tbl
+        WHERE psNo = #{psNo} AND userNo = #{userNo}
+    </delete>
+
+    <select id="getLikeCount" parameterType="int" resultType="Integer">
+        SELECT likeCount FROM pop_main_tbl
+        WHERE psNo = #{psNo} 
+    </select>
+   
 </mapper>

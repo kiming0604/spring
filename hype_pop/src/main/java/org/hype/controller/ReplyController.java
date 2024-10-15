@@ -1,85 +1,90 @@
-//package org.hype.controller;
-//
-//import java.util.List;
-//
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.MediaType;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import lombok.extern.log4j.Log4j;
-//
-//@Log4j
-//@RestController
-//@RequestMapping("/reply")
-//public class ReplyController {
-//
-//    @Autowired
-//    private ReplyService service;
-//
-//    // 1. ´ñ±Û µî·Ï
-//    @PostMapping(value = "/new", consumes = "application/json", produces = MediaType.TEXT_PLAIN_VALUE)
-//    public ResponseEntity<String> create(@RequestBody ReplyVO rvo) {
-//        log.info("replyVO : " + rvo);
-//        
-//        int insertCount = service.register(rvo);
-//        
-//        log.info("insertCount : " + insertCount);
-//        return insertCount == 1 ? 
-//            new ResponseEntity<>("success", HttpStatus.OK) :
-//            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//
-//    // 2. ´ñ±Û ¸ñ·Ï Á¶È¸
-//    @GetMapping(value = "pages/{psNo}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-//    public ResponseEntity<List<ReplyVO>> getList(@PathVariable("bno") int bno) {
-//        log.info("getList...." + bno);
-//        List<ReplyVO> replies = service.getList(bno);
-//        return new ResponseEntity<>(replies, HttpStatus.OK);
-//    }
-//      
+package org.hype.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hype.domain.psReplyVO;
+import org.hype.service.ReplyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@RestController
+@RequestMapping("/reply")
+public class ReplyController {
+
+   @Autowired
+    private ReplyService service;
+   
+   @PostMapping("/insertReply")
+   @ResponseBody
+   public ResponseEntity<Map<String, String>> insertReply(@RequestBody Map<String, Object> requestData) {
+       
+       // Stringì—ì„œ intë¡œ ë³€í™˜
+       int psNo = Integer.parseInt((String) requestData.get("psNo"));
+       int psScore = Integer.parseInt((String) requestData.get("rating"));
+       String psComment = (String) requestData.get("reviewText");
+       int userNo = Integer.parseInt((String) requestData.get("userNo"));
+
+       System.out.println("psNo: " + psNo);
+       System.out.println("rating: " + psScore);
+       System.out.println("reviewText: " + psComment);
+       System.out.println("userNo: " + userNo);
+       
+       psReplyVO vo = new psReplyVO();
+       
+       vo.setPsNo(psNo);
+       vo.setPsScore(psScore);
+       vo.setPsComment(psComment);
+       vo.setUserNo(userNo);
+       
+       // ì˜ˆì‹œ: likeCountë¥¼ ê°€ì ¸ì˜¤ëŠ” ë¡œì§ (ì´ ë¶€ë¶„ì€ êµ¬í˜„ëœ ì„œë¹„ìŠ¤ì— ë§ê²Œ ìˆ˜ì • í•„ìš”)
+       Integer result = service.insertPopUpReply(vo);
+      
+
+       // ì‘ë‹µ ë°ì´í„° ìƒì„±
+       Map<String, String> response = new HashMap<>();
+       if (result != null && result > 0) {
+           response.put("status", "success");
+           response.put("message", "ëŒ“ê¸€ì´ ì„±ê³µì ìœ¼ë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
+       } else {
+           response.put("status", "failure");
+           response.put("message", "ëŒ“ê¸€ ë“±ë¡ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
+       }
+
+       // JSON ì‘ë‹µ ì „ì†¡
+       return ResponseEntity.ok()
+           .contentType(MediaType.APPLICATION_JSON)
+           .body(response);
+   }
+
+   @PostMapping("/getUserReviews")
+   public ResponseEntity<Map<String, Object>> getUserReviews(@RequestBody Map<String, Integer> request) {
+       // ìš”ì²­ ë³¸ë¬¸ì—ì„œ psNoì™€ userNo ì¶”ì¶œ
+       Integer psNo = request.get("psNo");
+       Integer userNo = request.get("userNo");
+       System.out.println("Received request: " + request);
 
 
+       // ë¦¬ë·° ê°€ì ¸ì˜¤ê¸°
+       List<psReplyVO> reviews = service.getUserReviews(psNo, userNo);
+
+       // ì‘ë‹µ ë§µ êµ¬ì„±
+       Map<String, Object> response = new HashMap<>();
+       response.put("status", "success");
+       response.put("message", reviews.isEmpty() ? "ë¦¬ë·°ê°€ ì—†ìŠµë‹ˆë‹¤." : "ë¦¬ë·°ë¥¼ ë¶ˆëŸ¬ì™”ìŠµë‹ˆë‹¤.");
+       response.put("reviews", reviews);
+
+       return ResponseEntity.ok()
+               .contentType(MediaType.APPLICATION_JSON)
+               .body(response);
+   }
 
 
-//    º¹»çÇØ¼­ ÀÚÀ¯·Ó°Ô ´ñ±Û ºÒ·¯¿À±â¿¡ ¾²½Ã¸é µË´Ï´Ù! Á¶±İ ¼öÁ¤ÀÌ ÇÊ¿äÇÒ°Å¿¡¿ä
-
-
-
-
-
-
-//    // 3. ³» ´ñ±Û Á¶È¸
-//    @GetMapping(value = "/{userNo}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-//    public ResponseEntity<ReplyVO> get(@PathVariable("userNo") int userNo) {
-//        log.info("get......." + userNo);
-//        ReplyVO reply = service.get(userNo);
-//        return new ResponseEntity<>(reply, HttpStatus.OK);
-//    }
-//
-//    // 4. ´ñ±Û »èÁ¦
-//    @DeleteMapping(value = "/{userNo}", produces = MediaType.TEXT_PLAIN_VALUE)
-//    public ResponseEntity<String> remove(@PathVariable("userNo") int userNo) {
-//        log.info("remove......." + psNo);
-//        return service.remove(psNo) == 1 ?
-//            new ResponseEntity<>("success", HttpStatus.OK) :
-//            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//
-//    // 5. ´ñ±Û ¼öÁ¤
-//    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, value = "/{userNo}", produces = MediaType.TEXT_PLAIN_VALUE, consumes = "application/json")
-//    public ResponseEntity<String> modify(@PathVariable("userNo") int userNo, @RequestBody psReplyVO rvo) {
-//        log.info("rvo : " + rvo);
-//        log.info("rno : " + rno);
-//        
-//        int modifyCount = service.modify(rvo);
-//        
-//        log.info("modifyCount : " + modifyCount);
-//        
-//        return modifyCount == 1 ? 
-//            new ResponseEntity<>("success", HttpStatus.OK) :
-//            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//}
+}
