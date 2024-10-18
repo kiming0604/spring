@@ -120,5 +120,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT likeCount FROM pop_main_tbl
         WHERE psNo = #{psNo} 
     </select>
-   
+   <select id="showCalendar" resultType="org.hype.domain.popStoreVO">
+		select * from pop_main_tbl order by psno
+	</select>
+
+	<!--요셉이 캘린더 부분  -->
+	<select id="getCategoryData" resultType="org.hype.domain.pCatVO">
+		select * from pop_cat_tbl order by psno
+	</select>
+	
+	<!-- 서연씨 병합 부분 -->
+	<select id="getList" resultType="org.hype.domain.popStoreVO">
+		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl
+	</select> 
+	
+	<select id="getListBySearchPs" parameterType="String" resultType="org.hype.domain.popStoreVO">
+    	SELECT * FROM pop_main_tbl WHERE psName LIKE '%' || #{searchPs} || '%'
+	</select>
+	
+	<select id="getPopStoreById" parameterType="int" resultType="org.hype.domain.popStoreVO">
+   		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl WHERE psNo = #{psNo}
+	</select>
+	
+<!--     <insert id="psInsert" parameterType="org.hype.domain.popStoreVO">
+        INSERT INTO pop_main_tbl 
+            (psNo, psName, psStartDate, psEndDate, psAddress, latitude, longitude, psExp, snsAd, comInfo, transInfo, parkinginfo)
+        VALUES 
+            (POPMAIN_SEQ.NEXTVAL, #{psName}, #{psStartDate}, #{psEndDate}, 
+             #{psAddress}, #{latitude}, #{longitude}, 
+             #{psExp}, #{snsAd}, #{comInfo}, 
+             #{transInfo}, #{parkinginfo})
+    </insert> -->
+    
+<!--     <insert id="catInsert" parameterType="org.hype.domain.pCatVO">
+	    INSERT INTO pop_cat_tbl (psNo, healthBeauty, game, culture, shopping, supply, kids, design, foods, interior, 
+	    policy, character, experience, collaboration, entertainment)
+	    VALUES (POPMAIN_SEQ.CURRVAL, #{healthBeauty}, #{game}, #{culture}, #{shopping}, #{supply}, #{kids}, 
+	    #{design}, #{foods}, #{interior}, #{policy}, #{character}, #{experience}, #{collaboration}, #{entertainment})
+	</insert>  -->
+	
+<!-- 	<delete id="psDelete" parameterType="org.hype.domain.popStoreVO">
+		DELETE FROM pop_main_tbl
+    	WHERE psNo = #{psNo}
+	</delete> -->
+	
+<!-- 	<delete id="catDelete" parameterType="org.hype.domain.pCatVO">
+		DELETE FROM pop_cat_tbl
+    	WHERE psNo = #{psNo}
+	</delete> -->
+	
 </mapper>

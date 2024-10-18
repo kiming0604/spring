@@ -9,4 +9,16 @@ public interface PopUpReplyMapper {
      public Integer insertPopUpReply(psReplyVO vo);
 
 	public List<psReplyVO> getUserReviews(Map<String, Integer> params);
+
+	public int countUserReviews(Map<String, Integer> params);
+
+	public String getUserIdByUserNo(int userNo);
+
+	public int deleteReviewById(int reviewId);
+
+	public Integer updateReply(psReplyVO vo);
+
+	public List<psReplyVO> getOtherReviews(Map<String, Integer> params);
+
+	public int getTotalReviews(Map<String, Integer> params);
 }

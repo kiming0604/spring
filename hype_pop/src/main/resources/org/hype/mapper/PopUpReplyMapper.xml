@@ -5,17 +5,60 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="org.hype.mapper.PopUpReplyMapper">
 
+<select id="getUserIdByUserNo" resultType="String">
+    SELECT userId
+    FROM sign_in_info_tbl
+    WHERE userNo = #{userNo}
+    AND ROWNUM = 1  
+</select>
+
     <insert id="insertPopUpReply" parameterType="org.hype.domain.psReplyVO">
-     INSERT INTO pop_reply_tbl 
-    (psReplyNo, psNo, userNo, psComment, psScore, psRegDate)
+   INSERT INTO pop_reply_tbl 
+   (psReplyNo, psNo, userNo, userId, psComment, psScore, psRegDate)
     VALUES 
-    (psReplyNo_seq.NEXTVAL, #{psNo}, #{userNo}, #{psComment}, #{psScore}, SYSDATE)
-    </insert>
+   (psReplyNo_seq.NEXTVAL, #{psNo}, #{userNo}, #{userId}, #{psComment}, #{psScore}, SYSDATE)
+ </insert>
    
    <select id="getUserReviews" parameterType="map" resultType="org.hype.domain.psReplyVO">
     SELECT * FROM pop_reply_tbl 
     WHERE psNo = #{psNo} AND userNo = #{userNo}
 </select>
+<select id="countUserReviews" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM pop_reply_tbl
+        WHERE psNo = #{psNo} AND userNo = #{userNo}
+    </select>
+  <delete id="deleteReviewById" parameterType="int">
+        DELETE FROM pop_reply_tbl
+        WHERE psReplyNo = #{reviewId}
+    </delete>
+   <update id="updateReply" parameterType="org.hype.domain.psReplyVO">
+   UPDATE pop_reply_tbl
+   SET 
+      psComment = #{psComment}, 
+      psScore = #{psScore}, 
+      psUpdateDate = SYSDATE
+   WHERE 
+      psNo = #{psNo}
+      AND
+      userNo = #{userNo}  
+</update>
+<select id="getOtherReviews" parameterType="map" resultType="org.hype.domain.psReplyVO">
+    <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM rnum, a.* FROM (
+                SELECT * FROM pop_reply_tbl 
+                WHERE psNo = #{psNo} AND userNo != #{userNo}
+                ORDER BY psRegDate DESC
+            ) a
+            WHERE ROWNUM <= #{pageNum} * #{amount}
+        )
+        WHERE rnum > (#{pageNum} - 1) * #{amount}
+    ]]>
+</select>
 
-
+<select id="getTotalReviews" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM pop_reply_tbl 
+    WHERE psNo = #{psNo} AND userNo != #{userNo}
+</select>
 </mapper>

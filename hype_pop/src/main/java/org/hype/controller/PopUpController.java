@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hype.domain.likeVO;
+import org.hype.domain.pCatVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
 import org.hype.service.PopUpService;
@@ -61,6 +62,9 @@ public class PopUpController {
         // DB에서 상세 정보를 가져오는 로직 작성
         popStoreVO vo = service.getStoreInfoByName(storeName);
         
+
+
+        
         // storeName을 JSP에 전달
         model.addAttribute("storeInfo", vo);
         
@@ -68,11 +72,9 @@ public class PopUpController {
     }
 
     // 캘린더를 보여주는 메서드
-    @GetMapping("/calendar") // 특정 URL 매핑
-    public String popUpCalendar() {
-        // 캘린더 처리 로직
-        
-        return "/popUp/calendar"; // 캘린더를 보여주는 JSP 경로
+    @RequestMapping("/calendar")
+    public String showCalendarPage() {
+        return "/popUpCalendar/calendarMain";  
     }
     @PostMapping(value = "/likeCount", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -125,6 +127,39 @@ public class PopUpController {
 
         return ResponseEntity.ok(response);
     }
+    @PostMapping(value = "/checkLikeStatus", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkLikeStatus(@RequestBody likeVO likeVO) {
+        int psNo = likeVO.getPsNo();
+        int userNo = likeVO.getUserNo();
+
+        // 유저가 해당 팝업스토어에 좋아요를 눌렀는지 확인
+        boolean hasLiked = service.checkUserLike(psNo, userNo);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("hasLiked", hasLiked);  // 좋아요 상태 반환
+        return ResponseEntity.ok(response);
+    }
+    // 요셉이 거 병합 부분 
+    @GetMapping(value = "/calendarData", produces = MediaType.APPLICATION_JSON_VALUE) 
+    @ResponseBody
+    public List<popStoreVO> calendarData() {
+        List<popStoreVO> cData = service.showCalendar();
+        log.info("Calendar Data: " + cData); // 데이터 확인을 위한 로그
+        return cData;
+    }
+    
+    @GetMapping(value = "categoryData", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<pCatVO> getCategoryData() {
+        return service.getCategoryData();
+    }
+    
+    @GetMapping("/customerMain") // 고객 센터로 이동하는 메서드
+	public String customerMain() {
+		
+		return "/customerService/customerServiceMain";
+	}
 
 }
   

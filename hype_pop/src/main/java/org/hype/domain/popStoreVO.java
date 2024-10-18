@@ -3,6 +3,8 @@ package org.hype.domain;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,4 +36,7 @@ public class popStoreVO {
     // 새로운 필드 추가
     private String interest; // 관심사 추가
     private List<popStoreVO> topStores; // 상위 스토어 목록 추가
+    
+    //서연씨 통합 부분 
+    private MultipartFile imageFile;  // db테이블에는 생성X
 }
