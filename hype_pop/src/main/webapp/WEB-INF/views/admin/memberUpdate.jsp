@@ -17,10 +17,14 @@
 	<div id="updateLogin">최신 로그인 날짜</div>
 	<div id="activeAccount">계정 활성화 여부</div>
 	<div id="authority">권한</div>
+	
+	<!--  
     <button type="button" id="upBtn">↑</button>
     <button type="button" id="downBtn">↓</button>
 	
 	<div id="mCancel">취소 및 리스트로 돌아가기</div>	
 	<div id="mUpdate">수정완료</div>	
+	 -->
+	
 </body>
 </html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hype.mapper.GReplyMapper">
+	<insert id="insertGReply"
+		parameterType="org.hype.domain.gReplyVO">
+		insert into goods_reply_table
+		(gReplyNo, gno, userNo,
+		gcomment, gscore, userId, gRegDate, gUpdateDate)
+		values
+		(goods_reply_seq.nextVal, #{gno}, userNo1_seq.nextVal, #{gcomment},
+		#{gscore}, #{userId},
+		SYSDATE, SYSDATE)
+	</insert>
+	<select id="getAllReplyList"
+		resultType="org.hype.domain.gReplyVO">
+		select * from goods_reply_table where gno = #{gno} and
+		userNo != #{userNo} order by greplyno desc
+	</select>
+	<select id="getMyReply" resultType="org.hype.domain.gReplyVO">
+		select * from
+		goods_reply_table where gno = #{gno} and userNo = #{userNo}
+	</select>
+	<select id="getAvgStars" resultType="double">
+		select avg(gscore) from
+		goods_reply_table where gno = #{gno}
+	</select>
+	<select id="chkReplied">
+		select count(*) from goods_reply_table where userId =
+		#{userId}
+	</select>
+	<delete id="deleteReply">
+		delete from goods_reply_table where gno = #{gno} and
+		userNo = #{userNo}
+	</delete>
+	<update id="updateReply"
+		parameterType="org.hype.domain.gReplyVO">
+		update goods_reply_table set gcomment = #{gcomment},
+		gscore = #{gscore}, gupdateDate = sysdate where gno = #{gno} and
+		userNo = #{userNo}
+	</update>
+	<update id="updateReplyCntPlus">
+		update goods_info_tbl set replycnt = replycnt +1
+		where gno = #{gno}
+	</update>
+	<update id="updateReplyCntMinus">
+		update goods_info_tbl set replycnt = replycnt -1
+		where gno = #{gno}
+	</update>
+	<select id="getAllReplyListWithPaging" resultType="org.hype.domain.gReplyVO">
+	    <![CDATA[
+	    SELECT * FROM (
+	        SELECT ROWNUM AS rnum, a.* 
+	        FROM ( 
+	            SELECT * FROM goods_reply_table 
+	            WHERE gno = #{gno} AND userNo != #{userNo} 
+	            ORDER BY gRegDate DESC
+	        ) a 
+	        WHERE ROWNUM <= (#{offset} + #{size})
+	    ) 
+	    WHERE rnum > #{offset}
+	    ]]>
+	</select>
+	<select id="getReplyCount" resultType="int">
+		SELECT COUNT(*) FROM
+		goods_reply_table
+		WHERE gno = #{gno} AND userNo != #{userNo}
+	</select>
+</mapper>

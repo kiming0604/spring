@@ -1,11 +1,14 @@
-document.querySelectorAll('button').forEach(a => {
-    a.addEventListener('click', (event) => {
-       
-    	let buttonName = a.id;
+document.querySelectorAll('button').forEach(btn => {
+	btn.addEventListener('click', (e) => {
+    	e.preventDefault();
+    	
+    	let type = btn.getAttribute('id'); 
+    	
+    	
 
-        if (buttonName === "loginBtn") {
+        if ( type === "loginBtn") {
             
-        	location.href = "/";
+        	location.href = "/member/login";
             }
       
     });

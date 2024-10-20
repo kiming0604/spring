@@ -21,7 +21,8 @@
        
       <!-- log4jdbc --> 
       <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
-      <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@192.168.0.129:1521:XE"></property>
+    <!--   <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@192.168.0.129:1521:XE"></property>  집에서 사용하기 위해 잠시 주석처리 -->
+      <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>
       <property name="username" value="hypepop"></property>
       <property name="password" value="1234"></property>
       <property name="autoCommit" value="true"/> <!-- 오토커밋 활성화 -->

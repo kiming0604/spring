@@ -15,6 +15,6 @@
 	<div id="gEndDate">상품 판매 종료일</div>
 	<div id="storeExp">설명글</div>
 	
-	<div id="gRegister">등록하기</div>	
+<!-- 	<div id="gRegister">등록하기</div>	 -->
 </body>
 </html>

@@ -11,7 +11,7 @@
 	
 	<form method="POST" action="/admin/psRegister" enctype="multipart/form-data" onsubmit="return popStoreRegister(this);">
 	    <div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div>
-	    <input type="file" id="fileInput" name="imageFile" style="display: none;">
+	    <input type="file" id="imageFile" name="imageFile" style="display: none;">
 	    <div id="uploadedImages"></div>
 	    
 	    <div id="psLatitude">위도 <input type="text" name="latitude"></div>
@@ -45,9 +45,11 @@
 	    <div id="parking">주차장 정보 <input type="text" name="parkinginfo"></div>
 	    <div id="storeExp">설명글 <input type="text" name="psExp"></div>
 	    
+	    <!-- 
 	    <div id="psRegister">
 	        <button type="submit" id="psRegisterBtn">등록하기</button>
-	    </div>
+	    </div> 
+	    -->
 	</form>	
 	
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  
