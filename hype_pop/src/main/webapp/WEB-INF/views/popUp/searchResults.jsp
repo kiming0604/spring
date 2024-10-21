@@ -1,22 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>검색 결과</title>
-</head>
+
 <body>
   <h1>검색 결과 페이지</h1>
   <p>검색한 데이터: ${searchData}</p>
   <br>
-  <jsp:include page="layout/popUpHeader.jsp" />
   
   <div class="searchConditions">
     <h3>
-     <span id="arrayByDis">거리순</span> <span id="arrayByLike">좋아요 순</span> <span id="arrayByLatest">최신순</span> <span id="arrayByRating">별점순</span> <span id="selInterests">관심사 선택</span>
+      <span id="arrayByDis">거리순</span>
+      <span id="arrayByLike">좋아요 순</span>
+      <span id="arrayByLatest">최신순</span>
+      <span id="arrayByRating">별점순</span>
+      <button id="selectInterestsBtn">관심사 선택</button>
     </h3>
+  </div>
+
+  <!-- 관심사 종류 버튼들 -->
+  <div id="interestButtons" style="display: none;">
+    <button class="interestBtn">헬스&뷰티</button>
+    <button class="interestBtn">게임</button>
+    <button class="interestBtn">문화</button>
+    <button class="interestBtn">쇼핑</button>
+    <button class="interestBtn">문구</button>
+    <button class="interestBtn">키즈</button>
+    <button class="interestBtn">디자인</button>
+    <button class="interestBtn">식품</button>
+    <button class="interestBtn">인테리어</button>
+    <button class="interestBtn">정책</button>
+    <button class="interestBtn">캐릭터</button>
+    <button class="interestBtn">체험</button>
+    <button class="interestBtn">콜라보</button>
+    <button class="interestBtn">방송</button>
   </div>
 
   <table class="searchResultStore">
@@ -36,40 +52,3 @@
       </td>
     </tr>
   </table>
-
-<!-- 관심사 선택 모달 -->
-<div id="interestModal" style="display: none; position: absolute;">
-    <div id="interestList">
-        <h3>관심사를 선택하세요 (최대 3개)</h3>
-        <!-- X 버튼 추가 -->
-        <button id="closeModalBtn" style="position: absolute; right: 10px; top: 10px;">X</button>
-        <!-- 관심사 리스트 (5줄, 18개) -->
-        <div class="interests">
-            <label><input type="checkbox" value="관심사 1"> 관심사 1</label>
-            <label><input type="checkbox" value="관심사 2"> 관심사 2</label>
-            <label><input type="checkbox" value="관심사 3"> 관심사 3</label>
-            <label><input type="checkbox" value="관심사 4"> 관심사 4</label>
-            <label><input type="checkbox" value="관심사 5"> 관심사 5</label>
-            <label><input type="checkbox" value="관심사 6"> 관심사 6</label>
-            <label><input type="checkbox" value="관심사 7"> 관심사 7</label>
-            <label><input type="checkbox" value="관심사 8"> 관심사 8</label>
-            <label><input type="checkbox" value="관심사 9"> 관심사 9</label>
-            <label><input type="checkbox" value="관심사 10"> 관심사 10</label>
-            <label><input type="checkbox" value="관심사 11"> 관심사 11</label>
-            <label><input type="checkbox" value="관심사 12"> 관심사 12</label>
-            <label><input type="checkbox" value="관심사 13"> 관심사 13</label>
-            <label><input type="checkbox" value="관심사 14"> 관심사 14</label>
-            <label><input type="checkbox" value="관심사 15"> 관심사 15</label>
-            <label><input type="checkbox" value="관심사 16"> 관심사 16</label>
-            <label><input type="checkbox" value="관심사 17"> 관심사 17</label>
-            <label><input type="checkbox" value="관심사 18"> 관심사 18</label>
-        </div>
-        <button id="confirmSelection">선택 완료</button>
-    </div>
-</div>
-
-  <jsp:include page="layout/popUpFooter.jsp" />
-  <jsp:include page="layout/popUpNavBar.jsp" />
-</body>
-<script type="text/javascript" src="/resources/popUpJs/searchResults.js"></script>
-</html>

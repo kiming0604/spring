@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
 import org.hype.domain.pCatVO;
 import org.hype.domain.popStoreVO;
@@ -39,11 +40,24 @@ public class PopUpController {
         System.out.println("검색 데이터: " + searchData);
         
         // DB에서 검색 결과를 가져오는 로직 작성
+        List<popStoreVO> vo = service.popUpSearchByData(searchData);
+       
+        for (popStoreVO store : vo) {
+            System.out.println("스토어 번호: " + store.getPsNo());
+            System.out.println("스토어 이름: " + store.getPsName());
+            System.out.println("주소: " + store.getPsAddress());
+            System.out.println("설명: " + store.getPsExp());
+            System.out.println("좋아요 수: " + store.getLikeCount());
+            System.out.println("평균 별점: " + store.getAvgRating());
+            System.out.println("------------------------------");
+        }
+        
+        
         
         // searchData를 JSP에 전달
-        model.addAttribute("searchData", searchData);
+        model.addAttribute("searchData", vo);
         
-        return "/popUp/searchResults"; // 검색 결과를 보여주는 JSP 경로
+        return "/popUp/searchResultPage"; // 검색 결과를 보여주는 JSP 경로
     }
 
     // 검색 결과가 없는 경우를 처리하는 메서드
@@ -51,7 +65,7 @@ public class PopUpController {
     public String searchWithoutData() {
         // 검색 결과가 없는 경우 처리 로직
         
-        return "/popUp/searchResults"; // 검색 결과를 보여주는 JSP 경로
+        return "/popUp/searchResultPage"; // 검색 결과를 보여주는 JSP 경로
     }
 
     @GetMapping("/popUpDetails")
@@ -61,12 +75,17 @@ public class PopUpController {
         
         // DB에서 상세 정보를 가져오는 로직 작성
         popStoreVO vo = service.getStoreInfoByName(storeName);
+       
+         List<goodsVO> gvo = service.getGoodsInfoByName(storeName);
+         
+         for (goodsVO goods : gvo) {
+        	    System.out.println("상품명: " + goods.getGname() + ", 가격: " + goods.getGprice() + "원");
+        	}
         
-
-
-        
+    
         // storeName을 JSP에 전달
         model.addAttribute("storeInfo", vo);
+        model.addAttribute("goodsInfo", gvo);
         
         return "/popUp/popUpDetailsPage"; // 상세 정보를 보여주는 JSP 경로
     }

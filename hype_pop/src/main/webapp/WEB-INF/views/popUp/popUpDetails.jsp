@@ -102,17 +102,29 @@
     <span id="pageNumbers"></span>
     <button id="nextPage" onclick="changePage(currentPage + 1)">다음</button>
 </div>
-
+<!-- 체크박스 추가 -->
+<label>
+    <input type="checkbox" id="toggleGoodsList"> 상품 리스트 출력
+</label>
 <!-- 인기 상품 배너 -->
-	<table class="hitGoods">
-	    <tr>
-	        <td><span id="popUpGoods1">인기상품 배너1</span></td>
-	        <td><span id="popUpGoods2">인기상품 배너2</span></td>
-	        <td><span id="popUpGoods3">인기상품 배너3</span></td>
-	    </tr>
-	    <tr>
-	        <td id="popUpGoodsInfo1">엄청난 굿즈 1 30000원</td>
-	        <td id="popUpGoodsInfo2">엄청난 굿즈 2 40000원</td>
-	        <td id="popUpGoodsInfo3">많이 비싼 굿즈 3 40000원</td>
-	    </tr>
-	</table>
+<table class="hitGoods" id="goodsTable" style="display: none;"> <!-- 기본적으로 보이지 않게 설정 -->
+    <tr>
+        <td>
+            <span id="popUpGoods1">인기상품 배너1</span>
+            <input type="hidden" id="gno1" name="gno1" value="${goodsInfo[0].gno}">
+        </td>
+        <td>
+            <span id="popUpGoods2">인기상품 배너2</span>
+            <input type="hidden" id="gno2" name="gno2" value="${goodsInfo[1].gno}">
+        </td>
+        <td>
+            <span id="popUpGoods3">인기상품 배너3</span>
+            <input type="hidden" id="gno3" name="gno3" value="${goodsInfo[2].gno}">
+        </td>
+    </tr>
+    <tr>
+        <td><span id="popUpGoodsInfo1">${goodsInfo[0].gname} - ${goodsInfo[0].gprice}원</span></td>
+        <td><span id="popUpGoodsInfo2">${goodsInfo[1].gname} - ${goodsInfo[1].gprice}원</span></td>
+        <td><span id="popUpGoodsInfo3">${goodsInfo[2].gname} - ${goodsInfo[2].gprice}원</span></td>
+    </tr>
+</table>

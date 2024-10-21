@@ -502,6 +502,28 @@ function updatePagination(totalReviews) {
         pageNumbers.appendChild(pageButton);
     }
 }
+
+document.querySelectorAll('.hitGoods span').forEach(item => {
+    item.addEventListener('click', () => {
+        // 클릭한 상품의 부모 <td> 요소를 선택하여 숨겨진 입력을 찾기
+        const gnoInput = item.parentNode.querySelector('input[type="hidden"]'); 
+        const gno = gnoInput.value; // 숨겨진 input 요소의 값 가져오기
+        location.href = `/goodsStore/goodsDetails?gno=${gno}`;
+    });
+});
+document.getElementById("toggleGoodsList").addEventListener("change", function() {
+    const goodsTable = document.getElementById("goodsTable");
+    const toggleText = this.nextSibling;
+
+    if (this.checked) {
+        goodsTable.style.display = "table"; // 테이블 보이기
+        toggleText.textContent = "상품 리스트 출력 ON"; // 텍스트 변경
+    } else {
+        goodsTable.style.display = "none"; // 테이블 숨기기
+        toggleText.textContent = "상품 리스트 출력 OFF"; // 텍스트 변경
+    }
+});
+
 // 호출 시 psNo와 userNo를 전달하여 초기 리뷰 로드
 
 // 사용자의 좋아요 상태 체크 함수

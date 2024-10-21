@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
 import org.hype.domain.pCatVO;
 import org.hype.domain.popStoreVO;
@@ -111,6 +112,32 @@ public boolean checkUserLike(int psNo, int userNo) {
 		
 	}
 }
+
+// 해당 팝업스토어의 굿즈 정보들 받아오기
+@Transactional
+@Override
+public List<goodsVO> getGoodsInfoByName(String storeName) {
+	
+	int psNo = mapper.getPsNo(storeName);
+	
+	System.out.println("psNo: " + psNo); 
+	
+	List<goodsVO> result = mapper.getGoodsInfoByName(psNo);
+	System.out.println("조회된 상품 수: " + result.size());
+	
+	for (goodsVO goods : result) {
+	    System.out.println("상품명: " + goods.getGname() + ", 가격: " + goods.getGprice());
+	}
+	
+	return result;
+}
+@Override
+public List<popStoreVO> popUpSearchByData(String searchData) {
+	List<popStoreVO> result = mapper.popUpSearchByData(searchData);
+	return result;
+}
+
+
 // 요셉이거 병합 부분
 @Override
 	public List<popStoreVO> showCalendar() {

@@ -1,0 +1,97 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #141414; /* 어두운 배경 */
+    color: #e5e5e5; /* 밝은 텍스트 색상 */
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2.5em;
+}
+
+.searchConditions {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    margin: 20px 0; /* 위아래 여백 */
+}
+
+.searchConditions h3 {
+    display: flex;
+    gap: 20px; /* 버튼 사이 간격 */
+}
+
+#selectInterestsBtn {
+    background-color: #e50914; /* 넷플릭스 빨간색 */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#selectInterestsBtn:hover {
+    background-color: #f40612; /* 조금 더 어두운 빨간색 */
+}
+
+#interestButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* 중앙 정렬 */
+    margin: 20px 0; /* 위아래 여백 */
+}
+
+.interestBtn {
+    background-color: #444444; /* 어두운 회색 */
+    color: #e5e5e5; /* 밝은 텍스트 색상 */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.interestBtn:hover {
+    background-color: #666666; /* 회색 밝기 증가 */
+}
+
+table.searchResultStore {
+    width: 80%; /* 중앙 정렬을 위해 너비 조정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    border-collapse: collapse;
+}
+
+#popUpStoreImg {
+    width: 30%; /* 이미지가 차지할 너비 */
+}
+
+#popUpStoreInfo {
+    width: 70%; /* 정보가 차지할 너비 */
+}
+
+#popUpName {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #e50914; /* 넷플릭스 빨간색 */
+}
+
+#likeCount {
+    color: #b3b3b3; /* 연한 회색 */
+    font-weight: normal;
+}
+
+h3 {
+    margin: 10px 0;
+    color: #e5e5e5; /* 밝은 텍스트 색상 */
+}
+
+span {
+    background-color: #555; /* 관심사 강조를 위한 배경 색상 */
+    color: #ffffff; /* 흰색 텍스트 */
+    padding: 5px 10px;
+    border-radius: 3px;
+}

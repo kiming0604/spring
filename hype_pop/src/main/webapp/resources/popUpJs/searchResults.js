@@ -1,13 +1,8 @@
 // 관심사 선택 버튼 클릭 시 모달창 열기
-document.getElementById('selInterests').addEventListener('click', function() {
-    const modal = document.getElementById('interestModal');
-    modal.style.display = 'block'; // 모달창 열기
-    
-    // 모달창 위치를 관심사 선택 버튼 아래로 조정
-    const selInterestsBtn = document.getElementById('selInterests');
-    modal.style.top = selInterestsBtn.offsetTop + selInterestsBtn.offsetHeight + 'px';
-    modal.style.left = selInterestsBtn.offsetLeft + 'px';
-});
+  document.getElementById("selectInterestsBtn").onclick = function() {
+      var interestButtons = document.getElementById("interestButtons");
+      interestButtons.style.display = interestButtons.style.display === "none" ? "block" : "none";
+    };
 
 // X 버튼 클릭 시 모달창 닫기
 document.getElementById('closeModalBtn').addEventListener('click', function() {

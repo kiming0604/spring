@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map; // 추가된 import
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
 import org.hype.domain.pCatVO;
 import org.hype.domain.popStoreVO;
@@ -34,8 +35,13 @@ public interface PopUpMapper {
 
    public Integer getLikeCount(int psNo);
 
+   public int getPsNo(String storeName);
    
-  // 요셉이거 통합 부분
+   public List<goodsVO> getGoodsInfoByName(int psNo);
+   
+   public List<popStoreVO> popUpSearchByData(String searchData);
+
+   // 요셉이거 통합 부분
    public List<popStoreVO> showCalendar();
 
    public List<pCatVO> getCategoryData();
@@ -48,5 +54,8 @@ public interface PopUpMapper {
 //	public int catInsert(pCatVO pcatvo); // 카테고리 등록
 //	public int psDelete(popStoreVO psvo);
 //	public int catDelete(pCatVO pcatvo);	
+
+
+
 
 }
