@@ -9,130 +9,130 @@
 /* CSS 스타일 */
 /* a 태그의 기본 스타일 */
 a {
-	text-decoration: none; /* 밑줄 제거 */
-	color: black; /* 기본 텍스트 색상 검정색 */
-	transition: color 0.3s ease; /* 색상 변화에 대한 트랜지션 효과 추가 */
+   text-decoration: none; /* 밑줄 제거 */
+   color: black; /* 기본 텍스트 색상 검정색 */
+   transition: color 0.3s ease; /* 색상 변화에 대한 트랜지션 효과 추가 */
 }
 
 a:hover {
-	color: blue; /* 마우스를 가져다 대면 색상이 파란색으로 변경 */
+   color: blue; /* 마우스를 가져다 대면 색상이 파란색으로 변경 */
 }
 
 .tab {
-	display: flex; /* Flexbox를 사용하여 수평 배치 */
-	gap: 20px; /* 각 탭 사이의 간격 */
-	margin-bottom: 20px; /* 탭 아래 여백 */
-	justify-content: center; /* 가운데 정렬 */
+   display: flex; /* Flexbox를 사용하여 수평 배치 */
+   gap: 20px; /* 각 탭 사이의 간격 */
+   margin-bottom: 20px; /* 탭 아래 여백 */
+   justify-content: center; /* 가운데 정렬 */
 }
 
 .tab div {
-	padding: 10px 20px; /* 패딩 추가로 클릭 영역 확장 */
-	background-color: #f0f0f0; /* 기본 배경 색상 */
-	border-radius: 5px; /* 모서리 둥글게 */
-	cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-	transition: background-color 0.3s; /* 배경 색상 변화 효과 */
+   padding: 10px 20px; /* 패딩 추가로 클릭 영역 확장 */
+   background-color: #f0f0f0; /* 기본 배경 색상 */
+   border-radius: 5px; /* 모서리 둥글게 */
+   cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+   transition: background-color 0.3s; /* 배경 색상 변화 효과 */
 }
 
 .tab div.active {
-	background-color: #ccc; /* 활성화된 탭의 배경 색상 */
+   background-color: #ccc; /* 활성화된 탭의 배경 색상 */
 }
 
 .content {
-	max-width: 800px; /* 최대 너비 설정 */
-	height: 600px;
-	margin: 0 auto; /* 중앙 정렬 */
-	padding: 20px; /* 패딩 추가 */
-	border: 1px solid #ccc; /* 테두리 추가 */
-	border-radius: 5px; /* 모서리 둥글게 */
-	background-color: #f9f9f9; /* 배경 색상 */
-	position: relative; /* 부모 요소에 상대 위치 설정 */
+   max-width: 800px; /* 최대 너비 설정 */
+   height: 600px;
+   margin: 0 auto; /* 중앙 정렬 */
+   padding: 20px; /* 패딩 추가 */
+   border: 1px solid #ccc; /* 테두리 추가 */
+   border-radius: 5px; /* 모서리 둥글게 */
+   background-color: #f9f9f9; /* 배경 색상 */
+   position: relative; /* 부모 요소에 상대 위치 설정 */
 }
 
 .content section {
-	display: none; /* 기본적으로 모든 섹션 숨기기 */
-	text-align: center;
+   display: none; /* 기본적으로 모든 섹션 숨기기 */
+   text-align: center;
 }
 
 .content section.active {
-	display: block; /* 활성화된 섹션만 보이기 */
+   display: block; /* 활성화된 섹션만 보이기 */
 }
 
 .createAnnouncementBtn, .createInquiryBtn {
-	position: absolute; /* 절대 위치로 설정 */
-	bottom: 10px; /* 아래쪽 여백 */
-	right: 10px; /* 오른쪽 여백 */
+   position: absolute; /* 절대 위치로 설정 */
+   bottom: 10px; /* 아래쪽 여백 */
+   right: 10px; /* 오른쪽 여백 */
 }
 
 .content ul {
-	list-style-type: none;
-	padding: 0;
+   list-style-type: none;
+   padding: 0;
 }
 
 .content ul li {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	background-color: #f0f0f0;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	margin: 10px 0;
-	padding: 10px;
-	transition: background-color 0.3s;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   background-color: #f0f0f0;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   margin: 10px 0;
+   padding: 10px;
+   transition: background-color 0.3s;
 }
 
 .content ul li:hover {
-	background-color: #e0e0e0;
+   background-color: #e0e0e0;
 }
 
 .content ul li .title {
-	flex-grow: 1;
-	margin-left: 10px;
+   flex-grow: 1;
+   margin-left: 10px;
 }
 
 .content ul li .number, .content ul li .date {
-	margin-left: 10px;
+   margin-left: 10px;
 }
 
 .search {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	margin-bottom: 20px;
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   margin-bottom: 20px;
 }
 
 .search input[type="text"] {
-	padding: 5px;
-	margin-right: 10px;
+   padding: 5px;
+   margin-right: 10px;
 }
 
 .search img {
-	cursor: pointer;
+   cursor: pointer;
 }
 
 .pagination {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 20px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 20px;
 }
 
 .pagination a {
-	margin: 0 5px;
-	padding: 10px 15px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	text-decoration: none;
-	color: black;
-	transition: background-color 0.3s ease;
+   margin: 0 5px;
+   padding: 10px 15px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   text-decoration: none;
+   color: black;
+   transition: background-color 0.3s ease;
 }
 
 .pagination a:hover {
-	background-color: #f0f0f0;
+   background-color: #f0f0f0;
 }
 
 .pagination a.active {
-	background-color: #007bff;
-	color: white;
+   background-color: #007bff;
+   color: white;
 }
 </style>
 </head>
@@ -163,13 +163,13 @@ a:hover {
                 <li>로딩 중...</li> 
             </ul>
 
-			<br><br>
-			
-			<div class="pagination">			
-				<span class="notice-page-numbers"></span>
-			</div>
+         <br><br>
+         
+         <div class="pagination">         
+            <span class="notice-page-numbers"></span>
+         </div>
 
-			<div class="createAnnouncementBtn">
+         <div class="createAnnouncementBtn">
                 <input type="button" onclick="createNotice()" value="공지작성">
             </div>
         </section>
@@ -184,13 +184,13 @@ a:hover {
                 <li>로딩 중...</li> 
             </ul>
 
-			<br><br>
+         <br><br>
 
-			<div class="pagination">
-				<span class="inquiry-page-numbers"></span>
-			</div>
+         <div class="pagination">
+            <span class="inquiry-page-numbers"></span>
+         </div>
 
-			<div>
+         <div>
                 <button type="button" onclick="createInquiry()" class="createInquiryBtn">문의 등록</button>
             </div>
         </section>

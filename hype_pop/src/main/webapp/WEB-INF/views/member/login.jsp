@@ -105,7 +105,7 @@
 <body>
 
     <div class="header">
-        <a href="index.jsp">홈</a> <!-- 홈으로 가는 링크 추가 -->
+        <a href="/">홈</a> <!-- 홈으로 가는 링크 추가 -->
     </div>
 
     <div class="container">
