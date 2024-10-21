@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     let currentMonth = new Date().getMonth(); 
     let currentYear = new Date().getFullYear(); 
@@ -16,9 +15,19 @@ document.addEventListener('DOMContentLoaded', function() {
             calendarDays.insertAdjacentHTML('beforeend', `<td>${i}</td>`); 
         }
 
-        // fetch로 팝업스토어 데이터 가져오기
+        const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value);
+        const noSelectedCat = selectedCategories.length === 0; 
+
+        if (noSelectedCat && !document.getElementById('selectAll').checked) {
+            // 전체보기 체크박스 해제 시 캘린더와 팝업 리스트 비우기
+            document.getElementById('calendar-body').innerHTML = '';
+            document.getElementById('popUpList').innerHTML = '';
+            return; 
+        }
+
+        // 팝업스토어 정보 가져오기
         fetch(`/hypePop/calendarData?year=${currentYear}&month=${currentMonth + 1}`)
-            .then(response => {
+            .then(response => { 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -40,12 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 calendarBody.innerHTML = ''; 
                 popUpList.innerHTML = ''; 
 
-                // 체크된 카테고리가 없을 경우 모든 정보 표시
-                const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value);
-                const showAllStores = selectedCategories.length === 0; // 선택된 카테고리가 없으면 모든 정보 표시
-
-                // 카테고리 필터링
-                const filteredStores = showAllStores ? storeData : storeData.filter(store => {
+                // 필터링된 팝업스토어를 표시
+                const filteredStores = noSelectedCat ? storeData : storeData.filter(store => {
                     const categories = categoryData.filter(category => category.psNo === store.psNo);
                     return selectedCategories.some(category => 
                         categories.length > 0 && categories[0][category] === 1
@@ -119,6 +124,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     checkbox.checked = checkboxStates[key];
                 }
             });
+        } else {
+            // 체크박스 상태가 없으면 모든 체크박스 선택
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            selectAllCheckbox.checked = true; // 전체 선택 체크박스도 체크
         }
     }
 
@@ -126,33 +137,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkboxes = document.querySelectorAll('.category-checkbox');
     const selectAllCheckbox = document.getElementById('selectAll');
 
+
     // 전체보기 체크박스 상태 변경 시
     selectAllCheckbox.addEventListener('change', function() {
         const isChecked = this.checked;
         checkboxes.forEach(checkbox => {
-            checkbox.checked = isChecked; 
+            checkbox.checked = isChecked; // 전체보기 체크박스 상태에 따라 모두 체크하거나 해제
         });
-        if (isChecked) {
-            saveCheckboxState(); 
-            updateCalendar(); 
-        } else { 
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = true; 
-            });
-            saveCheckboxState(); 
-            updateCalendar(); 
-        }
+        saveCheckboxState(); 
+        updateCalendar(); 
     });
 
+    // 개별 체크박스 상태 변경 시 전체보기 체크박스 상태 업데이트
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
-            if (Array.from(checkboxes).every(cb => cb.checked)) {
-                selectAllCheckbox.checked = true; // 전체보기 체크박스 체크
-            } else {
-                selectAllCheckbox.checked = false; // 전체보기 체크박스 체크 해제
-            }
-            saveCheckboxState(); // 체크박스 상태 저장
-            updateCalendar();
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked; 
+            saveCheckboxState(); 
+            updateCalendar(); 
         });
     });
 
@@ -177,6 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 초기 화면 로드시 데이터 불러오기
-    loadCheckboxState(); // 체크박스 상태 복원
+    loadCheckboxState(); // 체크박스 상태 복원 및 초기화
     updateCalendar();
 });

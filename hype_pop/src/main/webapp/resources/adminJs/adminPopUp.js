@@ -225,8 +225,9 @@ function MemberLists(members) {
 //}
 //
 // 팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
+//팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
 document.querySelector('#popUpimg').addEventListener('click', function() {
-	document.querySelector('#fileInput').click(); // 클릭 시 파일 선택 창 열기
+   document.querySelector('#fileInput').click(); // 클릭 시 파일 선택 창 열기
 });
 
 document.querySelector('#fileInput').addEventListener('input', function(event) {
@@ -312,26 +313,3 @@ function checkFile(fileName, fileSize) {
     }
     return true;
 }
-
-//**** 팝업스토어 수정/삭제 페이지 영역 ****
-// 에러 발생 중이라 주석 처리
-//document.querySelector('#psDelete').addEventListener('click', popupDelete);
-//
-//function popupDelete() {
-//	if (confirm('정말로 삭제하시겠습니까?')) {
-//		// 카테고리 정보를 가져오기 (예시)
-//        const psCat = document.querySelector('input[name="psCat"]').value;
-//
-//        // 카테고리 정보를 hidden input에 추가
-//        document.querySelector('input[name="psCat"]').value = psCat;
-//
-//        // 이미지 UUID를 가져와서 hidden input에 추가
-//        const imageUuid = document.querySelector('input[name="imageUuid"]').value;
-//
-//        // 제출할 폼에 추가 정보 설정
-//        document.querySelector('input[name="imageUuid"]').value = imageUuid;
-//
-//        // 폼 제출
-//        document.querySelector('#deleteForm').submit();
-//    }
-//}

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+   pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -238,44 +238,44 @@ thead th {
         <div class="content">
             <div class="calendar-container">
                 <div class="checkBoxList">
-   				 	<label><input type="checkbox" id="selectAll" class="category-checkbox"> 전체보기</label>
-   				 	<label><input type="checkbox" class="category-checkbox" value="healthBeauty"> 헬스/뷰티</label>
-   				 	<label><input type="checkbox" class="category-checkbox" value="game"> 게임</label>
-  				 	<label><input type="checkbox" class="category-checkbox" value="culture"> 문화</label>
-   				 	<label><input type="checkbox" class="category-checkbox" value="shopping"> 쇼핑</label>
-  				 	<label><input type="checkbox" class="category-checkbox" value="supply"> 문구</label>
-  				  	<label><input type="checkbox" class="category-checkbox" value="kids"> 키즈</label>
-  				  	<label><input type="checkbox" class="category-checkbox" value="design"> 디자인</label>
- 				  	<label><input type="checkbox" class="category-checkbox" value="foods"> 음식</label>
-  				  	<label><input type="checkbox" class="category-checkbox" value="interior"> 인테리어</label>
-  				  	<label><input type="checkbox" class="category-checkbox" value="policy"> 정책</label>
-  				  	<label><input type="checkbox" class="category-checkbox" value="character"> 캐릭터</label>
-  				 	<label><input type="checkbox" class="category-checkbox" value="experience"> 경험</label>
-   				 	<label><input type="checkbox" class="category-checkbox" value="collaboration"> 콜라보</label>
- 				    <label><input type="checkbox" class="category-checkbox" value="entertainment"> 방송</label>
-				</div>
+                   <label><input type="checkbox" id="selectAll" class="category-checkbox"> 전체보기</label>
+                   <label><input type="checkbox" class="category-checkbox" value="healthBeauty"> 헬스/뷰티</label>
+                   <label><input type="checkbox" class="category-checkbox" value="game"> 게임</label>
+                  <label><input type="checkbox" class="category-checkbox" value="culture"> 문화</label>
+                   <label><input type="checkbox" class="category-checkbox" value="shopping"> 쇼핑</label>
+                  <label><input type="checkbox" class="category-checkbox" value="supply"> 문구</label>
+                   <label><input type="checkbox" class="category-checkbox" value="kids"> 키즈</label>
+                   <label><input type="checkbox" class="category-checkbox" value="design"> 디자인</label>
+                  <label><input type="checkbox" class="category-checkbox" value="foods"> 음식</label>
+                   <label><input type="checkbox" class="category-checkbox" value="interior"> 인테리어</label>
+                   <label><input type="checkbox" class="category-checkbox" value="policy"> 정책</label>
+                   <label><input type="checkbox" class="category-checkbox" value="character"> 캐릭터</label>
+                  <label><input type="checkbox" class="category-checkbox" value="experience"> 경험</label>
+                   <label><input type="checkbox" class="category-checkbox" value="collaboration"> 콜라보</label>
+                 <label><input type="checkbox" class="category-checkbox" value="entertainment"> 방송</label>
+            </div>
 
 
                 <br>
                 
                 <div class="monthChange">
-    				<button id="prevMonth"> &lt; </button> <!-- 이전 달로 이동 -->
-    				<span id="currentMonth">10월</span> <!-- 현재 달 표시 -->
-    				<button id="nextMonth"> &gt; </button> <!-- 다음 달로 이동 -->
-				</div>
+                <button id="prevMonth"> &lt; </button> <!-- 이전 달로 이동 -->
+                <span id="currentMonth">10월</span> <!-- 현재 달 표시 -->
+                <button id="nextMonth"> &gt; </button> <!-- 다음 달로 이동 -->
+            </div>
 
                 
                 <br>
                 <table class="calendar-table">
                     <thead>
-                    	<tr  id = "calendar-days">
-                    	<!-- 날짜 나올 공간  -->
-                    	</tr>
+                       <tr  id = "calendar-days">
+                       <!-- 날짜 나올 공간  -->
+                       </tr>
                     </thead>
 
                     <tbody id="calendar-body">
                     
-                    	<!-- 팝업스토어 목록 나올 공간 -->
+                       <!-- 팝업스토어 목록 나올 공간 -->
                     </tbody>
                 </table>
             </div>
@@ -284,13 +284,12 @@ thead th {
         <div class="popUpList" id = "popUpList"></div>
         
     </div>
-	
+   
     <br>
     <hr>
     <br>
 
     <jsp:include page="layout/popUpFooter.jsp" />
-    <jsp:include page="layout/popUpNavBar.jsp" />
     <script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
     <script type="text/javascript" src="/resources/calendarJs/calendarMain.js"></script>
 </body>

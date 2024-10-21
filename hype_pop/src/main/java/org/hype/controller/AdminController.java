@@ -1,4 +1,3 @@
-
 package org.hype.controller;
 
 import java.io.File;
@@ -45,161 +44,161 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
-	@Autowired
-	private PopUpService pservice;
-	
-	@Autowired
-	private GoodsService gservice;
-	
-	@Autowired
-	private MemberService mservice;
-	
-	@GetMapping("/adminPage")
-	public String adminPopUp() {		
-		
-		System.out.println("愿�由ъ옄 �럹�씠吏� �씠�룞");
-		
-		return "/admin/adminMain";
-	}
-	
-	@GetMapping("/askList")
-	public String askList() {		
-		
-		System.out.println("臾몄쓽 由ъ뒪�듃 �럹�씠吏� �씠�룞");
-		
-		return "/admin/askListCheck";
-	}
-	
-	// **愿�由ъ옄 �럹�씠吏� �쁺�뿭**
-	// �뙘�뾽�뒪�넗�뼱 由ъ뒪�듃 異쒕젰 (header - 怨듯넻)
-	@ResponseBody
-	@GetMapping(value ="/psList",
-			produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
-					   MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<List<popStoreVO>> getList(@RequestParam(required = false) String searchPs) {
-				
-		log.info("�뙘�뾽�뒪�넗�뼱 由ъ뒪�듃 異쒕젰 : " );
-		
-		List<popStoreVO> popStoreList;
+   
+   @Autowired
+   private PopUpService pservice;
+   
+   @Autowired
+   private GoodsService gservice;
+   
+   @Autowired
+   private MemberService mservice;
+   
+   @GetMapping("/adminPage")
+   public String adminPopUp() {      
+      
+      System.out.println("관리자 페이지 이동");
+      
+      return "/admin/adminMain";
+   }
+   
+   @GetMapping("/askList")
+   public String askList() {      
+      
+      System.out.println("문의 리스트 페이지 이동");
+      
+      return "/admin/askListCheck";
+   }
+   
+   // **관리자 페이지 영역**
+   // 팝업스토어 리스트 출력 (header - 공통)
+   @ResponseBody
+   @GetMapping(value ="/psList",
+         produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+                  MediaType.APPLICATION_XML_VALUE})
+   public ResponseEntity<List<popStoreVO>> getList(@RequestParam(required = false) String searchPs) {
+            
+      log.info("팝업스토어 리스트 출력 : " );
+      
+      List<popStoreVO> popStoreList;
 
-	    // 寃��깋�뼱媛� �엳�쓣 寃쎌슦
-	    if (searchPs != null && !searchPs.isEmpty()) {
-	        log.info("寃��깋�뼱 : " + searchPs);
-	        popStoreList = pservice.getListBySearchPs(searchPs); // 寃��깋 硫붿꽌�뱶 �샇異�
-	    } else {
-	        popStoreList = pservice.getList(); // �쟾泥� 由ъ뒪�듃 �샇異�
-	    }
-	    
-		return new ResponseEntity<List<popStoreVO>>(popStoreList, HttpStatus.OK);
-	}
-	
-	// �뙘�뾽�뒪�넗�뼱 �씠由� �겢由� �떆 �뙘�뾽�뒪�넗�뼱 �닔�젙/�궘�젣 �럹�씠吏�濡� �씠�룞
-	@GetMapping("/popUpUpdate")
-	public String updatePopUp(@RequestParam("psNo") int psNo, Model model) {
-	    log.info("�뙘�뾽�뒪�넗�뼱 �닔�젙 �럹�씠吏�濡� �씠�룞: psNo = " + psNo);
-	    
-	    // �빐�떦 psNo�뿉 ���븳 �뙘�뾽�뒪�넗�뼱 �젙蹂� 議고쉶
-	    popStoreVO popStore = pservice.getPopStoreById(psNo);
-	    if (popStore != null) {
-	        model.addAttribute("popStore", popStore); // JSP�뿉�꽌 �궗�슜�븯湲� �쐞�빐 紐⑤뜽�뿉 異붽�
-	        return "admin/psUpdateDelete"; // JSP �뙆�씪 寃쎈줈
-	    } else {
-	        // �빐�떦 ID�쓽 �뙘�뾽�뒪�넗�뼱媛� �뾾�뒗 寃쎌슦 泥섎━
-	        return "redirect:/admin/psList";
-	    }
-	}
-	
-	// �긽�뭹 由ъ뒪�듃 異쒕젰 (header - 怨듯넻)
-	@ResponseBody
-	@GetMapping(value ="/gList",
-			produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
-					   MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<List<goodsVO>> getGList(@RequestParam(required = false) String searchGs) {
-		
-		log.info("�긽�뭹 由ъ뒪�듃 異쒕젰 : " );
-		
-		List<goodsVO> goodsList;
-		
-		// 寃��깋�뼱媛� �엳�쓣 寃쎌슦
-	    if (searchGs != null && !searchGs.isEmpty()) {
-	        log.info("寃��깋�뼱 : " + searchGs);
-	        goodsList = gservice.getListBySearchGs(searchGs); // 寃��깋 硫붿꽌�뱶 �샇異�
-	    } else {
-	    	goodsList = gservice.getGList(); // �쟾泥� 由ъ뒪�듃 �샇異�
-	    }
-		return new ResponseEntity<List<goodsVO>>(goodsList, HttpStatus.OK);
-	}
-	
-	// 援우쫰 �씠由� �겢由� �떆 援우쫰 �젙蹂� �닔�젙/�궘�젣 �럹�씠吏�濡� �씠�룞
-	@GetMapping("/goodsUpdate")
-	public String updateGoods(@RequestParam("gNo") int gNo, Model model) {
-	    log.info("援우쫰 �젙蹂� �닔�젙 �럹�씠吏�濡� �씠�룞: gNo = " + gNo);
-	    
-	    // �빐�떦 psNo�뿉 ���븳 �뙘�뾽�뒪�넗�뼱 �젙蹂� 議고쉶
-	    goodsVO goods = gservice.getGoodsById(gNo);
-	    if (goods != null) {
-	        model.addAttribute("goods", goods); // JSP�뿉�꽌 �궗�슜�븯湲� �쐞�빐 紐⑤뜽�뿉 異붽�
-	        return "admin/gUpdateDelete"; // JSP �뙆�씪 寃쎈줈
-	    } else {
-	        // �빐�떦 ID�쓽 援우쫰媛� �뾾�뒗 寃쎌슦 泥섎━
-	        return "redirect:/admin/gList";
-	    }
-	}
-	
-	// �쉶�썝 由ъ뒪�듃 異쒕젰 (header - 怨듯넻)
-	@ResponseBody
-	@GetMapping(value ="/mList",
-	produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
-			   MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<List<signInVO>> getMList(@RequestParam(required = false) String searchMs) {
-		
-		log.info("�쉶�썝 由ъ뒪�듃 異쒕젰 : " );
-		
-		List<signInVO> memberList;
-		
-		// 寃��깋�뼱媛� �엳�쓣 寃쎌슦
-	    if (searchMs != null && !searchMs.isEmpty()) {
-	        log.info("寃��깋�뼱 : " + searchMs);
-	        memberList = mservice.getListBySearchMs(searchMs); // 寃��깋 硫붿꽌�뱶 �샇異�
-	    } else {
-	    	memberList = mservice.getMList(); // �쟾泥� 由ъ뒪�듃 �샇異�
-	    }
-		
-		return new ResponseEntity<List<signInVO>>(memberList, HttpStatus.OK);
-	}
-	
-	// �쉶�썝 �븘�씠�뵒 �겢由� �떆 �쉶�썝 �젙蹂� �닔�젙 �럹�씠吏�濡� �씠�룞
-	@GetMapping("/memberUpdate")
-	public String updateMembers(@RequestParam("userId") String userId, Model model) {
-	    log.info("�쉶�썝 �젙蹂� �닔�젙 �럹�씠吏�濡� �씠�룞: userId = " + userId);
-	    
-	    // �빐�떦 psNo�뿉 ���븳 �뙘�뾽�뒪�넗�뼱 �젙蹂� 議고쉶
-	    signInVO members = mservice.getMembersById(userId);
-	    if (members != null) {
-	        model.addAttribute("members", members); // JSP�뿉�꽌 �궗�슜�븯湲� �쐞�빐 紐⑤뜽�뿉 異붽�
-	        return "admin/memberUpdate"; // JSP �뙆�씪 寃쎈줈
-	    } else {
-	        // �빐�떦 ID�쓽 �쉶�썝�씠 �뾾�뒗 寃쎌슦 泥섎━
-	        return "redirect:/admin/mList";
-	    }
-	}
-	
-	//***footer �쁺�뿭***
-	// 臾몄쓽 由ъ뒪�듃 �솗�씤 踰꾪듉 �겢由� �떆 臾몄쓽 由ъ뒪�듃 �솗�씤 �럹�씠吏�濡� �씠�룞
-	@GetMapping("/askListCheck")
-	public String checkAskList() {
-		return "admin/askListCheck"; // JSP �뙆�씪 寃쎈줈
-	}
-				
-	// �긽�뭹 �긽�깭 議고쉶 踰꾪듉 �겢由� �떆 �긽�뭹 �긽�깭 議고쉶 �럹�씠吏�濡� �씠�룞
-	@GetMapping("/goodsState")
-	public String checkGoods() {
-		return "admin/goodsState"; // JSP �뙆�씪 寃쎈줈
-	}
-		
-	// �벑濡앺븯湲� 踰꾪듉 �겢由� �떆 �씠�룞
-	@GetMapping("/popUpRegister")
+       // 검색어가 있을 경우
+       if (searchPs != null && !searchPs.isEmpty()) {
+           log.info("검색어 : " + searchPs);
+           popStoreList = pservice.getListBySearchPs(searchPs); // 검색 메서드 호출
+       } else {
+           popStoreList = pservice.getList(); // 전체 리스트 호출
+       }
+       
+      return new ResponseEntity<List<popStoreVO>>(popStoreList, HttpStatus.OK);
+   }
+   
+   // 팝업스토어 이름 클릭 시 팝업스토어 수정/삭제 페이지로 이동
+   @GetMapping("/popUpUpdate")
+   public String updatePopUp(@RequestParam("psNo") int psNo, Model model) {
+       log.info("팝업스토어 수정 페이지로 이동: psNo = " + psNo);
+       
+       // 해당 psNo에 대한 팝업스토어 정보 조회
+       popStoreVO popStore = pservice.getPopStoreById(psNo);
+       if (popStore != null) {
+           model.addAttribute("popStore", popStore); // JSP에서 사용하기 위해 모델에 추가
+           return "admin/psUpdateDelete"; // JSP 파일 경로
+       } else {
+           // 해당 ID의 팝업스토어가 없는 경우 처리
+           return "redirect:/admin/psList";
+       }
+   }
+   
+   // 상품 리스트 출력 (header - 공통)
+   @ResponseBody
+   @GetMapping(value ="/gList",
+         produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+                  MediaType.APPLICATION_XML_VALUE})
+   public ResponseEntity<List<goodsVO>> getGList(@RequestParam(required = false) String searchGs) {
+      
+      log.info("상품 리스트 출력 : " );
+      
+      List<goodsVO> goodsList;
+      
+      // 검색어가 있을 경우
+       if (searchGs != null && !searchGs.isEmpty()) {
+           log.info("검색어 : " + searchGs);
+           goodsList = gservice.getListBySearchGs(searchGs); // 검색 메서드 호출
+       } else {
+          goodsList = gservice.getGList(); // 전체 리스트 호출
+       }
+      return new ResponseEntity<List<goodsVO>>(goodsList, HttpStatus.OK);
+   }
+   
+   // 굿즈 이름 클릭 시 굿즈 정보 수정/삭제 페이지로 이동
+   @GetMapping("/goodsUpdate")
+   public String updateGoods(@RequestParam("gNo") int gNo, Model model) {
+       log.info("굿즈 정보 수정 페이지로 이동: gNo = " + gNo);
+       
+       // 해당 psNo에 대한 팝업스토어 정보 조회
+       goodsVO goods = gservice.getGoodsById(gNo);
+       if (goods != null) {
+           model.addAttribute("goods", goods); // JSP에서 사용하기 위해 모델에 추가
+           return "admin/gUpdateDelete"; // JSP 파일 경로
+       } else {
+           // 해당 ID의 굿즈가 없는 경우 처리
+           return "redirect:/admin/gList";
+       }
+   }
+   
+   // 회원 리스트 출력 (header - 공통)
+   @ResponseBody
+   @GetMapping(value ="/mList",
+   produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+            MediaType.APPLICATION_XML_VALUE})
+   public ResponseEntity<List<signInVO>> getMList(@RequestParam(required = false) String searchMs) {
+      
+      log.info("회원 리스트 출력 : " );
+      
+      List<signInVO> memberList;
+      
+      // 검색어가 있을 경우
+       if (searchMs != null && !searchMs.isEmpty()) {
+           log.info("검색어 : " + searchMs);
+           memberList = mservice.getListBySearchMs(searchMs); // 검색 메서드 호출
+       } else {
+          memberList = mservice.getMList(); // 전체 리스트 호출
+       }
+      
+      return new ResponseEntity<List<signInVO>>(memberList, HttpStatus.OK);
+   }
+   
+   // 회원 아이디 클릭 시 회원 정보 수정 페이지로 이동
+   @GetMapping("/memberUpdate")
+   public String updateMembers(@RequestParam("userId") String userId, Model model) {
+       log.info("회원 정보 수정 페이지로 이동: userId = " + userId);
+       
+       // 해당 psNo에 대한 팝업스토어 정보 조회
+       signInVO members = mservice.getMembersById(userId);
+       if (members != null) {
+           model.addAttribute("members", members); // JSP에서 사용하기 위해 모델에 추가
+           return "admin/memberUpdate"; // JSP 파일 경로
+       } else {
+           // 해당 ID의 회원이 없는 경우 처리
+           return "redirect:/admin/mList";
+       }
+   }
+   
+   //***footer 영역***
+   // 문의 리스트 확인 버튼 클릭 시 문의 리스트 확인 페이지로 이동
+   @GetMapping("/askListCheck")
+   public String checkAskList() {
+      return "admin/askListCheck"; // JSP 파일 경로
+   }
+            
+   // 상품 상태 조회 버튼 클릭 시 상품 상태 조회 페이지로 이동
+   @GetMapping("/goodsState")
+   public String checkGoods() {
+      return "admin/goodsState"; // JSP 파일 경로
+   }
+      
+   // 등록하기 버튼 클릭 시 이동
+   @GetMapping("/popUpRegister")
     public String popUpRegister() {
         return "admin/popUpRegister"; 
     }
@@ -209,20 +208,20 @@ public class AdminController {
         return "admin/goodsRegister"; 
     }
     
-    //***�뙘�뾽�뒪�넗�뼱 �벑濡� �럹�씠吏� �쁺�뿭***
-    // �씠誘몄� �뙆�씪 �벑濡�
- 	// 鍮꾨룞湲� �넻�떊 : @ResponseBody
+    //***팝업스토어 등록 페이지 영역***
+    // 이미지 파일 등록
+    // 비동기 통신 : @ResponseBody
     @ResponseBody
     @PostMapping(value = "/uploadAsyncAction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<pImgVO> uploadAsyncPost(@RequestParam("uploadFile") MultipartFile uploadFile) {
         log.info("upload Async post...");
 
-        String uploadFolder = "C:\\upload"; // 湲곕낯 ���옣 寃쎈줈
+        String uploadFolder = "C:\\upload"; // 기본 저장 경로
         
         File uploadPath = new File(uploadFolder);
         log.info("uploadPath : " + uploadPath);
 
-        // 寃쎈줈媛� �뾾�쑝硫� �깮�꽦
+        // 경로가 없으면 생성
         if (!uploadPath.exists()) {
             uploadPath.mkdirs();
         }
@@ -244,7 +243,7 @@ public class AdminController {
 
             pImgVO attachDto = new pImgVO();
             attachDto.setUuid(uuid.toString());
-            attachDto.setUploadPath(uploadFolder); // �떎�젣 寃쎈줈 �꽕�젙
+            attachDto.setUploadPath(uploadFolder); // 실제 경로 설정
             attachDto.setFilename(uploadFile.getOriginalFilename());
 
             return new ResponseEntity<>(attachDto, HttpStatus.OK);
@@ -254,122 +253,122 @@ public class AdminController {
         }
     }
 
-    // �뙘�뾽�뒪�넗�뼱 �벑濡앸쾭�듉 �겢由� �떆 �벑濡� (insert)   	
-    // �쁽�옱 �뿉�윭 �굹怨� �엲�뼱�꽌 二쇱꽍 泥섎━
-//	@PostMapping("/psRegister")
-//	public String registerPopStore(popStoreVO psvo, pCatVO pcatvo, @RequestParam("uploadFile") MultipartFile imageFile) {
-//				
-//		log.warn("pcatvo :" + pcatvo.getHealthBeauty());
-//		log.warn("pcatvo :" + pcatvo.getCulture());
-//		log.warn("pcatvo :" + pcatvo.getShopping());
-//		pcatvo.setPsNo(psvo.getPsNo());
-//		
-//		pImgVO image = new pImgVO();
-//	    if (!imageFile.isEmpty()) {
-//	    	image.setPsNo(psvo.getPsNo());
-//	    	image.setUploadPath("C:\\upload"); // �떎�젣 寃쎈줈 �꽕�젙 �븘�슂
-//	    	image.setUuid(UUID.randomUUID().toString());
-//	        psvo.getPsImg().setFilename("Test Filename");
-////	        imgVO.setFilename(imageFile.getOriginalFilename());
+    // 팝업스토어 등록버튼 클릭 시 등록 (insert)      
+    // 현재 에러 나고 잇어서 주석 처리
+//   @PostMapping("/psRegister")
+//   public String registerPopStore(popStoreVO psvo, pCatVO pcatvo, @RequestParam("uploadFile") MultipartFile imageFile) {
+//            
+//      log.warn("pcatvo :" + pcatvo.getHealthBeauty());
+//      log.warn("pcatvo :" + pcatvo.getCulture());
+//      log.warn("pcatvo :" + pcatvo.getShopping());
+//      pcatvo.setPsNo(psvo.getPsNo());
+//      
+//      pImgVO image = new pImgVO();
+//       if (!imageFile.isEmpty()) {
+//          image.setPsNo(psvo.getPsNo());
+//          image.setUploadPath("C:\\upload"); // 실제 경로 설정 필요
+//          image.setUuid(UUID.randomUUID().toString());
+//           psvo.getPsImg().setFilename("Test Filename");
+////           imgVO.setFilename(imageFile.getOriginalFilename());
 //
-//	        // �뙆�씪 �뾽濡쒕뱶 硫붿꽌�뱶 �샇異�
-//	        ResponseEntity<pImgVO> response = uploadAsyncPost(imageFile);
-//	        if (response.getStatusCode() == HttpStatus.OK) {
-//	        	image = response.getBody(); // �뾽濡쒕뱶�맂 �씠誘몄� �젙蹂�
-//	        }
-//	        
-//	        // �뙆�씪 ���옣 濡쒖쭅 異붽�
-//	        try {
-//	            saveFile(imageFile, image.getUploadPath(), image.getFilename());
-//	        } catch (IOException e) {
-//	            log.error("�뙆�씪 ���옣 以� �삤瑜� 諛쒖깮: " + e.getMessage());
-//	            throw new RuntimeException("�뙆�씪 ���옣 �떎�뙣");
-//	        }
-//	    }
-//		    
-//		// �벑濡�
-//		pservice.psInsert(psvo, pcatvo, imageFile);
+//           // 파일 업로드 메서드 호출
+//           ResponseEntity<pImgVO> response = uploadAsyncPost(imageFile);
+//           if (response.getStatusCode() == HttpStatus.OK) {
+//              image = response.getBody(); // 업로드된 이미지 정보
+//           }
+//           
+//           // 파일 저장 로직 추가
+//           try {
+//               saveFile(imageFile, image.getUploadPath(), image.getFilename());
+//           } catch (IOException e) {
+//               log.error("파일 저장 중 오류 발생: " + e.getMessage());
+//               throw new RuntimeException("파일 저장 실패");
+//           }
+//       }
+//          
+//      // 등록
+//      pservice.psInsert(psvo, pcatvo, imageFile);
 //        
 //        return "admin/adminMain";
 //    }
-//	
-//	private void saveFile(MultipartFile file, String uploadPath, String filename) throws IOException {
-//	    File dest = new File(uploadPath + "\\" + filename);
-//	    file.transferTo(dest); // �뙆�씪 ���옣
-//	}
+//   
+//   private void saveFile(MultipartFile file, String uploadPath, String filename) throws IOException {
+//       File dest = new File(uploadPath + "\\" + filename);
+//       file.transferTo(dest); // 파일 저장
+//   }
     
-    // �쁽�옱 �뿉�윭 �굹怨� �엲�뼱�꽌 二쇱꽍 泥섎━
+    // 현재 에러 나고 잇어서 주석 처리
 //    @PostMapping("/psRegister")
 //    public String registerPopStore(
 //            popStoreVO psvo,
-//            @RequestParam("psCat") String categories, // 移댄뀒怨좊━
+//            @RequestParam("psCat") String categories, // 카테고리
 //            @RequestParam("imageFile") MultipartFile imageFile) { 
-//    	
-//    	log.info("registerPopStore....." + categories);
-//    	
-//    	log.warn("�벑濡앺븯湲� �씠誘몄� " + psvo.getPsImg().getFilename());
-//    	
-//    	//psvo.getPsImg().setFilename("Test Filename");
-//    	   	
-//    	int result = 0;
-//    	
+//       
+//       log.info("registerPopStore....." + categories);
+//       
+//       log.warn("등록하기 이미지 " + psvo.getPsImg().getFilename());
+//       
+//       //psvo.getPsImg().setFilename("Test Filename");
+//             
+//       int result = 0;
+//       
 //        try {
-//            // 移댄뀒怨좊━瑜� 臾몄옄�뿴 諛곗뿴濡� 蹂��솚
+//            // 카테고리를 문자열 배열로 변환
 //            String[] categoryArray = categories.split(",");
 //            
-//            // �씠誘몄� �젙蹂� �깮�꽦
+//            // 이미지 정보 생성
 //            pImgVO imgVO = new pImgVO();
 //            if (!imageFile.isEmpty()) {
 ////                imgVO.setFilename(imageFile.getOriginalFilename());
-//                imgVO.setUploadPath("C:\\upload"); // �떎�젣 寃쎈줈 �꽕�젙 �븘�슂
+//                imgVO.setUploadPath("C:\\upload"); // 실제 경로 설정 필요
 //                imgVO.setUuid(UUID.randomUUID().toString());
 //
-//                // �뙆�씪 �뾽濡쒕뱶 硫붿꽌�뱶 �샇異�
+//                // 파일 업로드 메서드 호출
 //                ResponseEntity<pImgVO> response = uploadAsyncPost(imageFile);
 //                if (response.getStatusCode() == HttpStatus.OK) {
-//                    imgVO = response.getBody(); // �뾽濡쒕뱶�맂 �씠誘몄� �젙蹂�
+//                    imgVO = response.getBody(); // 업로드된 이미지 정보
 //                }
 //            }
 //
-//            // �뙘�뾽�뒪�넗�뼱 �벑濡�
+//            // 팝업스토어 등록
 //            result = pservice.psInsert(psvo, categoryArray, imgVO);
 //
-//            // �꽦怨듭쟻�쑝濡� �벑濡앸맂 寃쎌슦 JSON �쓳�떟 諛섑솚
-//            log.error("�뙘�뾽�뒪�넗�뼱 �벑濡앹씠 �셿猷뚮릺�뿀�뒿�땲�떎. ID : " + result);
+//            // 성공적으로 등록된 경우 JSON 응답 반환
+//            log.error("팝업스토어 등록이 완료되었습니다. ID : " + result);
 //        } catch (Exception e) {
-//            // �삤瑜� 諛쒖깮 �떆 JSON �쓳�떟 諛섑솚
-//        	log.error("�뙘�뾽�뒪�넗�뼱 �벑濡� 以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. " + result);
+//            // 오류 발생 시 JSON 응답 반환
+//           log.error("팝업스토어 등록 중 오류가 발생했습니다. " + result);
 //        }
 //        
 //        
 //        return "/admin/adminMain";
-//    }	
+//    }   
     
-    // �뙘�뾽�뒪�넗�뼱 �닔�젙/�궘�젣 �럹�씠吏� �쁺�뿭
-    // �궘�젣 踰꾪듉 �겢由� �떆 �궘�젣 �썑 愿�由ъ옄 硫붿씤�럹�씠吏�濡� �씠�룞 
-    // �쁽�옱 �뿉�윭 �굹怨� �엲�뼱�꽌 二쇱꽍 泥섎━
+    // 팝업스토어 수정/삭제 페이지 영역
+    // 삭제 버튼 클릭 시 삭제 후 관리자 메인페이지로 이동 
+    // 현재 에러 나고 잇어서 주석 처리
 //    @PostMapping("/psDelete")
 //    public String deletePopStore(
-//    		@ModelAttribute popStoreVO psvo,
-//            @ModelAttribute pCatVO pcatvo, // 移댄뀒怨좊━ �젙蹂�
+//          @ModelAttribute popStoreVO psvo,
+//            @ModelAttribute pCatVO pcatvo, // 카테고리 정보
 //            @ModelAttribute pImgVO image)
 //    {
-//    	log.info("�뙘�뾽�뒪�넗�뼱 �씠由�: " + psvo.getPsName());
-//        log.info("移댄뀒怨좊━: " + pcatvo.toString());
-//        log.info("�씠誘몄� UUID: " + image.getUuid());
+//       log.info("팝업스토어 이름: " + psvo.getPsName());
+//        log.info("카테고리: " + pcatvo.toString());
+//        log.info("이미지 UUID: " + image.getUuid());
 //        
-//        String imagePath = "C:\\upload\\" + image.getUuid() + ".jpg"; // �삁�떆 寃쎈줈
+//        String imagePath = "C:\\upload\\" + image.getUuid() + ".jpg"; // 예시 경로
 //        
-//        // �씠誘몄� �뙆�씪 �궘�젣 濡쒖쭅
+//        // 이미지 파일 삭제 로직
 //        File fileToDelete = new File(imagePath);
 //        if (fileToDelete.exists() && fileToDelete.delete()) {
-//            log.info("�씠誘몄� �뙆�씪 �궘�젣 �꽦怨�: " + imagePath);
+//            log.info("이미지 파일 삭제 성공: " + imagePath);
 //        } else {
-//            log.warn("�씠誘몄� �뙆�씪 �궘�젣 �떎�뙣 �삉�뒗 �뙆�씪�씠 議댁옱�븯吏� �븡�쓬: " + imagePath);
+//            log.warn("이미지 파일 삭제 실패 또는 파일이 존재하지 않음: " + imagePath);
 //        }
 //
-//        // �궘�젣 濡쒖쭅 �닔�뻾
-//        int result = pservice.psDelete(psvo, pcatvo, image); // �궘�젣 �꽌鍮꾩뒪 �샇異�
+//        // 삭제 로직 수행
+//        int result = pservice.psDelete(psvo, pcatvo, image); // 삭제 서비스 호출
 //        
 //        return "/admin/adminMain";
 //    }
