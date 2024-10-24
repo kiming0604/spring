@@ -34,7 +34,9 @@ public class popStoreVO {
     private double avgRating; 
 
     // 새로운 필드 추가
-    private String interest; // 관심사 추가
+    
+
+    private String interest; // 단일 관심사 가져오기
     private List<popStoreVO> topStores; // 상위 스토어 목록 추가
     
     //서연씨 통합 부분 

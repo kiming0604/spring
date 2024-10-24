@@ -33,39 +33,91 @@ public class PopUpController {
 	PopUpService service;
 	
 
-    // 검색 결과를 보여주는 메서드
-    @GetMapping("/search") // URL 매핑에 해당하는 메서드
-    public String search(@RequestParam("searchData") String searchData, Model model) {
-        // searchData를 받아 검색 결과를 처리
-        System.out.println("검색 데이터: " + searchData);
-        
-        // DB에서 검색 결과를 가져오는 로직 작성
-        List<popStoreVO> vo = service.popUpSearchByData(searchData);
-       
-        for (popStoreVO store : vo) {
-            System.out.println("스토어 번호: " + store.getPsNo());
-            System.out.println("스토어 이름: " + store.getPsName());
-            System.out.println("주소: " + store.getPsAddress());
-            System.out.println("설명: " + store.getPsExp());
-            System.out.println("좋아요 수: " + store.getLikeCount());
-            System.out.println("평균 별점: " + store.getAvgRating());
-            System.out.println("------------------------------");
-        }
-        
-        
-        
-        // searchData를 JSP에 전달
-        model.addAttribute("searchData", vo);
-        
-        return "/popUp/searchResultPage"; // 검색 결과를 보여주는 JSP 경로
-    }
+	@GetMapping("/search") // URL 매핑에 해당하는 메서드
+	public String search(@RequestParam("searchData") String searchData, Model model) {
+	    // searchData를 받아 검색 결과를 처리
+	    System.out.println("검색 데이터: " + searchData);
+	    
+	    // DB에서 검색 결과를 가져오는 로직 작성
+	    List<popStoreVO> vo = service.popUpSearchByData(searchData);
+	   
+	    for (popStoreVO store : vo) {
+	        System.out.println("스토어 번호: " + store.getPsNo());
+	        System.out.println("스토어 이름: " + store.getPsName());
+	        System.out.println("주소: " + store.getPsAddress());
+	        System.out.println("설명: " + store.getPsExp());
+	        System.out.println("좋아요 수: " + store.getLikeCount());
+	        System.out.println("평균 별점: " + store.getAvgRating());
+	        
+	        // 각 스토어의 관심사 조회
+	        List<Map<String, Object>> interestsList = service.getInterestsByPsNo(store.getPsNo());
 
+	        // 관심사를 문자열로 변환
+	        StringBuilder interestsBuilder = new StringBuilder();
+	        for (Map<String, Object> interest : interestsList) {
+	            // 관심사 문자열 추가
+	            if (interestsBuilder.length() > 0) {
+	                interestsBuilder.append(", "); // 쉼표로 구분
+	            }
+	            interestsBuilder.append(interest.get("INTERESTS")); // INTERESTS 키에서 값 가져오기
+	        }
+
+	        // 관심사 설정
+	        store.setInterest(interestsBuilder.toString());
+	        //평균 별점 계산
+	        double averageRating = service.calculateAverageRating(store.getPsNo());
+	        store.setAvgRating(averageRating); // 평균 평점 설정
+
+	        System.out.println("관심사: " + store.getInterest());
+	        System.out.println("------------------------------");
+	    }
+	    
+	    // searchData를 JSP에 전달
+	    model.addAttribute("searchData", vo);	
+	    
+	    return "/popUp/searchResultPage"; // 검색 결과를 보여주는 JSP 경로
+	}
     // 검색 결과가 없는 경우를 처리하는 메서드
     @GetMapping("/search/noData") // 특정 URL 매핑
-    public String searchWithoutData() {
-        // 검색 결과가 없는 경우 처리 로직
-        
-        return "/popUp/searchResultPage"; // 검색 결과를 보여주는 JSP 경로
+    public String searchWithoutData(Model model) {
+    	
+    	 List<popStoreVO> vo = service.getAllPopUpData();
+    	
+    	  for (popStoreVO store : vo) {
+  	        System.out.println("스토어 번호: " + store.getPsNo());
+  	        System.out.println("스토어 이름: " + store.getPsName());
+  	        System.out.println("주소: " + store.getPsAddress());
+  	        System.out.println("설명: " + store.getPsExp());
+  	        System.out.println("좋아요 수: " + store.getLikeCount());
+  	        System.out.println("평균 별점: " + store.getAvgRating());
+  	        
+  	        // 각 스토어의 관심사 조회
+  	        List<Map<String, Object>> interestsList = service.getInterestsByPsNo(store.getPsNo());
+
+  	        // 관심사를 문자열로 변환
+  	        StringBuilder interestsBuilder = new StringBuilder();
+  	        for (Map<String, Object> interest : interestsList) {
+  	            // 관심사 문자열 추가
+  	            if (interestsBuilder.length() > 0) {
+  	                interestsBuilder.append(", "); // 쉼표로 구분
+  	            }
+  	            interestsBuilder.append(interest.get("INTERESTS")); // INTERESTS 키에서 값 가져오기
+  	        }
+
+  	        // 관심사 설정
+  	        store.setInterest(interestsBuilder.toString());
+  	        //평균 별점 계산
+  	        double averageRating = service.calculateAverageRating(store.getPsNo());
+  	        store.setAvgRating(averageRating); // 평균 평점 설정
+
+  	        System.out.println("관심사: " + store.getInterest());
+  	        System.out.println("------------------------------");
+  	    }
+  	    
+  	    // searchData를 JSP에 전달
+  	    model.addAttribute("searchData", vo);
+  	    
+  	    return "/popUp/searchResultPage"; // 검색 결과를 보여주는 JSP 경로
     }
 
     @GetMapping("/popUpDetails")

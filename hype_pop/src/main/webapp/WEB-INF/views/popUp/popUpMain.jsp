@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v3s0wu5ddz"></script>
 
 <div class="popUpRecommend"> 
     <h1>현재 인기있는 팝업스토어</h1>
@@ -35,8 +36,4 @@
 
 </div>
 
-<div id="pupUpStoreMap">
-    <h1>
-        <span id="MapAPI">지도 API</span>
-    </h1>
-</div>
+<div id="map" style="width: 800px; height: 400px; margin: 0 auto; display: flex; justify-content: center;" ></div>

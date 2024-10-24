@@ -7,8 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>HYPE POP</title>
-<link rel="stylesheet" type="text/css" href="../resources/css/popUpMain.css">
-<link rel="stylesheet" type="text/css" href="../resources/css/searchResult.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/popUpMain.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/searchResult.css">
 
 </head>
 <body>

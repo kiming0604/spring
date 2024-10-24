@@ -134,9 +134,35 @@ public List<goodsVO> getGoodsInfoByName(String storeName) {
 @Override
 public List<popStoreVO> popUpSearchByData(String searchData) {
 	List<popStoreVO> result = mapper.popUpSearchByData(searchData);
+	
+	return result;
+}
+@Override
+public List<Map<String, Object>> getInterestsByPsNo(int psNo) {
+	List<Map<String, Object>> result = mapper.getInterestsByPsNo(psNo);
+	
+	return result;
+}
+@Override
+public double calculateAverageRating(int psNo) {
+    // 쿼리 결과가 이미 평균을 반환하므로, 바로 리턴
+    return mapper.findRatingsByPsNo(psNo); // 쿼리에서 이미 평균을 계산함
+}
+@Override
+public List<popStoreVO> getAllPopUpData() {
+	List<popStoreVO> result = mapper.showCalendar();
 	return result;
 }
 
+@Override
+public List<popStoreVO> findNearbyStores(double lat, double lng, double radius) {
+    Map<String, Object> params = new HashMap<>();
+    params.put("lat", lat);
+    params.put("lng", lng);
+    params.put("radius", radius);
+    
+    return mapper.findNearbyStores(params);
+}
 
 // 요셉이거 병합 부분
 @Override

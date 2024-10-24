@@ -20,6 +20,7 @@
     <!-- 푸터 include -->
     <jsp:include page="layout/popUpFooter.jsp"/>
 
+ <script type="text/javascript" src="/resources/popUpJs/popUpMap.js"></script>
  <script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
 </body>
 </html>

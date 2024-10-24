@@ -29,6 +29,15 @@ public interface PopUpService {
 	// 검색내용으로 팝업스토어 검색하기
 	public List<popStoreVO> popUpSearchByData(String searchData);
 	
+	// 검색 결과 팝업스토어들의 관심사 가져 오기
+	public List<Map<String, Object>> getInterestsByPsNo(int psNo);
+    // 평균 평점 가져오는 메서드	
+	public double calculateAverageRating(int psNo);
+    // 전체 스토어 데이터 조회
+	public List<popStoreVO> getAllPopUpData();
+	// 1km 이내 스토어 찾기 로직
+	public List<popStoreVO> findNearbyStores(double lat, double lng, double radius);
+	
 	//요셉이 병합부분 
 	public List<popStoreVO> showCalendar();
 

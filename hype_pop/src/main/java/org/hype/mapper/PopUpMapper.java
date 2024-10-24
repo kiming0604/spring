@@ -41,6 +41,15 @@ public interface PopUpMapper {
    
    public List<popStoreVO> popUpSearchByData(String searchData);
 
+   public List<Map<String, Object>> getInterestsByPsNo(int psNo);
+   // 평균 평점 가져오기   
+   public double findRatingsByPsNo(int psNo);
+
+
+   public List<popStoreVO> findNearbyStores(Map<String, Object> params);
+
+   
+   
    // 요셉이거 통합 부분
    public List<popStoreVO> showCalendar();
 
@@ -54,6 +63,15 @@ public interface PopUpMapper {
 //	public int catInsert(pCatVO pcatvo); // 카테고리 등록
 //	public int psDelete(popStoreVO psvo);
 //	public int catDelete(pCatVO pcatvo);	
+
+
+	
+
+
+
+
+
+
 
 
 
