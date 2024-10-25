@@ -1,12 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>굿즈 스토어 상세 페이지</title>
 <style>
-/* 전체 페이지 레이아웃 */
+/* 기본 설정 */
 body {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	background-color: #141414;
@@ -19,7 +18,7 @@ h1, h2, p, span {
 	color: #fff;
 }
 
-/* 굿즈 상세 레이아웃 */
+/* 굿즈 상세 섹션 */
 .goodsDetails {
 	width: 80%;
 	margin: 30px auto;
@@ -62,7 +61,6 @@ h1, h2, p, span {
 	font-size: 18px;
 }
 
-/* 수량 조정 버튼 */
 .quantityBar {
 	display: flex;
 	align-items: center;
@@ -100,7 +98,6 @@ h1, h2, p, span {
 	color: #e50914;
 }
 
-/* 버튼 스타일 */
 .actionButtons {
 	display: flex;
 	gap: 15px;
@@ -126,16 +123,18 @@ h1, h2, p, span {
 
 /* 굿즈 상세 이미지 */
 .goodsDetailImg {
-	width: 80%;
-	margin: 30px auto;
-	text-align: center;
-	background-color: #222;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    width: 80%;
+    margin: 30px auto;
+    text-align: center;
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    height: 600px;
+    position: relative;
 }
 
-/* 별점 스타일 */
+/* 별점 및 후기 스타일 */
 .starRating span {
 	font-size: 30px;
 	cursor: pointer;
@@ -147,55 +146,39 @@ h1, h2, p, span {
 
 #userReviews {
 	width: 80%;
-	margin: 0 auto 30px auto; /* 중앙 정렬 */
+	margin: 0 auto 30px auto;
 	padding: 20px;
 	background-color: #222;
 	border-radius: 10px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* 후기 제목 스타일 */
 #userReviews h2 {
 	color: #fff;
-	font-size: 28px; /* 크기를 살짝 키움 */
-	font-weight: 600; /* 글자 두께를 조금 더 두껍게 */
-	margin-bottom: 20px; /* 제목과 댓글 목록 사이 간격 */
-	text-align: left; /* 제목을 왼쪽 정렬 */
+	font-size: 28px;
+	font-weight: 600;
+	margin-bottom: 20px;
+	text-align: left;
 	padding-bottom: 10px;
-	border-bottom: 2px solid #e50914; /* 아래에 구분선 추가 */
+	border-bottom: 2px solid #e50914;
 }
 
-/* 댓글 목록 */
-.myChat {
+.myChat, .allChat {
 	list-style-type: none;
 	padding: 0;
 	color: #fff;
 }
 
-.myChat li {
-	background-color: #333;
-	padding: 15px;
-	margin-bottom: 10px;
-	border-radius: 8px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* 유저 리뷰 스타일 */
-#userReviews ul {
-	list-style-type: none;
-	padding: 0;
-}
-
-#userReviews ul li {
+.myChat li, .allChat li {
 	background-color: #333;
 	padding: 15px;
 	margin-bottom: 10px;
 	border-radius: 8px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	color: #fff;
-	width: 80%; /* 댓글 영역의 너비를 80%로 설정 */
-	margin: 0 auto 10px; /* 가운데 정렬 */
-	position: relative; /* 케밥 메뉴 위치를 위한 설정 */
+	width: 80%;
+	margin: 0 auto 10px;
+	position: relative;
 }
 
 .reviewItem {
@@ -204,10 +187,9 @@ h1, h2, p, span {
 
 .reviewContent {
 	width: 80%;
-	display: inline-block; /* 댓글 내용을 차지하는 영역 */
+	display: inline-block;
 }
 
-/* 평균 별점 영역 */
 .avgStarRating {
 	display: flex;
 	align-items: center;
@@ -220,7 +202,7 @@ h1, h2, p, span {
 .kebabMenu {
 	position: absolute;
 	top: 15px;
-	right: 10px; /* 우측에서 10px 떨어지게 */
+	right: 10px;
 	cursor: pointer;
 }
 
@@ -234,6 +216,7 @@ h1, h2, p, span {
 	padding: 10px;
 	border-radius: 8px;
 	z-index: 1000;
+	color: black;
 }
 
 .menuOptions button {
@@ -264,10 +247,10 @@ h1, h2, p, span {
 #reviewForm {
 	display: flex;
 	flex-direction: column;
-	align-items: center; /* 가로 축 중앙 정렬 */
-	justify-content: center; /* 세로 축 중앙 정렬 */
-	width: 80%; /* 폼 너비 설정 */
-	margin: 30px auto; /* 가운데 정렬을 위해 자동 마진 */
+	align-items: center;
+	justify-content: center;
+	width: 80%;
+	margin: 30px auto;
 	background-color: #222;
 	padding: 20px;
 	border-radius: 10px;
@@ -302,7 +285,7 @@ h1, h2, p, span {
 
 .starRating {
 	display: flex;
-	justify-content: center; /* 별점도 중앙 정렬 */
+	justify-content: center;
 	margin-bottom: 10px;
 }
 
@@ -317,43 +300,41 @@ h1, h2, p, span {
 	text-align: center;
 }
 .editCommentInput {
-    width: 100%;  /* 입력 필드 너비를 100%로 설정 */
-    padding: 10px;  /* 적절한 패딩 추가 */
-    margin-bottom: 10px;  /* 하단 간격 추가 */
-    font-size: 16px;  /* 글자 크기 */
-    border: 1px solid #444;  /* 테두리 색상 */
-    border-radius: 5px;  /* 모서리를 둥글게 */
-    background-color: #222;  /* 배경색 */
-    color: #fff;  /* 텍스트 색상 */
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
 }
 .styledButton {
-    padding: 10px 20px;  /* 버튼 패딩 */
-    font-size: 16px;  /* 글자 크기 */
-    cursor: pointer;  /* 마우스 포인터 변경 */
-    border: none;  /* 테두리 없음 */
-    border-radius: 5px;  /* 둥근 모서리 */
-    margin-right: 10px;  /* 버튼 간의 간격 */
-    transition: background-color 0.3s;  /* 배경색 전환 애니메이션 */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s;
 }
 
-/* 수정 완료 버튼 */
 .saveEditBtn {
-    background-color: #e50914;  /* 넷플릭스 스타일 빨간색 */
-    color: white;  /* 글자 색상 흰색 */
+    background-color: #e50914;
+    color: white;
 }
 
 .saveEditBtn:hover {
-    background-color: #c3070a;  /* 더 어두운 빨간색으로 변경 */
+    background-color: #c3070a;
 }
 
-/* 수정 취소 버튼 */
 .cancelEditBtn {
-    background-color: #444;  /* 회색 배경 */
-    color: white;  /* 글자 색상 흰색 */
+    background-color: #444;
+    color: white;
 }
 
 .cancelEditBtn:hover {
-    background-color: #888;  /* 더 밝은 회색으로 변경 */
+    background-color: #888;
 }
 
 .pagination {
@@ -361,7 +342,7 @@ h1, h2, p, span {
     margin-top: 20px;
 }
 .pagination button {
-    background-color: #e50914; /* 넷플릭스 빨간색 */
+    background-color: #e50914;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -373,26 +354,26 @@ h1, h2, p, span {
 }
 
 .pagination button.active {
-    background-color: #c3070a; /* 현재 페이지는 더 어두운 빨간색 */
+    background-color: #c3070a;
     font-weight: bold;
 }
 
 .pagination button:hover {
-    background-color: #f44336; /* 버튼 호버 시 밝은 빨간색 */
+    background-color: #f44336;
 }
 </style>
 </head>
 <body>
 	<jsp:include page="layout/popUpHeader.jsp" />
 	<div class="goodsDetails">
-		<div id="goodsBanner">굿즈 배너 이미지</div>
+		<div id="goodsBanner"></div>
 		<div id="goodsInfo">
+			<input type="hidden" id="fileNameBanner" value="${goods.attachList[0].uuid}_${goods.attachList[0].fileName }">
 			<span id="goodsLike">좋아요: ${goods.likeCount }회</span>
 			<span id="goodsName">상품명: ${goods.gname }</span>
 			<span id="goodsPrice">가격: ${goods.gprice }</span>
 			<span id="goodsDes"> ${goods.gexp } </span>
 			<span id="endDate">판매 종료일: ${goods.sellDate }</span>
-			<!-- 수량 조정 바 -->
 			<div class="quantityBar">
 				<button id="decreaseBtn">-</button>
 				<input type="text" id="quantity" value="1" readonly />
@@ -409,7 +390,7 @@ h1, h2, p, span {
 		</div>
 	</div>
 	<div class="goodsDetailImg">
-		<h1>굿즈 상세 이미지</h1>
+	<input type="hidden" id="fileNameDetail" value="${goods.attachList[1].uuid}_${goods.attachList[1].fileName}">
 	</div>
 	<form id="reviewForm" method="post">
 		<div class="starRating" id="newReviewStars">
@@ -431,7 +412,6 @@ h1, h2, p, span {
 	<div id="userReviews">
 		<h2>후기들</h2>
 		<ul class="myChat">
-			<!-- 댓글 목록이 여기에 추가됩니다 -->
 		</ul>
 		<ul class="allChat">
 		

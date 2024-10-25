@@ -15,9 +15,7 @@
 	<div id="gEndDate">상품 판매 종료일</div>
 	<div id="storeExp">설명글</div>
 	
-	<!-- 
 	<div id="gCancel">취소 및 리스트로 돌아가기</div>	
 	<div id="gUpdate">수정완료</div>	
-	 -->
 </body>
 </html>

@@ -1,11 +1,15 @@
 package org.hype.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.hype.domain.gCatVO;
+import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
+import org.hype.domain.mCatVO;
+import org.hype.domain.popStoreVO;
 import org.hype.domain.rankVO;
 import org.hype.mapper.GoodsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,26 +38,19 @@ public class GoodsServiceImpl implements GoodsService{
 	public goodsVO getGoodsById(int gNo) {
 		return mapper.getGoodsById(gNo);
 	}	
-    // ÁøÈ¯ÀÌ Çü´Ô ÃëÇÕ ºÎºĞ 
 	@Override
 	public List<goodsVO> getListByLikeCount() {
-		log.info("ÀÎ±â ±ÂÁî °¡Á®¿À´Â Áß...");
 		return mapper.getListByLikeCount();
 	}
 
-	// ·Î±×ÀÎ X ÀÎ±â °ü½É»ç1 ±ÂÁî 8°³ ºÒ·¯¿À±â
 	@Override
 	public Map<String, Object> getListByInterestOneNotLogin() {
 	    List<rankVO> rVo = mapper.getCategoryRankNotLogin();
-	    log.info(rVo);
-	    log.info("rVoÀÇ 0¹ø Ä«Å×°í¸®´Â " + rVo.get(0).getCategory());
-	    
-	    String category = rVo.get(0).getCategory();  // Ä«Å×°í¸® °ª ÃßÃâ
+	    String category = rVo.get(0).getCategory();
 	    Map<String, String> params = new HashMap<>();
 	    params.put("key", category);
 	    
-	    List<goodsVO> vo = mapper.getListByInterestNotLogin(params);
-	    vo.forEach(item -> log.info("rVo 0¹øÀÇ vo´Â " + item.getGname()));
+	    List<goodsVO> vo = mapper.getListByInterest(params);
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("category", category);
@@ -62,18 +59,15 @@ public class GoodsServiceImpl implements GoodsService{
 	    return result;
 	}
 	
-	// ·Î±×ÀÎ X ÀÎ±â °ü½É»ç2 ±ÂÁî 8°³ ºÒ·¯¿À±â
 	@Override
 	public Map<String, Object> getListByInterestTwoNotLogin() {
 		List<rankVO> rVo = mapper.getCategoryRankNotLogin();
-		log.info("rVoÀÇ 1¹ø Ä«Å×°í¸®´Â " + rVo.get(1).getCategory());
 		
 	    String category = rVo.get(1).getCategory();
 	    Map<String, String> params = new HashMap<>();
 	    params.put("key", category);
 	    
-        List<goodsVO> vo = mapper.getListByInterestNotLogin(params);
-        vo.forEach(item -> log.info("rVo 1¹øÀÇ vo´Â " + item.getGname()));
+        List<goodsVO> vo = mapper.getListByInterest(params);
         
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("category", category);
@@ -82,18 +76,15 @@ public class GoodsServiceImpl implements GoodsService{
 		return result;
 	}
 
-	// ·Î±×ÀÎ X ÀÎ±â °ü½É»ç3 ±ÂÁî 8°³ ºÒ·¯¿À±â	
 	@Override
 	public Map<String, Object> getListByInterestThreeNotLogin() {
 		List<rankVO> rVo = mapper.getCategoryRankNotLogin();
-		log.info("rVoÀÇ 2¹ø Ä«Å×°í¸®´Â " + rVo.get(2).getCategory());
 		
 	    String category = rVo.get(2).getCategory();
 	    Map<String, String> params = new HashMap<>();
 	    params.put("key", category);
 	    
-        List<goodsVO> vo = mapper.getListByInterestNotLogin(params);
-        vo.forEach(item -> log.info("rVo 2¹øÀÇ vo´Â " + item.getGname()));
+        List<goodsVO> vo = mapper.getListByInterest(params);
         
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("category", category);
@@ -103,21 +94,27 @@ public class GoodsServiceImpl implements GoodsService{
 	}
 
 	@Override
-	public List<goodsVO> getListByInterestOneLogined() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<goodsVO> getListByInterestOneLogined(String category) {
+	    Map<String, String> params = new HashMap<>();
+	    params.put("key", category);
+	    List<goodsVO> vo = mapper.getListByInterest(params);
+		return vo;
 	}
 
 	@Override
-	public List<goodsVO> getListByInterestTwoLogined() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<goodsVO> getListByInterestTwoLogined(String category) {
+	    Map<String, String> params = new HashMap<>();
+	    params.put("key", category);
+	    List<goodsVO> vo = mapper.getListByInterest(params);
+		return vo;
 	}
 
 	@Override
-	public List<goodsVO> getListByInterestThreeLogined() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<goodsVO> getListByInterestThreeLogined(String category) {
+	    Map<String, String> params = new HashMap<>();
+	    params.put("key", category);
+	    List<goodsVO> vo = mapper.getListByInterest(params);
+		return vo;
 	}
 
 	@Override
@@ -126,10 +123,14 @@ public class GoodsServiceImpl implements GoodsService{
 	}
 	
 	@Override
-    public List<goodsVO> getSearchList(String searchText, int offset, int limit) {
-        return mapper.getSearchList(searchText, offset, limit);
-    }
-
+	public List<goodsVO> getAllSearchList(String searchText){
+		return mapper.getAllSearchList(searchText);
+	};
+	@Override
+	public List<goodsVO> getAllGoodsList(){
+		return mapper.getAllGoodsList();
+	};
+	
     @Override
     public gCatVO getCategory(int gno) {
         return mapper.getCategory(gno);
@@ -162,5 +163,70 @@ public class GoodsServiceImpl implements GoodsService{
     public int getLikeChk(int userNo, int gno) {
     	return mapper.getLike(userNo, gno);
     }
-		
+    
+    @Override
+    public List<String> getUserInfo(int userNo) {
+        mCatVO vo = mapper.getUserInfo(userNo);
+        List<String> selectedCategories = new ArrayList<>();
+
+        // ê° í•„ë“œê°€ 1ì¸ ê²½ìš°, ë¦¬ìŠ¤íŠ¸ì— í•´ë‹¹ ì¹´í…Œê³ ë¦¬ë¥¼ ì¶”ê°€
+        if (vo.getHealthBeauty() == 1) {
+            selectedCategories.add("healthbeauty");
+        }
+        if (vo.getGame() == 1) {
+            selectedCategories.add("game");
+        }
+        if (vo.getCulture() == 1) {
+            selectedCategories.add("culture");
+        }
+        if (vo.getShopping() == 1) {
+            selectedCategories.add("shopping");
+        }
+        if (vo.getSupply() == 1) {
+            selectedCategories.add("supply");
+        }
+        if (vo.getKids() == 1) {
+            selectedCategories.add("kids");
+        }
+        if (vo.getDesign() == 1) {
+            selectedCategories.add("design");
+        }
+        if (vo.getFoods() == 1) {
+            selectedCategories.add("foods");
+        }
+        if (vo.getInterior() == 1) {
+            selectedCategories.add("interior");
+        }
+        if (vo.getPolicy() == 1) {
+            selectedCategories.add("policy");
+        }
+        if (vo.getCharacter() == 1) {
+            selectedCategories.add("character");
+        }
+        if (vo.getExperience() == 1) {
+            selectedCategories.add("experience");
+        }
+        if (vo.getCollaboration() == 1) {
+            selectedCategories.add("collaboration");
+        }
+        if (vo.getEntertainment() == 1) {
+            selectedCategories.add("entertainment");
+        }
+
+        return selectedCategories;
+    }
+	@Override
+	public gImgVO getImgByGno(int gno) {
+		return mapper.getImgByGno(gno);
+	}
+	
+	@Override
+	public gImgVO getGoodsDetailImg(int gno) {
+		return mapper.getGoodsDetailImg(gno);
+	}
+	
+	@Override
+	public List<popStoreVO> getAllStore() {
+		return mapper.getAllStore();
+	}
 }

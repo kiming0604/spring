@@ -1,14 +1,14 @@
 package org.hype.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.hype.domain.gCatVO;
+import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
-import org.hype.domain.rankVO;
 import org.hype.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,57 +29,72 @@ public class GoodsController {
 	
 	String open = null;
 	
-    @GetMapping("/goodsDetails")
-    public String goodsDetails(@RequestParam("gno") int gno, Model model, HttpServletRequest request) {
-    	goodsVO vo = gService.getOneByGno(gno);
-    	System.out.println("±ÂÁî »ó¼¼ ÆäÀÌÁö gno : " + gno);
-    	
-    	HttpSession session = request.getSession();
-    	String open = (String) session.getAttribute("open"); // ¼¼¼Ç¿¡ Æ¯Á¤ gnoÀÇ open °ª ÀúÀå
-    	if (open == null) {
-    		session.setAttribute("open", "yes"); // gnoº°·Î ¼¼¼Ç¿¡ 'open' ¼³Á¤
-    		
-    		int hit = vo.getGhit() + 1; // Á¶È¸¼ö Áõ°¡
-    		vo.setGhit(hit);
-    		gService.getUpdatehit(vo);  // Á¶È¸¼ö ¾÷µ¥ÀÌÆ®
-    	}
-        model.addAttribute("goods", vo);
-        log.info("like count ´Â " + gService.getOneByGno(gno).getLikeCount());
-        
-        open = (String) session.getAttribute("open");
-        if (open == null) {
-            session.setAttribute("open", "yes");
-            // °Ô½Ã±Û Á¶È¸ ½Ã 'open' °ªÀ» 'yes'·Î ¼³Á¤
+	@GetMapping("/goodsDetails")
+	public String goodsDetails(@RequestParam("gno") int gno, Model model, HttpServletRequest request) {
+	    goodsVO vo = gService.getOneByGno(gno);
+	    HttpSession session = request.getSession();
+	    
+	    String open = (String) session.getAttribute("open");
+	    if (open == null) {
+	        session.setAttribute("open", "yes");
 
-            int hit = vo.getGhit() + 1;
-            vo.setGhit(hit);
-            gService.getUpdatehit(vo);
-            // Á¶È¸¼ö Áõ°¡ ÈÄ ¾÷µ¥ÀÌÆ®
-        }
-        
-        return "/goodsStore/goodsDetails";
-    }
+	        int hit = vo.getGhit() + 1;
+	        vo.setGhit(hit);
+	        gService.getUpdatehit(vo);
+	    }
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+        	gImgVO imgVo2 = gService.getGoodsDetailImg(vo.getGno());
+            imgVo.add(imgVo1);  
+            imgVo.add(imgVo2);
+        	vo.setAttachList(imgVo);
+	    
+	    model.addAttribute("goods", vo);
+	    
+	    return "/goodsStore/goodsDetails";
+	}
  
     @GetMapping("/goodsMain")
     public String goodsMain(Model model, HttpServletRequest request) {
-        // ¸ŞÀÎ ÆäÀÌÁö¸¦ º¸¿©Áİ´Ï´Ù
-        log.info("¸ŞÀÎ ÆäÀÌÁö·Î ÀÌµ¿");
         List<goodsVO> vo1 = gService.getListByLikeCount();
-        vo1.forEach(item -> log.info("vo1´Â " + item.getGname()));
-        model.addAttribute("likeGoods", gService.getListByLikeCount());
+        for(goodsVO vo : vo1){
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+            imgVo.add(imgVo1);  
+        	vo.setAttachList(imgVo);
+        };
+        model.addAttribute("likeGoods", vo1);
         
-        
+        // ë¡œê·¸ì¸í•˜ì§€ ì•Šì€ ê²½ìš° ê´€ì‹¬ì‚¬ 3ê°œì— ëŒ€í•œ goodsVO ê°€ì ¸ì˜¤ê¸°
         Map<String, Object> result1 = gService.getListByInterestOneNotLogin();
         String category1 = (String) result1.get("category");
         List<goodsVO> interestOneNotLogin = (List<goodsVO>) result1.get("goodsList");
+        for(goodsVO vo : interestOneNotLogin){
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+            imgVo.add(imgVo1);  
+        	vo.setAttachList(imgVo);
+        };
         
         Map<String, Object> result2 = gService.getListByInterestTwoNotLogin();
         String category2 = (String) result2.get("category");
         List<goodsVO> interestTwoNotLogin = (List<goodsVO>) result2.get("goodsList");
+        for(goodsVO vo : interestTwoNotLogin){
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+            imgVo.add(imgVo1);  
+        	vo.setAttachList(imgVo);
+        };
         
         Map<String, Object> result3 = gService.getListByInterestThreeNotLogin();
         String category3 = (String) result3.get("category");
         List<goodsVO> interestThreeNotLogin = (List<goodsVO>) result3.get("goodsList");
+        for(goodsVO vo : interestThreeNotLogin){
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+            imgVo.add(imgVo1);  
+        	vo.setAttachList(imgVo);
+        };
         
         HttpSession session = request.getSession();
         session.setAttribute("open", "null");
@@ -91,36 +106,47 @@ public class GoodsController {
         model.addAttribute("interestTwoNotLogin", interestTwoNotLogin);
         model.addAttribute("interestThreeNotLogin", interestThreeNotLogin);
         
+//        @AuthenticationPrincipal CustomUser customUser
+//        customUser.userNoë¡œ ê°€ì ¸ì˜¤ë˜ê°€ í•´ì•¼í•¨
         
-        return "/goodsStore/goodsMain"; // ¸ŞÀÎ ÆäÀÌÁö JSPÀÇ °æ·Î
+        int userNo = 2;
+        //ë¡œê·¸ì¸í•œ ê²½ìš° ê´€ì‹¬ì‚¬ 3ê°œì— ëŒ€í•œ goodVO ê°€ì ¸ì˜¤ê¸°
+        List<String> mcat = gService.getUserInfo(userNo);
+        List<goodsVO> interestOneLogined = gService.getListByInterestOneLogined(mcat.get(0));
+        for(goodsVO vo : interestOneLogined){
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+            imgVo.add(imgVo1);  
+        	vo.setAttachList(imgVo);
+        };
+        
+        List<goodsVO> interestTwoLogined = gService.getListByInterestOneLogined(mcat.get(1));
+        for(goodsVO vo : interestTwoLogined){
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+            imgVo.add(imgVo1);  
+        	vo.setAttachList(imgVo);
+        };
+        
+        List<goodsVO> interestThreeLogined = gService.getListByInterestOneLogined(mcat.get(2));
+        for(goodsVO vo : interestThreeLogined){
+        	List<gImgVO> imgVo = new ArrayList<gImgVO>();
+        	gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
+            imgVo.add(imgVo1);  
+        	vo.setAttachList(imgVo);
+        };
+        
+        model.addAttribute("categoryFour", mcat.get(0));
+        model.addAttribute("categoryFive", mcat.get(1));
+        model.addAttribute("categorySix", mcat.get(2));
+        model.addAttribute("interstOneLogined", interestOneLogined);
+        model.addAttribute("interestTwoLogined", interestTwoLogined);
+        model.addAttribute("interestThreeLogined", interestThreeLogined);
+        return "/goodsStore/goodsMain";
     }
 
     @GetMapping("/goodsSearch")
-    public String goodsSearch(@RequestParam(value = "searchText", required = false) String searchText, Model model, HttpServletRequest request) {
-        // °Ë»ö¾î°¡ ¾øÀ¸¸é ºó ¹®ÀÚ¿­·Î Ã³¸®ÇÏ¿© ÀüÃ¼ ¸ñ·Ï °Ë»ö
-        if (searchText == null || searchText.trim().isEmpty()) {
-            searchText = "";  // ºó °Ë»ö¾î·Î Ã³¸®ÇÏ¿© ÀüÃ¼ °á°ú Ãâ·Â
-        }
-
-        // °Ë»ö ¸®½ºÆ® °¡Á®¿À±â (°Ë»ö¾î°¡ ¾øÀ» ¶§´Â ÀüÃ¼ °á°ú ¹İÈ¯)
-        List<goodsVO> voList = gService.getSearchList(searchText, 0, 10);
-
-        // °¢ »óÇ°¿¡ Ä«Å×°í¸® Á¤º¸ Ãß°¡
-        for (goodsVO vo : voList) {
-            gCatVO voCat = gService.getCategory(vo.getGno());
-            log.info("°Ë»ö ½Ã cat Àº : " + voCat);
-            vo.setGcat(voCat);
-        }
-
-        // ¼¼¼Ç Ã³¸®
-        HttpSession session = request.getSession();
-        session.setAttribute("open", "null");
-
-        // ¸ğµ¨¿¡ °Ë»ö °á°ú ¹× °Ë»ö¾î Ãß°¡
-        model.addAttribute("searchList", voList);
-        model.addAttribute("searchText", searchText);
-
-        return "/goodsStore/goodsSearch";  // JSP ÆäÀÌÁö ¹İÈ¯
+    public String goodsSearch() {
+        return "/goodsStore/goodsSearch";
     }
-
 }

@@ -170,36 +170,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{searchData} || '%'
 	</select>
 
-	<select id="getInterestsByPsNo" parameterType="int"
-		resultType="map">
-     <![CDATA[
+	<select id="getInterestsByPsNo" parameterType="int" resultType="map">
+    <![CDATA[
     SELECT PSNO, LISTAGG(INTEREST, ', ') WITHIN GROUP (ORDER BY INTEREST) AS INTERESTS
     FROM (
-        SELECT PSNO,
-            CASE
-                WHEN HEALTHBEAUTY = 1 THEN '헬스&뷰티'
-                WHEN GAME = 1 THEN '게임'
-                WHEN CULTURE = 1 THEN '문화'
-                WHEN SHOPPING = 1 THEN '쇼핑'
-                WHEN SUPPLY = 1 THEN '제공'
-                WHEN KIDS = 1 THEN '키즈'
-                WHEN DESIGN = 1 THEN '디자인'
-                WHEN FOODS = 1 THEN '식품'
-                WHEN INTERIOR = 1 THEN '인테리어'
-                WHEN POLICY = 1 THEN '정책'
-                WHEN CHARACTER = 1 THEN '캐릭터'
-                WHEN EXPERIENCE = 1 THEN '체험'
-                WHEN COLLABORATION = 1 THEN '콜라보'
-                WHEN ENTERTAINMENT = 1 THEN '방송'
-                ELSE NULL
-            END AS INTEREST
-        FROM pop_cat_tbl
-        WHERE PSNO = #{psNo} 
+        SELECT PSNO, '헬스&뷰티' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND HEALTHBEAUTY = 1
+        UNION ALL
+        SELECT PSNO, '게임' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND GAME = 1
+        UNION ALL
+        SELECT PSNO, '문화' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND CULTURE = 1
+        UNION ALL
+        SELECT PSNO, '쇼핑' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND SHOPPING = 1
+        UNION ALL
+        SELECT PSNO, '제공' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND SUPPLY = 1
+        UNION ALL
+        SELECT PSNO, '키즈' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND KIDS = 1
+        UNION ALL
+        SELECT PSNO, '디자인' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND DESIGN = 1
+        UNION ALL
+        SELECT PSNO, '식품' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND FOODS = 1
+        UNION ALL
+        SELECT PSNO, '인테리어' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND INTERIOR = 1
+        UNION ALL
+        SELECT PSNO, '정책' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND POLICY = 1
+        UNION ALL
+        SELECT PSNO, '캐릭터' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND CHARACTER = 1
+        UNION ALL
+        SELECT PSNO, '체험' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND EXPERIENCE = 1
+        UNION ALL
+        SELECT PSNO, '콜라보' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND COLLABORATION = 1
+        UNION ALL
+        SELECT PSNO, '방송' AS INTEREST FROM pop_cat_tbl WHERE PSNO = #{psNo} AND ENTERTAINMENT = 1
     ) INTERESTS_TABLE
-    WHERE INTEREST IS NOT NULL
     GROUP BY PSNO
-        ]]>
-	</select>
+    ]]>
+</select>
 
 	<!-- 특정 팝업 스토어의 평균 별점을 계산하는 쿼리 -->
 	<select id="findRatingsByPsNo" parameterType="int"
@@ -241,43 +246,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from
 		pop_cat_tbl order by psno
 	</select>
-
-	<!-- 서연씨 병합 부분 -->
-	<select id="getList" resultType="org.hype.domain.popStoreVO">
-		SELECT psNo, psName,
-		psStartDate, psEndDate FROM pop_main_tbl
+	
+	<!-- 관심사 가져오기 -->
+	<select id="getUserInterest" resultType="org.hype.domain.mCatVO">
+		select * from member_cat_tbl where userNo = #{userNo}
 	</select>
 
-	<select id="getListBySearchPs" parameterType="String"
-		resultType="org.hype.domain.popStoreVO">
-		SELECT * FROM pop_main_tbl WHERE psName LIKE '%' ||
-		#{searchPs} || '%'
+	<!-- 좋아요 한 팝업스토어 가져오기 -->
+	<select id="getUserLike" resultType="org.hype.domain.likeVO">
+		select * from like_list_tbl where userNo = #{userNo}
 	</select>
 
-	<select id="getPopStoreById" parameterType="int"
-		resultType="org.hype.domain.popStoreVO">
-		SELECT psNo, psName, psStartDate, psEndDate FROM
-		pop_main_tbl WHERE psNo =
-		#{psNo}
-	</select>
-
-	<!-- <insert id="psInsert" parameterType="org.hype.domain.popStoreVO"> INSERT 
-		INTO pop_main_tbl (psNo, psName, psStartDate, psEndDate, psAddress, latitude, 
-		longitude, psExp, snsAd, comInfo, transInfo, parkinginfo) VALUES (POPMAIN_SEQ.NEXTVAL, 
-		#{psName}, #{psStartDate}, #{psEndDate}, #{psAddress}, #{latitude}, #{longitude}, 
-		#{psExp}, #{snsAd}, #{comInfo}, #{transInfo}, #{parkinginfo}) </insert> -->
-
-	<!-- <insert id="catInsert" parameterType="org.hype.domain.pCatVO"> INSERT 
-		INTO pop_cat_tbl (psNo, healthBeauty, game, culture, shopping, supply, kids, 
-		design, foods, interior, policy, character, experience, collaboration, entertainment) 
-		VALUES (POPMAIN_SEQ.CURRVAL, #{healthBeauty}, #{game}, #{culture}, #{shopping}, 
-		#{supply}, #{kids}, #{design}, #{foods}, #{interior}, #{policy}, #{character}, 
-		#{experience}, #{collaboration}, #{entertainment}) </insert> -->
-
-	<!-- <delete id="psDelete" parameterType="org.hype.domain.popStoreVO"> DELETE 
-		FROM pop_main_tbl WHERE psNo = #{psNo} </delete> -->
-
-	<!-- <delete id="catDelete" parameterType="org.hype.domain.pCatVO"> DELETE 
-		FROM pop_cat_tbl WHERE psNo = #{psNo} </delete> -->
+	
 
 </mapper>

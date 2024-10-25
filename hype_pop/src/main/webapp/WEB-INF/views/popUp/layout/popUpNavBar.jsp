@@ -33,9 +33,9 @@
 <body>
 
     <div class="navBar">
-        <a href="/hypePop/search/noData">팝업 스토어 검색</a>
-        <a href="/goodsStore/goodsSearch">굿즈 검색</a>
-        <a href="/#MapAPI">내 주변</a>
+        <a href="/hypePop/search/noData">팝업 스토어 전체 보기</a>
+        <a href="/goodsStore/goodsSearch">굿즈 전체 보기</a>
+        <a href="/#map">내 주변</a>
         <a href="/hypePop/calendar">캘린더</a>
         <a href="/member/login">로그인</a>
     </div>

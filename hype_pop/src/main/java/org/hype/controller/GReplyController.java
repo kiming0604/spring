@@ -31,22 +31,12 @@ public class GReplyController {
     
     @PostMapping(value = "/new", consumes = "application/json", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> replyInsert(@RequestBody gReplyVO vo) {
-        // ∑Œ±◊ø° ø‰√ª ≥ªøÎ¿ª √‚∑¬
-        log.info("--Controller.insertGReply--" + vo);
-        log.info("gNo: " + vo.getGno());
-        log.info("userNo: " + vo.getUserNo());
-        log.info("gComment: " + vo.getGcomment());
-        log.info("gScore: " + vo.getGscore());
         int resultInsert = gService.insertGReply(vo);
 		return resultInsert == 1 ?
 				new ResponseEntity<String>("success", HttpStatus.OK) : 
 				new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // ∫Ò∑Œ±◊¿Œ ªÛ≈¬ø°º≠ ∏µÁ ¥Ò±€ ∏Ò∑œ ∫“∑Øø¿±‚
-//    @GetMapping(value = "/goodsDetails/{gNo}", produces = MediaType.TEXT_PLAIN_VALUE)
-//    public 
-    
     @GetMapping(value = "/{gno}/{userNo}/{page}/{size}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getReplyListWithPaging(
             @PathVariable("gno") int gno, 
@@ -55,19 +45,15 @@ public class GReplyController {
             @PathVariable("size") int size) {
         
         Map<String, Object> response = new HashMap<>();
-        log.info("--Controller.getReplyListWithPaging gno:" + gno + " userNo:" + userNo + " page:" + page + " size:" + size);
-        
-        // ≥ª ¥Ò±€∞˙ ¥Ÿ∏• ¥Ò±€¿ª ≥™¥©æÓº≠ √≥∏Æ
         Object myReply = gService.getMyReply(gno, userNo);
         int offset = (page - 1) * size;
         
         List<gReplyVO> replyList = gService.getAllReplyListWithPaging(gno, userNo, offset, size);
         
-        int totalReplies = gService.getReplyCount(gno, userNo);  // ¿¸√º ¥Ò±€ ºˆ (≥ª ¥Ò±€ ¡¶ø‹)
+        int totalReplies = gService.getReplyCount(gno, userNo);
         
         for (gReplyVO vo : replyList) {
-            int greplyNo = vo.getGreplyNo();  // getGreplyNo() ∏ﬁº≠µÂ∏¶ »£√‚«œø© ¥Ò±€ π¯»£∏¶ ∞°¡Æø»
-            System.out.println("¥Ò±€ π¯»£: " + greplyNo);
+            int greplyNo = vo.getGreplyNo();
         }
         
         response.put("myReply", myReply);
@@ -79,25 +65,22 @@ public class GReplyController {
     
     @GetMapping(value = "/avgStars/{gno}", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> goodsAvgStars(@PathVariable("gno") int gno) {
-        // gService.getAvgStars()¥¬ ∆Ú±’ ∫∞¡°¿ª π›»Ø«œ¥¬ ∏ﬁº≠µÂ∑Œ ∞°¡§
-        double avgStars = gService.getAvgStars(gno);  // ∆Ú±’ ∫∞¡° π›»Ø ∏ﬁº≠µÂ
-        String avgStarsString = String.valueOf(avgStars);  // double ∞™¿ª String¿∏∑Œ ∫Ø»Ø
-        
-        return new ResponseEntity<>(avgStarsString, HttpStatus.OK);  // πÆ¿⁄ø≠∑Œ π›»Ø
+        double avgStars = gService.getAvgStars(gno);
+        String avgStarsString = String.valueOf(avgStars);
+        return new ResponseEntity<>(avgStarsString, HttpStatus.OK);
     }
     
-    // ¥Ò±€¿ª ¥ﬁæ“¥¬¡ˆ »Æ¿Œ
-    @GetMapping(value = "/chkReplied", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Integer> chkReplied(@PathVariable("userNo") int userNo){
-    	int result = gService.chkReplied(userNo);
+    @GetMapping(value = "/chkReplied/{userNo}/{gno}", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> chkReplied(@PathVariable("userNo") int userNo, @PathVariable("gno") int gno){
+    	log.warn("aaaaaaaaaaaa" + userNo + gno);
+    	String result = gService.chkReplied(userNo, gno);
+    	log.warn("resultÍ∞Ä Ïó¨Í∏∞ ÌëúÏãúÎê® : " + result );
     	return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     @DeleteMapping(value = "/deleteReply/{gno}/{userNo}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> deleteReply(@PathVariable("gno") int gno, @PathVariable("userNo") int userNo){
-    	
     	int result = gService.deleteReply(gno, userNo);
-    	
     	return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
@@ -114,13 +97,4 @@ public class GReplyController {
             return ResponseEntity.status(500).body("error");
         }
     }
-//	@PutMapping(value="/{rno}", consumes = "application/json", produces = MediaType.TEXT_PLAIN_VALUE)
-//	public ResponseEntity<String> replyUpdate(@RequestBody ReplyVO vo, @PathVariable("rno") int rno){
-//		log.info("--Controller.replyUpdate--rno:" + rno + "vo : "+ vo);
-//		int resultUpdate = service.replyUpdate(vo);
-//		log.info("resultUpdate : " + resultUpdate);
-//		return resultUpdate == 1 ?
-//				new ResponseEntity<String>("success", HttpStatus.OK) : 
-//				new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
 }

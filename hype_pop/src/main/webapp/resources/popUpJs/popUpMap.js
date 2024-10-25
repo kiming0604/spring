@@ -88,21 +88,31 @@ function fetchNearbyStores(latitude, longitude) {
         });
 }
 
-// 스토어 마커 추가
+
+//스토어 마커 추가
+//스토어 마커 추가
 function addMarker(store) {
     var storePosition = new naver.maps.LatLng(store.latitude, store.longitude);
     var marker = new naver.maps.Marker({
         position: storePosition,
         map: map,
-        title: store.psName // 스토어 이름
+        title: store.psName, // 스토어 이름
+        icon: {
+            url: 'https://i.ibb.co/QXBkTXD/store-Marker.png', // 새로운 마커 이미지 URL
+            scaledSize: new naver.maps.Size(70, 40), // 가로 크기를 늘림 (좌우로 늘어나게 설정)
+            size: new naver.maps.Size(60, 40),
+            origin: new naver.maps.Point(0, 0),
+            anchor: new naver.maps.Point(35, 40) // 마커의 중심점을 조정
+        }
     });
 
+    // 정보창 생성
     var infoWindow = new naver.maps.InfoWindow({
-        content: `<div style="width:150px;text-align:center;padding:10px;">
+        content: `<div id="infoWindow-${store.psName}" style="width:150px;text-align:center;padding:10px; cursor: pointer;">
                     <strong>${store.psName}</strong><br>
                     시작일: ${formatDate(store.psStartDate)}<br>
                     종료일: ${formatDate(store.psEndDate)}
-                </div>`
+                  </div>`
     });
 
     // 스토어 마커 클릭 시 정보창 열기
@@ -115,10 +125,21 @@ function addMarker(store) {
         // 새로운 스토어 정보창 열기
         infoWindow.open(map, marker);
         
-        // 스토어 정보창을 전역으로 관리
-        storeInfoWindow = infoWindow;
+        // 정보를 기반으로 클릭 이벤트 추가
+        setTimeout(() => {
+            const infoWindowElement = document.getElementById(`infoWindow-${store.psName}`);
+            if (infoWindowElement) {
+                infoWindowElement.addEventListener('click', function() {
+                    console.log(store.psName); // store.psName 사용
+
+                    // 상세 페이지로 이동
+                    location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(store.psName)}`;
+                });
+            }
+        }, 0); // DOM이 완전히 로드된 후에 이벤트 리스너를 추가
     });
 }
+
 
 // 내 위치 마커 추가
 function addCurrentLocationMarker(latitude, longitude) {

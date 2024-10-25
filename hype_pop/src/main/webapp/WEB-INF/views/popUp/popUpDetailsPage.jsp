@@ -13,4 +13,5 @@
 </body>
  <script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script> 
  <script type="text/javascript" src="/resources/popUpJs/popUpDetails.js"></script> 
+  <script type="text/javascript" src="/resources/popUpJs/popUpDetailMap.js"></script>
 </html>

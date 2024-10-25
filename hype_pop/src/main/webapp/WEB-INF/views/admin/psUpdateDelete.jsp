@@ -32,11 +32,9 @@
 		<div id="storeExp">설명글 <input type="text" name="psExp" value="${vo.psExp}"></div>
 	</form>
 	
-	<!-- 
 	<div id="psCancel">취소 및 리스트로 돌아가기</div>	
 	<div id="psDelete" style="cursor: pointer;">삭제</div>	
 	<div id="psUpdate">수정완료</div>	
-	 -->
 	
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  
 <script type="text/javascript" src="/resources/adminJs/adminPopUp.js"></script>

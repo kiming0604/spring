@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
+import org.hype.domain.mCatVO;
 import org.hype.domain.pCatVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
@@ -42,12 +43,7 @@ public class PopUpController {
 	    List<popStoreVO> vo = service.popUpSearchByData(searchData);
 	   
 	    for (popStoreVO store : vo) {
-	        System.out.println("스토어 번호: " + store.getPsNo());
-	        System.out.println("스토어 이름: " + store.getPsName());
-	        System.out.println("주소: " + store.getPsAddress());
-	        System.out.println("설명: " + store.getPsExp());
-	        System.out.println("좋아요 수: " + store.getLikeCount());
-	        System.out.println("평균 별점: " + store.getAvgRating());
+	     
 	        
 	        // 각 스토어의 관심사 조회
 	        List<Map<String, Object>> interestsList = service.getInterestsByPsNo(store.getPsNo());
@@ -55,15 +51,14 @@ public class PopUpController {
 	        // 관심사를 문자열로 변환
 	        StringBuilder interestsBuilder = new StringBuilder();
 	        for (Map<String, Object> interest : interestsList) {
-	            // 관심사 문자열 추가
 	            if (interestsBuilder.length() > 0) {
-	                interestsBuilder.append(", "); // 쉼표로 구분
+	                interestsBuilder.append(", "); // 콤마로 구분
 	            }
-	            interestsBuilder.append(interest.get("INTERESTS")); // INTERESTS 키에서 값 가져오기
+	            log.info("관심사 : " + interestsBuilder);
+	            interestsBuilder.append(interest.get("INTERESTS"));
 	        }
-
-	        // 관심사 설정
 	        store.setInterest(interestsBuilder.toString());
+	        
 	        //평균 별점 계산
 	        double averageRating = service.calculateAverageRating(store.getPsNo());
 	        store.setAvgRating(averageRating); // 평균 평점 설정
@@ -231,6 +226,42 @@ public class PopUpController {
 		
 		return "/customerService/customerServiceMain";
 	}
-
+    @GetMapping(value = "userInterest", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<mCatVO> getUserInterest(@RequestParam("userNo") int userNo) {
+        return service.getUserInterest(userNo);
+    }
+    
+    // 유저 좋아요 가져오기
+    @GetMapping(value = "userLike", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<likeVO> getUserLike(@RequestParam("userNo") int userNo) {
+    	return service.getUserLike(userNo);
+    }
+    
+    
+    // 윤씨 취합부분!
+    
+    @GetMapping("/myDetail")
+    public String myDetail(@RequestParam("storeName") String storeName, Model model) {
+        // storeName을 받아 상세 정보를 처리
+        System.out.println("스토어 이름: " + storeName);
+        
+        // DB에서 상세 정보를 가져오는 로직 작성
+        popStoreVO vo = service.getStoreInfoByName(storeName);
+       
+         List<goodsVO> gvo = service.getGoodsInfoByName(storeName);
+         
+         for (goodsVO goods : gvo) {
+        	    System.out.println("상품명: " + goods.getGname() + ", 가격: " + goods.getGprice() + "원");
+        	}
+        
+    
+        // storeName을 JSP에 전달
+        model.addAttribute("storeInfo", vo);
+        model.addAttribute("goodsInfo", gvo);
+        
+        return "/popUp/popUpDetailsPage"; // 상세 정보를 보여주는 JSP 경로
+    }
 }
   

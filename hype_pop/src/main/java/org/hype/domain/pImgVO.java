@@ -1,4 +1,3 @@
-
 package org.hype.domain;
 
 import lombok.AllArgsConstructor;

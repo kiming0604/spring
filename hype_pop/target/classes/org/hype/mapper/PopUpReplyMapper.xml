@@ -61,4 +61,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     SELECT COUNT(*) FROM pop_reply_tbl 
     WHERE psNo = #{psNo} AND userNo != #{userNo}
 </select>
+
+    <!--윤씨 취합 부분! -->
+	<select id="getMyPopupReviews" parameterType="int"
+		resultType="org.hype.domain.psReplyVO">
+		select *
+		FROM pop_reply_tbl
+		where userNo = #{userNo}
+	</select>
+	
+	
+	<!--psName 조회  -->
+	<select id="getPsName" resultType="String">
+	select psName from pop_main_tbl where psNo = #{psNo}
+	</select>
 </mapper>

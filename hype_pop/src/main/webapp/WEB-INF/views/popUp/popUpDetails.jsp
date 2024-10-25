@@ -1,7 +1,9 @@
 	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-	
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> <!-- fn 라이브러리 추가 -->
+	<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v3s0wu5ddz"></script>
 <!-- 팝업스토어 배너 및 좋아요 수 -->
+
 <div class="popUpbanner">
     <table>
         <tr>
@@ -38,7 +40,7 @@
 	</table>
 	
 	<!-- 팝업스토어 위치 지도 -->
-	<div id="popUpMap">팝업스토어가 포커스되어있는 지도</div>
+	<div id="map" style="width: 800px; height: 400px; margin: 0 auto; display: flex; justify-content: center;" ></div>
 	
 	<!-- 기타 정보 -->
 	<div id="popUpETCInfo">
@@ -86,8 +88,19 @@
     <textarea id="updateText" name="updateText" placeholder="후기를 수정해주세요!" rows="5"></textarea>
     <input type="hidden" id="rating" name="rating" value="0">
     <input type="hidden" id="psNo" name="psNo" value="${storeInfo.psNo}">
-    <input type="hidden" id="userNo" name="userNo" value="100">
-    <input type="button" value="수정 취소" onclick="updateCancle()">
+    <input type="hidden" id="userNo" name="userNo" value="100"> 
+   <span
+    data-storeInfo='{
+        "latitude": ${storeInfo.latitude}, 
+        "longitude": ${storeInfo.longitude}, 
+        "psName": "${fn:escapeXml(storeInfo.psName)}", 
+        "psStartDate": "${fn:escapeXml(storeInfo.psStartDate)}", 
+        "psEndDate": "${fn:escapeXml(storeInfo.psEndDate)}"
+    }'
+    data-psNo='${storeInfo.psNo}'>
+    </span> 
+
+		<input type="button" value="수정 취소" onclick="updateCancle()">
     <input type="button" value="수정 완료" onclick="update(this.form)">
 </form>
 <!-- 내가 남긴 후기 아래에 다른 사용자들의 후기를 볼 수 있는 섹션 추가 -->

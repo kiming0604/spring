@@ -4,29 +4,37 @@ import java.util.List;
 import java.util.Map;
 
 import org.hype.domain.gCatVO;
+import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
+import org.hype.domain.mCatVO;
+import org.hype.domain.popStoreVO;
 
 public interface GoodsService {
-	public List<goodsVO> getGList();  // 관리자 상품 리스트 가져오기
-	public List<goodsVO> getListBySearchGs(String searchGs);  // 관리자 검색 기능 추가
-	public goodsVO getGoodsById (int gNo);  // 특정 굿즈(상품) 조회
+	public List<goodsVO> getGList();  //          품     트         
+	public List<goodsVO> getListBySearchGs(String searchGs);  //         講       煞 
+	public goodsVO getGoodsById (int gNo);  // 특       (  품)   회
 	
 	
 	
 	
-	// 진환이 형님 취합 부분
+	//   환              觀 
+	public List<goodsVO> getAllSearchList(String searchText);
+	public List<goodsVO> getAllGoodsList();
 	public List<goodsVO> getListByLikeCount();
 	public Map<String, Object> getListByInterestOneNotLogin();
 	public Map<String, Object> getListByInterestTwoNotLogin();
 	public Map<String, Object> getListByInterestThreeNotLogin();
-	public List<goodsVO> getListByInterestOneLogined();
-	public List<goodsVO> getListByInterestTwoLogined();
-	public List<goodsVO> getListByInterestThreeLogined();
+	public List<goodsVO> getListByInterestOneLogined(String category);
+	public List<goodsVO> getListByInterestTwoLogined(String category);
+	public List<goodsVO> getListByInterestThreeLogined(String category);
 	public goodsVO getOneByGno(int gno);
-	public List<goodsVO> getSearchList(String searchText, int offset, int limit) ;
 	public gCatVO getCategory(int gno);
 	public int getUpdatehit(goodsVO vo);
 	public int updateLike(int userNo, int gno);
 	public int getLikeCount(int gno);
 	public int getLikeChk(int userNo, int gno);
+	public List<String> getUserInfo(int userNo);
+	public gImgVO getImgByGno(int gno);
+	public gImgVO getGoodsDetailImg(int gno);
+	public List<popStoreVO> getAllStore();
 }

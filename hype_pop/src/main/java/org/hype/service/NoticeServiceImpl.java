@@ -25,12 +25,11 @@ public class NoticeServiceImpl implements NoticeService{
 
 
 	@Override
-	public List<qnaVO> getInquiriesWithPaging(int pageNum, int amount) {
+	public List<qnaVO> getInquiriesWithPaging(int pageNum, int amount, int userNo) {
 		int startRow = (pageNum - 1) * amount;
 	    int endRow = pageNum * amount; 
-	    return supportmapper.getInquiriesWithPaging(startRow, endRow);
+	    return supportmapper.getInquiriesWithPaging(startRow, endRow, userNo);
 	}
-
 
 	@Override
 	public boolean createNotice(noticeVO notice) {
@@ -88,9 +87,8 @@ public class NoticeServiceImpl implements NoticeService{
 
 
 	@Override
-	public int getTotalInquiryCount() {
+	public int getTotalInquiryCount(int userNo) {
 		
-		return supportmapper.getTotalInquiryCount();
+		return supportmapper.getTotalInquiryCount(userNo);
 	}
-
 }

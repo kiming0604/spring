@@ -1,40 +1,52 @@
 package org.hype.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.apache.ibatis.annotations.Param;
+import org.hype.domain.likeVO;
+import org.hype.domain.mCatVO;
 import org.hype.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @RestController
-
 @RequestMapping("/member/api")
 public class MemberRestController {
 
-    @Autowired
-    private MemberService memberService;
+	@Autowired
+	private MemberService memberService;
 
-    @GetMapping("/checkUserId")
-    public ResponseEntity<String> checkUserId(String userId) {
-        log.info("userId : " + userId);
-        
-        boolean isDuplicate = memberService.checkDuplicateId(userId);
-        
-        log.info("isDuplicate : " + isDuplicate);
-        
-        if (isDuplicate) {
-            return new ResponseEntity<>("no", HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>("ok", HttpStatus.OK);
-        }
-    }
+	@Autowired
+	private JavaMailSenderImpl mailSender;
+
+	private static String authCode;
+
+	@GetMapping("/checkUserId")
+	public ResponseEntity<String> checkUserId(String userId) {
+		log.info("userId : " + userId);
+		boolean isDuplicate = memberService.checkDuplicateId(userId);
+		log.info("isDuplicate : " + isDuplicate);
+
+		if (isDuplicate) {
+			return new ResponseEntity<>("no", HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>("ok", HttpStatus.OK);
+		}
+	}
+
 
     @GetMapping("/getPolicyContent")
     public ResponseEntity<String> getPolicyContent(@RequestParam String type) {
@@ -101,4 +113,88 @@ public class MemberRestController {
                 .contentType(MediaType.valueOf("text/html; charset=UTF-8")) // 적절한 미디어 타입 설정
                 .body(content);
     }
+
+	// 이메일로 인증코드 전송
+	@RequestMapping(value = "/sendMail/{userEmail}", method = RequestMethod.GET)
+	public ResponseEntity<String> sendMailTest(@PathVariable String userEmail) {
+		System.out.println("이메일 전송 요청 수신: " + userEmail); // 요청 로그
+		authCode = String.valueOf((int) (Math.random() * 900000) + 100000); // 랜덤 인증 코드 생성
+		String subject = "test 인증 코드";
+		String content = authCode;
+		String from = mailSender.getUsername(); // 보내는 이메일
+		String to = userEmail; // 받는 이메일 (수정: .com 제거)
+
+		try {
+			MimeMessage mail = mailSender.createMimeMessage();
+			MimeMessageHelper mailHelper = new MimeMessageHelper(mail, "UTF-8");
+
+			mailHelper.setFrom(from);
+			mailHelper.setTo(to);
+			mailHelper.setSubject(subject);
+			mailHelper.setText(content, false);
+
+			mailSender.send(mail);
+			return ResponseEntity.ok("ok");
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+		}
+	}
+
+	// 인증코드 확인
+	@GetMapping("/verifyCode")
+	public ResponseEntity<String> verifyEmailCode(@RequestParam String code) {
+		if (authCode != null && authCode.equals(code)) {
+			return ResponseEntity.ok("ok");
+		} else {
+			return ResponseEntity.ok("fail");
+		}
+	}
+
+	// 마이페이지 관심사 변경
+	@PostMapping("/updateUserInterests")
+	public ResponseEntity<String> updateUserInterests(@RequestParam("userNo") int userNo, mCatVO mcvo) {
+
+		log.warn("mcvo :" + mcvo.getGame());
+		log.warn("mcvo :" + mcvo.getCulture());
+		log.warn("mcvo :" + mcvo.getShopping());
+
+		try {
+			memberService.changeUserInterest(userNo, mcvo);
+			return ResponseEntity.ok("관심사가 성공적으로 업데이트되었습니다.");
+		} catch (Exception e) {
+			log.error("Error updating interests", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트 중 문제가 발생했습니다.");
+		}
+	}
+
+
+
+	// 메소드 레벨에서 @DeleteMapping 사용
+	@DeleteMapping(value = "/removePopup/{psNo}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> removePopup(@PathVariable("psNo") int psNo, @RequestParam(value = "userNo") int userNo) {
+		int deleted = memberService.pLikeListDelete(userNo,psNo);
+
+		if (deleted > 0) { // deleted가 0보다 크면 성공
+			return ResponseEntity.ok("ok");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("fail"); // 삭제할 데이터가 없는 경우
+		}
+	}
+	
+	
+	@DeleteMapping(value = "/removeGoods/{gno}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> removeGoods(@PathVariable("gno") int gno, @RequestParam(value = "userNo") int userNo) {
+		int deleted = memberService.gLikeListDelete(userNo,gno);
+
+		if (deleted > 0) { // deleted가 0보다 크면 성공
+			return ResponseEntity.ok("ok");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("fail"); // 삭제할 데이터가 없는 경우
+		}
+	}
+
 }

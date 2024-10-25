@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
+import org.hype.domain.mCatVO;
 import org.hype.domain.pCatVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
@@ -55,18 +56,11 @@ public interface PopUpMapper {
 
    public List<pCatVO> getCategoryData();
    
-   // 서연씨 통합 부분 
-	public List<popStoreVO> getList();  // 관리자 popup 리스트 가져오기
-	public List<popStoreVO> getListBySearchPs(String searchPs);  // 관리자 검색 기능 추가
-	public popStoreVO getPopStoreById (int psNo);  // 특정 팝업스토어 조회
-//	public int psInsert(popStoreVO psvo); // 팝업스토어 등록
-//	public int catInsert(pCatVO pcatvo); // 카테고리 등록
-//	public int psDelete(popStoreVO psvo);
-//	public int catDelete(pCatVO pcatvo);	
+// 유저 번호로 관심사 가져오기
+	public List<mCatVO> getUserInterest(int userNo);
 
-
-	
-
+	// 유저 번호로 좋아요 누른 팝업스토어 가져오기
+	public List<likeVO> getUserLike(int userNo);
 
 
 

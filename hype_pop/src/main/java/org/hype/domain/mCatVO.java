@@ -10,21 +10,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class mCatVO {
-
-	
-	 int userNo; // È¸¿ø ¹øÈ£
-	  int  healthBeauty; // Çï½º /ºäÆ¼
-	  int  game; // °ÔÀÓ
-	  int  culture; // ¹®È­
-	  int  shopping; // ¼îÇÎ
-	  int  supply; // ¹®±¸
-	  int  kids; // Å°Áî
-	  int  design; // µğÀÚÀÎ
-	  int  foods; // ½ÄÇ°
-	  int  interior; // ÀÎÅ×¸®¾î
-	  int  policy; // Á¤Ã¥
-	  int character; // Ä³¸¯ÅÍ
-	  int experience; // Ã¼Çè
-	  int collaboration; // Äİ¶óº¸
-	  int entertainment; // ¹æ¼Û
+	private int userNo;
+	private int healthBeauty; // í—¬ìŠ¤ /ë·°í‹°
+	private int game; // ê²Œì„
+	private int culture; // ë¬¸í™”
+	private int shopping; // ì‡¼í•‘
+	private int supply; // ë¬¸êµ¬
+	private int kids; // í‚¤ì¦ˆ
+	private int design; // ë””ìì¸
+	private int foods; // ì‹í’ˆ
+	private int interior; // ì¸í…Œë¦¬ì–´
+	private int policy; // ì •ì±…
+	private int character; // ìºë¦­í„°
+	private int experience; // ì²´í—˜
+	private int collaboration; // ì½œë¼ë³´
+	private int entertainment; // ë°©ì†¡
 }

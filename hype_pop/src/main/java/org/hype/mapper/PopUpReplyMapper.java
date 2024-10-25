@@ -21,4 +21,14 @@ public interface PopUpReplyMapper {
 	public List<psReplyVO> getOtherReviews(Map<String, Integer> params);
 
 	public int getTotalReviews(Map<String, Integer> params);
+	
+	
+	// 윤씨 추가 된 부분
+	
+	
+	// 유저의 댓글을 가져오는 메서드
+    public List<psReplyVO> getMyPopupReviews(int userNo);
+		
+	// psNo로 psName을 가져오는 메서드
+	public String getPsName(int psNo);
 }

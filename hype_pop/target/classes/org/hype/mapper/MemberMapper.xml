@@ -1,30 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper 
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--auth 는 나중에 추가할 예정 -->
 <mapper namespace="org.hype.mapper.MemberMapper">
-	<select id="getMList" resultType="org.hype.domain.signInVO">
-	    SELECT 
-            userNo, 
-            userId, 
-            userEmail,
-            lastLoginDate,
-            enabled,
-            auth
-        FROM sign_in_info_tbl
-    </select>
-    
-    <select id="getListBySearchMs" parameterType="String" resultType="org.hype.domain.signInVO">
-    	SELECT * FROM sign_in_info_tbl WHERE userId LIKE '%' || #{searchMs} || '%'
-	</select>
-	
-	<select id="getMembersById" parameterType="String" resultType="org.hype.domain.signInVO">
-   		SELECT userNo, userId, userEmail, lastLoginDate, enabled, auth FROM sign_in_info_tbl WHERE userNo = #{userNo}
-	</select>
-	
-	<!--윤씨 통합 부분 -->
-	<!--auth 는 나중에 추가할 예정 -->
 	<!-- <resultMap type="org.hype.domain.signInVO" id="memberMap">
 		<result property="userNo" column="USERNO" />
 		<result property="userId" column="USERID" />
@@ -98,8 +79,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
+	<!--아이디 중복 확인  -->
+	<select id="checkDuplicateId" resultType="int" parameterType="String">
+    	SELECT COUNT(*) FROM sign_in_info_tbl WHERE userId = #{userId}
+	</select>
 
-	<!--로그인 -->
+
+
+	<!--////////////로그인 ////////////// -->
 	<select id="loginMember" parameterType="org.hype.domain.signInVO" resultType="org.hype.domain.signInVO">
 		select *
 		from sign_in_info_tbl
@@ -107,24 +94,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and userPw = #{userPw}
 	</select>
 
-	<!--아이디 중복 확인  -->
-	<select id="checkDuplicateId" resultType="int" parameterType="String">
-    	SELECT COUNT(*) FROM sign_in_info_tbl WHERE userId = #{userId}
-	</select>
 
 
 	<!--아이디 찾기 버튼 -->
 		<!--아이디 조회 , 테이블 행 수로 조회 -->
 		<select id="selectId" parameterType="org.hype.domain.signInVO" resultType="int">
 			select
-			count(*) from sign_in_info_tbl where userId = #{userId};
+			count(*) from sign_in_info_tbl where userId = #{userId}
 		</select>
 	
 		<!--이메일로 회원 정보 조회 -->
 		<select id="selectEmail" parameterType="string"
 			resultType="org.hype.domain.signInVO">
 			select * from sign_in_info_tbl where userEmail =
-			#{userEmail};
+			#{userEmail}
 		</select>
 
 
@@ -133,84 +116,138 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<update id="updatePw" parameterType="string">
 		update sign_in_info_tbl 
-		set userPw = #{userPw} where userEmail = {userEmail};
+		set userPw = #{userPw} where userEmail = {userEmail}
 	</update>
+	
+	
+	<!--////////////마이페이지 ///////////////  -->
+
+	<!--이름, 아이디 , 이메일, 전화번호 가져오기  -->
+	<select id="selectMyPageInfo" resultType="org.hype.domain.signInVO">
+		select userId,userName,userEmail,userNumber
+		from sign_in_info_tbl 
+		where userNo = #{userNo}
+	</select>
+		
+		
+	<!--관심사 가져오기 -->
+	<select id="selectMyInterest" parameterType="int" resultType="org.hype.domain.mCatVO">
+	select * from member_cat_tbl where userNo = #{userNo}
+	</select>
+	
+	<!--원래 관심사 삭제   -->
+	<delete id="deleteUserInterest" parameterType="int" >
+		delete from member_cat_tbl where userNo = #{userNo}
+	</delete>
+	
+	<!--변경된 관심사 insert  -->
+	<insert id="changeUserInterest" parameterType="org.hype.domain.mCatVO" >
+		  INSERT INTO member_cat_tbl (
+	        userNo,
+	        healthBeauty,
+	        game,
+	        culture,
+	        shopping,
+	        supply,
+	        kids,
+	        design,
+	        foods,
+	        interior,
+	        policy,
+	        character,
+	        experience,
+	        collaboration,
+	        entertainment
+	    ) VALUES (
+	        #{userNo},
+	        #{healthBeauty},
+	        #{game},
+	        #{culture},
+	        #{shopping},
+	        #{supply},
+	        #{kids},
+	        #{design},
+	        #{foods},
+	        #{interior},
+	        #{policy},
+	        #{character},
+	        #{experience},
+	        #{collaboration},
+	        #{entertainment}
+	    )
+	</insert>
+
 
 
 	<!--비밀번호 변경으로 비밀번호 변경 -->
 
 		<!--기존 비밀번호 조회 -->
-		<select id="oldPw" parameterType="org.hype.domain.signInVO"
+		<select id="selectOldPw" parameterType="org.hype.domain.signInVO"
 			resultType="int">
-			select count(*) from sign_in_info_tbl where userNo = #{userNo} and userPw =
-			#{userPw};
+			select count(*) from sign_in_info_tbl where userNo = #{userNo} and userPw = #{oldPw}
 		</select>
 	
 	
 		<!--신규 비밀번호 입력 -->
-		<update id="newPw" parameterType="org.hype.domain.signInVO">
+		<update id="updateNewPw" parameterType="org.hype.domain.signInVO">
 			update sign_in_info_tbl set
-			userPw = #{newPw} where userNo = #{userNo} and userPw = #{userPw};
+			userPw = #{newPw} where userNo = #{userNo} and userPw = #{oldPw}
 		</update>
 
 
 	<!--이메일 변경 -->
 
 		<!--기존 이메일 조회 -->
-		<select id="oldEmail" parameterType="org.hype.domain.signInVO"
+		<!-- <select id="selectOldEmail" parameterType="org.hype.domain.signInVO"
 			resultType="int">
-			select count(*) from sign_in_info_tbl where userNo = #{userNo} and userEmail
-			= #{userEmail};
+			select count(*) from sign_in_info_tbl where userNo = #{userNo} and userEmail= #{oldEmail}
 		</select>
-	
+	 -->
 		<!--신규 이메일 입력 -->
-		<update id="newEmail" parameterType="org.hype.domain.signInVO">
+		<update id="updateNewEmail" parameterType="org.hype.domain.signInVO">
 			update sign_in_info_tbl set
-			userEmail = #{newEmail} where userNo = #{userNo} and userEmail =
-			#{userEmail};
+			userEmail = #{newEmail} where userNo = #{userNo} 
 		</update>
 
 
 	<!--전화번호 변경 -->
 	
 		<!--기존 전화번호 조회 -->
-		<select id="oldPhoneNum"
+		<select id="selectOldPhoneNum"
 			parameterType="org.hype.domain.signInVO" resultType="int">
 			select count(*) from sign_in_info_tbl where userNo = #{userNo} and
-			userNumber = #{userNumber};
+			userNumber = #{oldPhoneNumber}
 		</select>
 	
 		<!--신규 전화번호 입력 -->
-		<update id="newPhoneNum"
+		<update id="updateNewPhoneNum"
 			parameterType="org.hype.domain.signInVO">
 			update sign_in_info_tbl set userNumber =
-			#{newUserNumber} where userNo = #{userNo} and userNumber =
-			#{userNumber};
+			#{newPhoneNumber} where userNo = #{userNo} and userNumber =
+			#{oldPhoneNumber}
 		</update>
 
 
 	<!--좋아요 한 팝업스토어 -->
-	<select id="likeList" resultType="org.hype.domain.pImgVO">
-		select pop_img_tbl.*,
-		like_list_tbl.userNo
-		from pop_img_tbl
-		left join pop_img_tbl on
-		like_list_tbl.psNo = pop_img_tbl.psNo;
-		where like_list_table.userNo =
-		#{userNo}
+	<select id="pLikeList" resultType="org.hype.domain.likedPopImgVO">
+	    select * from liked_pop_img_view where userNo = #{userNo}
 	</select>
+	 
 
 	<!--좋아요 한 굿즈 스토어 -->
-	<select id="glikeList" resultType="org.hype.domain.gImgVO">
-		select goods_img_tbl.*
-		from
-		pop_img_tbl
-		join goods_like_list_table
-		on goods_img_tbl.gno = goods_like_list_table.gno
-		where goods_like_list_table.userNo = #{userNo}
+	<select id="gLikeList" resultType="org.hype.domain.likedGoodsImgVO">
+	select * from liked_goods_img_view where userNo = #{userNo}
 	</select>
-
-
+	
+	<!--좋아요 한 팝업스토어 삭제-->
+	<delete id="pLikeListDelete" parameterType="int" >
+	delete from like_list_tbl where userNo = #{userNo} and psNo=#{psNo}
+	</delete>
+	<!--좋아요 한 굿즈 스토어 삭제 -->
+	<delete id="gLikeListDelete" parameterType="int"  >
+	delete from goods_like_list_table where userNo = #{userNo} and gno=#{gno}
+	</delete>
+	
 	<!--굿즈 댓글 목록 리스트 -->
 	<select id="gReplyList" resultType="org.hype.domain.gReplyVO">
 		select
@@ -293,23 +330,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		join goods_info_tbl
 		on pay_list_tbl.gno = goods_info_tbl.gno
 		order by
-		pay_list_tbl.gBuyDate DESC;
+		pay_list_tbl.gBuyDate DESC
 	</select>
 
 
 	<!--회원 삭제(나중에 다시 봐야 됨) -->
 	<delete id="deleteUser">
-		DELETE FROM user_interest_tbl WHERE userNo = #{userNo};
-		DELETE FROM cart_tbl WHERE userNo = #{userNo};
-		DELETE FROM pay_list_tbl WHERE userNo = #{userNo};
-		DELETE FROM delivery_tbl WHERE userNo = #{userNo};
-		DELETE FROM sign_in_info_tbl WHERE userNo = #{userNo};
+		DELETE FROM user_interest_tbl WHERE userNo = #{userNo}
+		DELETE FROM cart_tbl WHERE userNo = #{userNo}
+		DELETE FROM pay_list_tbl WHERE userNo = #{userNo}
+		DELETE FROM delivery_tbl WHERE userNo = #{userNo}
+		DELETE FROM sign_in_info_tbl WHERE userNo = #{userNo}
 	</delete>
 
 
 
 
 
-	
-	
+
+
+
 </mapper>

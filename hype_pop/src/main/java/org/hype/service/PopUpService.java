@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
+import org.hype.domain.mCatVO;
 import org.hype.domain.pCatVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
@@ -43,12 +44,9 @@ public interface PopUpService {
 
 	public List<pCatVO> getCategoryData();
 	
-	// 서연싸 병합 부분 
-    public List<popStoreVO> getList();  // 관리자 popup 리스트 가져오기
-    public List<popStoreVO> getListBySearchPs(String searchPs);  // 관리자 검색 기능 추가
-    public popStoreVO getPopStoreById (int psNo);  // 특정 팝업스토어 조회
-//    public int psInsert(popStoreVO psvo, pCatVO pcatvo, MultipartFile imageFile);
-//    public int psInsert(popStoreVO psvo, pCatVO pcatvo, pImgVO image);
-//    public int psInsert(popStoreVO psvo, String[] categories, pImgVO image); // 팝업스토어 등록
-//    public int psDelete(popStoreVO psvo, pCatVO pcatvo, pImgVO image); // 팝업스토어 삭제
+	    // 관심사 가져오기
+		public List<mCatVO> getUserInterest(int userNo);
+
+		// 좋아요한 팝업스토어 가져오기
+		public List<likeVO> getUserLike(int userNo);
 }

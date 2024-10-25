@@ -1,7 +1,8 @@
+const f = document.forms[0];	
+console.log(f);
+
 function checkUserId() {
-	const f = document.forms[0];
-    
-	console.log(f);
+
 	
 	const userId = f.userId.value;
 	
@@ -39,9 +40,6 @@ function checkUserId() {
 //빈 값 검증
 
 function formSubmit(){
-	
-const f = document.forms[0];	
-console.log(f);
 
 const userId = f.userId.value;
 const userPw = f.userPw.value;
@@ -50,6 +48,8 @@ const userEmail = f.userEmail.value;
 const userName = f.userName.value;
 const userNumber = f.userNumber.value;
 const selectedInterests = [];
+
+
 
 if (!userId) {
 	alert("아이디를 입력하세요!");
@@ -82,86 +82,125 @@ if (!userNumber) {
 	return;
 	}
 
-if (selectedInterests.length === 0) {
+if (selectedInterests.lengSth === 0) {
     alert('관심사를 선택하세요!'); // 경고 메시지
     return; // 경고 후 종료
 }
 
-console.log(selectedInterests.length);
+
+
+
+
+
 
 }
 
 
 
 
-
+const selectedInterests = []; // 선택된 관심사 배열
+const MIN_INTERESTS = 3; // 최소 선택  관심사 개수 3개
 // 관심사 선택 버튼 클릭 이벤트
 document.getElementById('interestBtn').addEventListener('click', function() {
-    const selectedInterests = [];
 
+	
     // 모달 표시
     const interestModal = document.getElementById('userInterest');
     interestModal.style.display = 'flex'; // Flexbox로 중앙 정렬
 
-    // 각 관심사 박스들에 대한 클릭 이벤트 처리
-    document.querySelectorAll('.interestBox').forEach(function(interestBox) {
-        interestBox.addEventListener('click', function() {
-            const interest = interestBox.getAttribute('data-interest');
-            const isSelected = selectedInterests.includes(interest);
+    // 모달이 열릴 때, 이미 선택된 관심사에 대해 스타일 업데이트
+    updateInterestStyles();
 
-            if (!isSelected) {
-                selectedInterests.push(interest);
-                interestBox.classList.add('selectedBox'); // 선택된 스타일 클래스 추가
-            } else {
-                const index = selectedInterests.indexOf(interest);
-                selectedInterests.splice(index, 1);
-                interestBox.classList.remove('selectedBox'); // 선택 해제 시 클래스 제거
+});
+
+// 각 관심사 박스에 대한 클릭 이벤트 등록 (한 번만 등록)
+document.querySelectorAll('.interestBox').forEach(function(interestBox) {
+    interestBox.addEventListener('click', function() {
+        const interest = interestBox.getAttribute('data-interest');
+        const isSelected = selectedInterests.includes(interest);
+
+        if (!isSelected) {
+            // 최대 관심사 선택 개수 제한
+            if (selectedInterests.length < MIN_INTERESTS) {
+                alert(`최소 ${MIN_INTERESTS}개 선택해주세요.`);
+                return; // 선택을 더 이상 하지 않음
             }
-            updateInterestDisplay();
-        });
-    });
-
-    // 선택한 관심사 업데이트 함수
-    function updateInterestDisplay() {
-        const interestsContainer = document.getElementById('selectedInterests');
-        interestsContainer.innerHTML = ''; // 기존 내용을 비우고 새로 추가
-
-        selectedInterests.forEach(function(interest) {
-            const selectedBox = document.createElement('div');
-            selectedBox.className = 'selectedInterestBox'; // 스타일 클래스 추가
-            selectedBox.innerText = interest; // 관심사 이름 추가
-            interestsContainer.appendChild(selectedBox); // 컨테이너에 추가
-        });
-    }
-    
-
-    // 모달 닫기 함수
-    function closeModal() {
-        interestModal.style.display = 'none'; // 모달 숨기기
-    }
-
-    // 확인 버튼 클릭 이벤트
-    document.getElementById('confirmButton').addEventListener('click', function() {
-        
-    
-    	
-    	if (selectedInterests.length < 3) {
-            alert('최소 3개 이상 선택하세요');
-            return; // 경고 후 종료
+            
+           
+            //선택된 관심사 객체 추가
+            selectedInterests.push(interest);
+           
+            
+            console.log(selectedInterests);
+            interestBox.classList.add('selectedBox');
+         
+        } else {
+            const index = selectedInterests.indexOf(interest);
+            selectedInterests.splice(index, 1);
+            interestBox.classList.remove('selectedBox'); // 선택 해제 시 클래스 제거
         }
-
-        // 선택된 관심사를 숨겨진 input 필드에 추가
-//        const interestsInput = document.createElement('input');
-//        interestsInput.type = 'hidden';
-//        interestsInput.name = 'userInterest'; // 서버에서 받을 때 사용할 이름
-//        interestsInput.value = selectedInterests.join(','); // 선택된 관심사들을 문자열로 변환
-//        document.querySelector('form').appendChild(interestsInput); // 폼에 추가
         
-        closeModal(); // 모달 닫기
+        updateInterestDisplay();
     });
 });
 
-//비동기로 개인정보 처리방침  띄우기
+// 선택한 관심사 스타일 업데이트 함수
+function updateInterestStyles() {
+    document.querySelectorAll('.interestBox').forEach(function(interestBox) {
+        const interest = interestBox.getAttribute('data-interest');
+        const isSelected = selectedInterests.includes(interest);
+
+        if (isSelected) {
+            interestBox.classList.add('selectedBox'); // 선택된 항목은 스타일 추가
+        } else {
+            interestBox.classList.remove('selectedBox'); // 선택 해제된 항목은 스타일 제거
+        }
+    });
+}
+
+// 선택한 관심사 업데이트 함수
+function updateInterestDisplay() {
+    const interestsContainer = document.getElementById('selectedInterests');
+    interestsContainer.innerHTML = ''; // 기존 내용을 비우고 새로 추가
+
+    selectedInterests.forEach(function(interest) {
+        const selectedBox = document.createElement('div');
+        selectedBox.className = 'selectedInterestBox'; // 스타일 클래스 추가
+        selectedBox.innerText = interest; // 관심사 이름 추가
+        interestsContainer.appendChild(selectedBox); // 컨테이너에 추가
+        console.log(interestsContainer);
+    });
+}
+
+
+
+// 모달 닫기 함수
+function closeModal() {
+    const interestModal = document.getElementById('userInterest');
+    interestModal.style.display = 'none'; // 모달 숨기기
+}
+
+// 확인 버튼 클릭 이벤트
+document.getElementById('confirmButton').addEventListener('click', function() {
+    if (selectedInterests.length < 1) {
+        alert('최소 1개 이상 선택하세요');
+        return; // 경고 후 종료
+    }
+  
+//    if (document.getElementById('confirmButton').disabled) {
+//        event.preventDefault(); // 폼 제출 방지
+//        alert('확인 버튼을 먼저 눌러주세요!'); // 경고 메시지
+//    }
+
+    closeModal(); // 모달 닫기
+    
+ 
+});
+
+
+
+
+//------------------비동기  정책 동의 안내서 띄우기-------------------------------
 
 //모달 열기
 function openPolicyModal() {

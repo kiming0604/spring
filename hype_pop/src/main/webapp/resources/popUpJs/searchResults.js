@@ -3,6 +3,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const storeCards = document.querySelectorAll(".store-card");
     const storesArray = [];
 
+    // 사용자 위치 정보
+    let userLocation = {
+        latitude: null,
+        longitude: null
+    };
+
+    // 사용자 위치 가져오기
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            userLocation.latitude = position.coords.latitude;
+            userLocation.longitude = position.coords.longitude;
+            console.log("사용자 위치:", userLocation);
+            loadPageAgain(storesArray); // 위치 정보가 설정된 후 페이지 로드
+        }, (error) => {
+            console.error("위치 정보 가져오기 실패:", error);
+        });
+    } else {
+        console.error("이 브라우저는 Geolocation을 지원하지 않습니다.");
+    }
+
     // 각 카드에 대해 필요한 정보를 추출하여 배열에 저장
     storeCards.forEach((card) => {
         const storeName = card.querySelector(".storeName").textContent;
@@ -11,6 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const psAddress = card.querySelector("h3").textContent.replace("주소: ", "");
         const interest = card.querySelector(".popUpCat").textContent;
         const rating = parseFloat(card.querySelector(".rating").value);
+        const latitude = parseFloat(card.querySelector(".latitude").value); // 위도
+        const longitude = parseFloat(card.querySelector(".longitude").value); // 경도
 
         // 날짜 정보를 가져오는 부분
         const psStartDate = card.querySelector(".date-info span:nth-child(1)").textContent.replace("시작일: ", "").trim();
@@ -26,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
             rating: rating,
             psStartDate: psStartDate,
             psEndDate: psEndDate,
+            latitude: latitude, // 추가된 부분
+            longitude: longitude // 추가된 부분
         };
 
         // 배열에 추가
@@ -37,8 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const itemsPerPage = 10; // 페이지당 표시할 스토어 수
 
     // 초기 로드 시 스토어 표시
-    loadPageAgain(storesArray);
-
     function loadPageAgain(storesArray) {
         currentStoreIndex = 0; // 초기 인덱스 설정
         displayStores(storesArray); // 초기 10개 스토어 표시
@@ -54,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // 초기에 모든 카드 지우기
-        storeContainer.innerHTML = ""; 
+        storeContainer.innerHTML = "";
 
         // 초기에 10개만 보여주기
         const initialStores = filteredStores.slice(currentStoreIndex, currentStoreIndex + itemsPerPage);
@@ -110,6 +132,32 @@ document.addEventListener("DOMContentLoaded", function () {
         addLoadMoreButton(storeContainer, filteredStores);
     }
 
+    // Haversine 거리 계산 함수
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // 지구의 반경 (km)
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // 거리 (km)
+    }
+
+    // 거리 기준으로 정렬하는 함수
+    function sortStoresByDistance() {
+        if (userLocation.latitude && userLocation.longitude) {
+            storesArray.sort((a, b) => {
+                const distanceA = calculateDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
+                const distanceB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
+                return distanceA - distanceB; // 가까운 순서대로 정렬
+            });
+            loadPageAgain(storesArray); // 정렬된 스토어 표시
+        } else {
+            console.error("사용자 위치가 설정되지 않았습니다.");
+        }
+    }
+
     // 관심사 선택 버튼 클릭 시 관심사 버튼 표시
     document.getElementById("selectInterestsBtn").onclick = function () {
         const interestButtons = document.getElementById("interestButtons");
@@ -144,19 +192,40 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(selectedInterests);
     }
 
-    // 관심사로 스토어 필터링
     function filterStoresByInterest() {
-        const filteredStores = storesArray.filter((store) => {
-            return selectedInterests.some((selected) => store.interest.includes(selected));
-        });
+        const filteredStores = [];
 
+        // 모든 스토어를 순회
+        for (const store of storesArray) {
+            // 스토어의 관심사 문자열을 배열로 변환
+            const storeInterests = store.interest.split(",").map(s => s.trim()).filter(Boolean); // 빈 문자열 필터링
+
+            // 여기에 관심사 문자열 형식 확인을 위한 로그 추가
+            console.log("스토어 관심사:", storeInterests); // 디버깅을 위한 출력
+
+            // 스토어 관심사에 대해 selectedInterests 배열의 각 요소에 대해 일치 여부 확인
+            const hasMatchingInterest = storeInterests.some(storeInterest => 
+                selectedInterests.includes(storeInterest)
+            );
+
+            // 일치하는 관심사가 있으면 필터링된 배열에 추가
+            if (hasMatchingInterest) {
+                filteredStores.push(store);
+            }
+        }
+
+        console.log("필터링된 스토어:", filteredStores); // 디버깅을 위한 출력
         displayStores(filteredStores); // 필터링된 스토어 표시
     }
-
-    // 스토어 카드 생성 함수
+   
+ // 스토어 카드 생성 함수
     function createStoreCard(store) {
         const storeCard = document.createElement("div");
         storeCard.classList.add("store-card");
+
+        // 관심사를 콤마로 나눠 배열로 만듦
+        const interestsArray = store.interest.split(",").map(s => s.trim());
+
         storeCard.innerHTML = `
             <div class="store-image">
                 <img src="/resources/images/hamburger.png" alt="팝업스토어 배너 이미지">
@@ -167,26 +236,21 @@ document.addEventListener("DOMContentLoaded", function () {
                     <span class="likeCount">좋아요 수: ${store.likeCount}</span>
                     <input type="hidden" class="psNo" value="${store.psNo}">
                     <input type="hidden" class="rating" value="${store.rating}">
+                    <input type="hidden" class="latitude" value="${store.latitude}">
+                    <input type="hidden" class="longitude" value="${store.longitude}">
                 </div>
                 <h3>주소: ${store.address}</h3>
-                <span class="popUpCat">${store.interest}</span>
                 <div class="date-info">
                     <span>시작일: ${store.psStartDate}</span>
                     <span>종료일: ${store.psEndDate}</span>
+                </div>
+                <div class="popUpCat">
+                    ${interestsArray.map(interest => `<span class="interest-tag">${interest}</span>`).join("")}
                 </div>
             </div>
         `;
         return storeCard;
     }
-
-    // 스토어 이름 클릭 이벤트 위임
-    document.querySelector(".searchResultStore").addEventListener("click", (event) => {
-        const target = event.target.closest(".storeName");
-        if (target) {
-            let storeName = target.innerText;
-            location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(storeName)}`;
-        }
-    });
 
     // 정렬 기준 클릭 이벤트
     document.querySelectorAll(".searchConditions span").forEach((option) => {
@@ -207,21 +271,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (sortBy === "arrayByDis") {
                 console.log("거리순 정렬");
-                // 거리순 정렬 처리 추가
+                sortStoresByDistance(); // 거리순 정렬 함수 호출
             } else if (sortBy === "arrayByLike") {
                 console.log("좋아요순 정렬");
-                sortStoresByLike();
+                sortStoresByLike(); // 좋아요순 정렬 함수 호출
             } else if (sortBy === "arrayByLatest") {
                 console.log("최신순 정렬");
-                sortStoresByLatest();
+                sortStoresByLatest(); // 최신순 정렬 함수 호출
             } else if (sortBy === "arrayByRating") {
                 console.log("별점 순 정렬");
-                sortStoresByRating();
+                sortStoresByRating(); // 별점 순 정렬 함수 호출
             }
         });
     });
-
-    // 좋아요 수에 따라 정렬하는 함수
+ // 좋아요 수에 따라 정렬하는 함수
     function sortStoresByLike() {
         storesArray.sort((a, b) => b.likeCount - a.likeCount);
         loadPageAgain(storesArray);
@@ -243,4 +306,8 @@ document.addEventListener("DOMContentLoaded", function () {
         storesArray.sort((a, b) => b.rating - a.rating);
         loadPageAgain(storesArray);
     }
+
+
 });
+
+

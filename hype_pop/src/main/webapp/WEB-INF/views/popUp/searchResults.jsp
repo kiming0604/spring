@@ -44,6 +44,8 @@
                     <h2><span class="storeName">${store.psName}</span></h2>
                     <span class="likeCount">좋아요 수: ${store.likeCount}</span>
                     <input type="hidden" class="psNo" value="${store.psNo}">
+                    <input type="hidden" class="latitude" value="${store.latitude}">
+                    <input type="hidden" class="longitude" value="${store.longitude}">    
                     <input type="hidden" class="rating" value="${store.avgRating}"> <!-- 별점 추가 -->
                 </div>
                 <h3>주소: ${store.psAddress}</h3>

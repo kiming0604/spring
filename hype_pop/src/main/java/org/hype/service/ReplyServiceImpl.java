@@ -1,5 +1,6 @@
 package org.hype.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,4 +88,26 @@ public class ReplyServiceImpl implements ReplyService{
 	    // Mapper 호출 시 params 맵을 사용
 	    return mapper.getTotalReviews(params);
 	}
+	//새로 추가(김윤)
+		@Override
+		@Transactional
+		public Map<String, Object> getMyPopupReviews(int userNo) {
+		 
+			//내 댓글 리스트
+			List<psReplyVO>replies = mapper.getMyPopupReviews(userNo);
+			// psName 저장할 리스트
+			List<String> psNames = new ArrayList<>();
+		    
+			// 각 psNo에 대해 psName 가져오기
+			 for (psReplyVO reply : replies) {
+			        String psName = mapper.getPsName(reply.getPsNo()); 
+			        psNames.add(psName);
+			    }
+			
+			
+			    Map<String, Object> result = new HashMap<>();
+			    result.put("replies", replies);
+			    result.put("psNames", psNames);
+			    return result; // 결과를 Map 형태로 반환 
+		}
 }

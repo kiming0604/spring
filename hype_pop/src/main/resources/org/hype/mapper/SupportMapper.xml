@@ -22,7 +22,7 @@
 		SELECT * FROM (
 			SELECT a.*, ROWNUM AS row_num
 			FROM (
-				SELECT * FROM qna_tbl ORDER BY qnaNo DESC
+				SELECT * FROM qna_tbl WHERE userNo = #{userNo} ORDER BY qnaRegDate DESC
 			) a
 			WHERE ROWNUM <= #{endRow}
 		)
@@ -94,10 +94,9 @@
         SELECT COUNT(*) FROM notice_tbl
     </select>
 
-    <!-- 문의 개수 조회 -->
+ <!-- 문의 개수 조회 -->
     <select id="getTotalInquiryCount" resultType="int">
-        SELECT COUNT(*) FROM qna_tbl
+        SELECT COUNT(*) FROM qna_tbl where userNo = #{userNo}
     </select>
-
 
 </mapper>

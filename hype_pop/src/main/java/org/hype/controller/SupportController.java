@@ -52,9 +52,10 @@ public class SupportController {
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> getInquiryList(
 	    @RequestParam(defaultValue = "1") int pageNum,
-	    @RequestParam(defaultValue = "5") int amount) {
-	    List<qnaVO> inquiries = noticeService.getInquiriesWithPaging(pageNum, amount);
-	    int totalCount = noticeService.getTotalInquiryCount(); // 총 문의 개수 가져오기
+	    @RequestParam(defaultValue = "5") int amount,
+	    @RequestParam int userNo) {
+	    List<qnaVO> inquiries = noticeService.getInquiriesWithPaging(pageNum, amount, userNo);
+	    int totalCount = noticeService.getTotalInquiryCount(userNo); // 총 문의 개수 가져오기
 
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("inquiries", inquiries);
@@ -62,7 +63,6 @@ public class SupportController {
 
 	    return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
 
 
 

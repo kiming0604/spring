@@ -2,34 +2,31 @@ package org.hype.domain;
 
 import java.sql.Date;
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
+@Setter
 public class signInVO {
 	
-
-
-	 int userNo; // È¸¿ø ¹øÈ£
-	 String userId; // ¾ÆÀÌµğ
-	 String userPw; // ºñ¹Ğ¹øÈ£
-	 String userEmail; // ÀÌ¸ŞÀÏ
-	 String userName; // ÀÌ¸§
-	 int userNumber; // ÀüÈ­¹øÈ£
-	 mCatVO userInterest; // °ü½É»ç
-	 Date regDate; // °¡ÀÔÀÏ
-	 Date lastLoginDate; // ¸¶Áö¸· ·Î±×ÀÎ ³¯Â¥
-	 boolean enabled; // °èÁ¤ È°¼ºÈ­ ¿©ºÎ
-	 int auth; // ±ÇÇÑ
-	 List<popStoreVO> gLikeList; // ±ÂÁî ÁÁ¾Æ¿ä ¸ñ·Ï
-	 List<goodsVO> pLikeList; // ½ºÅä¾î ÁÁ¾Æ¿ä ¸ñ·Ï
-	 String snsToken; // Access Token
-	 String snsType; // sns Á¾·ù
-
+	private int userNo; // íšŒì› ë²ˆí˜¸
+	private String userId; // ì•„ì´ë””
+	private String userPw; // ë¹„ë°€ë²ˆí˜¸
+	private String userEmail; // ì´ë©”ì¼
+	private String userName; // ì´ë¦„
+	private int userNumber; // ì „í™”ë²ˆí˜¸
+	private mCatVO userInterest; // ê´€ì‹¬ì‚¬
+	private Date regDate; // ê°€ì…ì¼
+	private Date lastLoginDate; // ë§ˆì§€ë§‰ ë¡œê·¸ì¸ ë‚ ì§œ
+	private boolean enabled; // ê³„ì • í™œì„±í™” ì—¬ë¶€
+	private int auth; // ê¶Œí•œ
+	private List<popStoreVO> gLikeList; // êµ¿ì¦ˆ ì¢‹ì•„ìš” ëª©ë¡
+	private List<goodsVO> pLikeList; // ìŠ¤í† ì–´ ì¢‹ì•„ìš” ëª©ë¡
+	private String snsToken; // Access Token
+	private String snsType; // sns ì¢…ë¥˜
 }

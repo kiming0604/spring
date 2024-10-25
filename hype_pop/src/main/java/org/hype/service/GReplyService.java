@@ -10,7 +10,7 @@ public interface GReplyService {
 	public List<gReplyVO> getAllReplyList(@Param("gno") int gno,@Param("userNo") int userNo);
 	public gReplyVO getMyReply(@Param("gno") int gno,@Param("userNo") int userNo);
 	public double getAvgStars(int gno);
-	public int chkReplied(int userNo);
+	public String chkReplied(@Param("userNo") int userNo, @Param("gno") int gno);
 	public int deleteReply(int gno, int userNo);
 	public int updateReply(gReplyVO vo);
 	public List<gReplyVO> getAllReplyListWithPaging(@Param("gno") int gno, @Param("userNo") int userNo, @Param("offset") int offset, @Param("size") int size);

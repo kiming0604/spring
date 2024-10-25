@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <title>Goods Search Result</title>
 <style type="text/css">
-/* 전체 레이아웃 */
+<style type="text/css">
 body {
     margin: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -16,7 +16,6 @@ body {
     color: #fff;
 }
 
-/* 네비게이션 바 */
 #popUpHeader {
     background-color: #141414;
     padding: 10px 20px;
@@ -48,7 +47,6 @@ body {
     color: #e50914;
 }
 
-/* 검색 결과 섹션 */
 #goodsSearchResult {
     padding: 20px;
 }
@@ -72,17 +70,20 @@ body {
     background-color: #e50914;
 }
 
-/* 굿즈 컨테이너: 한 줄에 2개의 아이템이 배치되도록 설정 */
+.searchCategory span.active {
+    background-color: #e50914;
+    color: #fff;
+}
+
 .goodsContainer {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 한 줄에 두 개씩 */
+    grid-template-columns: 1fr;
     gap: 20px;
 }
 
-/* 굿즈 개별 카드 */
 .goodsResult {
     background-color: #222;
-    display: flex; /* 이미지를 왼쪽에, 텍스트 정보를 오른쪽에 배치하기 위해 flexbox 사용 */
+    display: flex;
     padding: 15px;
     border-radius: 10px;
     transition: transform 0.3s ease, background-color 0.3s ease;
@@ -94,19 +95,20 @@ body {
     background-color: #333;
 }
 
-/* 이미지 스타일 */
 .goodsImg {
-    width: 150px; /* 이미지 너비 */
-    height: 150px; /* 이미지 높이 */
-    background-color: #fff; /* 이미지 자리 표시용 배경색 */
+    width: 150px;
+    height: 150px;
+    background-color: #fff;
     margin-right: 20px;
     border-radius: 10px;
-    object-fit: cover; /* 이미지가 영역을 넘어가지 않도록 설정 */
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-/* 텍스트 정보 */
 .goodsInfo {
-    flex-grow: 1; /* 텍스트 정보가 남은 공간을 채우도록 설정 */
+    flex-grow: 1;
 }
 
 .goodsName, .goodsPrice, .goodsExp, .goodsSellDate, .goodsLike {
@@ -132,7 +134,24 @@ body {
     color: #666;
 }
 
-/* 더보기 버튼 */
+#init {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #333;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#init:hover {
+    background-color: #e50914;
+    transform: scale(1.05);
+}
+
 #loadMoreBtn {
     display: block;
     margin: 30px auto;
@@ -150,7 +169,6 @@ body {
     background-color: #f40612;
 }
 
-/* 푸터 */
 #popUpFooter {
     background-color: #141414;
     padding: 20px;
@@ -167,6 +185,41 @@ body {
 #popUpFooter a:hover {
     color: #e50914;
 }
+
+#selectCat {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+}
+
+#selectCat::-webkit-scrollbar {
+    display: none;
+}
+
+.categoryFilter {
+    flex-shrink: 0;
+    font-size: 18px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.categoryFilter:hover {
+    background-color: #e50914;
+    transform: scale(1.05);
+}
+
+.categoryFilter.active {
+    background-color: #e50914;
+    color: #fff;
+}
 </style>
 </head>
 <body>
@@ -179,31 +232,31 @@ body {
 		<span id="likeHigh">좋아요순</span>
 		<span id="replyHigh">후기 많은순</span>
 		<span id="newDate">최신순</span>
-		<span id="selectCat">관심사 선택하여 검색</span>
+	</div>
+	<div>
+		<button id="init">검색어 초기화(모든 리스트 출력)</button>
+	</div>
+	<div id="selectCat">
+		<div class="categoryFilter" id="allCategory">전체</div>
+		<div class="categoryFilter" id="healthBeauty">건강 & 뷰티</div>
+		<div class="categoryFilter" id="game">게임</div>
+		<div class="categoryFilter" id="culture">문화</div>
+		<div class="categoryFilter" id="shopping">쇼핑</div>
+		<div class="categoryFilter" id="supply">문구</div>
+		<div class="categoryFilter" id="kids">키즈</div>
+		<div class="categoryFilter" id="design">디자인</div>
+		<div class="categoryFilter" id="foods">식품</div>
+		<div class="categoryFilter" id="interior">인테리어</div>
+		<div class="categoryFilter" id="policy">정책</div>
+		<div class="categoryFilter" id="character">캐릭터</div>
+		<div class="categoryFilter" id="experience">체험</div>
+		<div class="categoryFilter" id="collaboration">콜라보</div>
+		<div class="categoryFilter" id="entertainment">방송</div>
 	</div>
     <div class="goodsContainer" id="goodsContainer">
-        <c:forEach var="vo" items="${searchList}">
-            <div class="goodsResult">
-                <div class="goodsImg">굿즈 이미지</div>
-                <div class="goodsInfo">
-                    <input type="hidden" value="${vo.gno}">
-                    <div class="goodsLike">좋아요: ${vo.likeCount}</div>
-                    <div class="goodsName">상품명: ${vo.gname}</div>
-                    <div class="goodsPrice">가격: ${vo.gprice} 원</div>
-                    <div class="goodsExp">설명: ${vo.gexp}</div>
-                    <div class="goodsSellDate">판매종료일 : ${vo.sellDate}</div>
-                    <div class="goodsCategory">굿즈 관심사:
-                        <c:if test="${vo.gcat.healthBeauty == 1}">healthBeauty</c:if>
-                        <c:if test="${vo.gcat.game == 1}">game</c:if>
-                        <!-- 중략 -->
-                    </div>
-                </div>
-            </div>
-        </c:forEach>
     </div>
     <button id="loadMoreBtn">더보기</button>
 </div>
-
 	<jsp:include page="layout/popUpFooter.jsp" />
 	<jsp:include page="layout/goodsNavBar.jsp" />
 </body>

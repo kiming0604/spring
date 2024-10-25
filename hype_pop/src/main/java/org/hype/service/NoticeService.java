@@ -11,9 +11,9 @@ public interface NoticeService {
 	
 	public int getTotalNoticeCount();
 
-	public List<qnaVO> getInquiriesWithPaging(int pageNum, int amount);
+	public List<qnaVO> getInquiriesWithPaging(int pageNum, int amount, int userNo);
 	
-	public int getTotalInquiryCount();
+	public int getTotalInquiryCount(int userNo);
 	
 	public boolean createNotice(noticeVO notice);
 

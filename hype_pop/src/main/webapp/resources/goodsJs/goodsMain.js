@@ -1,4 +1,32 @@
-// 공통 슬라이드 설정 함수
+localStorage.setItem('searchText', ""); // 검색어 저장
+
+document.addEventListener("DOMContentLoaded", function() {
+    function setBackgroundImage(item) {
+        const fileName = item.querySelector("#fileName").value;
+
+        fetch(`/goodsStore/images/${encodeURIComponent(fileName)}`)
+            .then(response => response.blob())
+            .then(blob => {
+                const imageUrl = URL.createObjectURL(blob);
+                item.style.backgroundImage = `url(${imageUrl})`;
+                item.style.backgroundSize = "cover";
+                item.style.backgroundPosition = "center center";
+                item.style.backgroundRepeat = "no-repeat";
+            })
+            .catch(error => {
+                console.error("이미지를 불러오는 중 오류 발생: ", error);
+            });
+    }
+
+    for (let i = 1; i <= 7; i++) {
+        const goodsItems = document.querySelectorAll(`.goodsItem${i}`);
+        goodsItems.forEach((item) => {
+            setBackgroundImage(item);
+        });
+    }
+});
+
+
 function setupSlider(containerClass, itemClass, prevBtnId, nextBtnId, itemsToShow, totalItems) {
     let currentIndex = 0;
 
@@ -7,27 +35,21 @@ function setupSlider(containerClass, itemClass, prevBtnId, nextBtnId, itemsToSho
 
     if (nextBtn) {
         nextBtn.addEventListener('click', () => {
-            if (currentIndex < totalItems - itemsToShow) {
-                currentIndex += itemsToShow;
-                updateDisplay(containerClass, itemClass, currentIndex, itemsToShow);
-            }
+            currentIndex = (currentIndex + itemsToShow) % totalItems;
+            updateDisplay(containerClass, itemClass, currentIndex, itemsToShow);
         });
     }
 
     if (prevBtn) {
         prevBtn.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex -= itemsToShow;
-                updateDisplay(containerClass, itemClass, currentIndex, itemsToShow);
-            }
+            currentIndex = (currentIndex - itemsToShow + totalItems) % totalItems;
+            updateDisplay(containerClass, itemClass, currentIndex, itemsToShow);
         });
     }
 
-    // 초기 표시 설정
     updateDisplay(containerClass, itemClass, currentIndex, itemsToShow);
 }
 
-// 공통 업데이트 디스플레이 함수
 function updateDisplay(containerClass, itemClass, currentIndex, itemsToShow) {
     const items = document.querySelectorAll(`.${itemClass}`);
     items.forEach((item, index) => {
@@ -35,13 +57,14 @@ function updateDisplay(containerClass, itemClass, currentIndex, itemsToShow) {
     });
 }
 
-// 모든 슬라이더에 대해 설정 호출
 setupSlider('goodsContainer1', 'goodsItem1', 'prevBtn1', 'nextBtn1', 4, 8);
 setupSlider('goodsContainer2', 'goodsItem2', 'prevBtn2', 'nextBtn2', 4, 8);
 setupSlider('goodsContainer3', 'goodsItem3', 'prevBtn3', 'nextBtn3', 4, 8);
 setupSlider('goodsContainer4', 'goodsItem4', 'prevBtn4', 'nextBtn4', 4, 8);
+setupSlider('goodsContainer5', 'goodsItem5', 'prevBtn5', 'nextBtn5', 4, 8);
+setupSlider('goodsContainer6', 'goodsItem6', 'prevBtn6', 'nextBtn6', 4, 8);
+setupSlider('goodsContainer7', 'goodsItem7', 'prevBtn7', 'nextBtn7', 4, 8);
 
-// 상품명 길이 조정
 const goodsNames = document.querySelectorAll('.goodsName');
 const maxLength = 40;
 goodsNames.forEach((element) => {
@@ -52,11 +75,10 @@ goodsNames.forEach((element) => {
     element.textContent = displayName;
 });
 
-// 굿즈 클릭하여 디테일 페이지로 이동
 function setupGoodsItemClick(itemClass) {
     document.querySelectorAll(`.${itemClass}`).forEach(item => {
         item.addEventListener('click', () => {
-            const gno = item.querySelector('input[type="hidden"]').value; // 숨겨진 input 요소 선택
+            const gno = item.querySelector('input[type="hidden"]').value;
             location.href = `/goodsStore/goodsDetails?gno=${gno}`;
         });
     });
@@ -66,3 +88,6 @@ setupGoodsItemClick('goodsItem1');
 setupGoodsItemClick('goodsItem2');
 setupGoodsItemClick('goodsItem3');
 setupGoodsItemClick('goodsItem4');
+setupGoodsItemClick('goodsItem5');
+setupGoodsItemClick('goodsItem6');
+setupGoodsItemClick('goodsItem7');

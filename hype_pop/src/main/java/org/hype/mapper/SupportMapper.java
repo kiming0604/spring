@@ -9,7 +9,7 @@ import org.hype.domain.qnaVO;
 public interface SupportMapper {
 	public List<noticeVO> getNoticesWithPaging(@Param("startRow") int startRow, @Param("endRow") int endRow);
 
-	public List<qnaVO> getInquiriesWithPaging(@Param("startRow") int startRow, @Param("endRow") int endRow);
+	public List<qnaVO> getInquiriesWithPaging(@Param("startRow") int startRow, @Param("endRow") int endRow, @Param("userNo") int userNo);
 
 	public boolean insertNotice(noticeVO notice);
 
@@ -29,6 +29,6 @@ public interface SupportMapper {
 
 	public int getTotalNoticeCount();
 
-	public int getTotalInquiryCount();
+	public int getTotalInquiryCount(int userNo);
 	
 }
