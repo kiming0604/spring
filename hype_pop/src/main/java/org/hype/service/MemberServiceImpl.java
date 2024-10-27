@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.hype.domain.gImgVO;
 import org.hype.domain.gLikeVO;
 import org.hype.domain.likeVO;
-import org.hype.domain.LikedGoodsImgVO;
-import org.hype.domain.LikedPopImgVO;
+import org.hype.domain.likedGoodsImgVO;
+import org.hype.domain.likedPopImgVO;
 import org.hype.domain.mCatVO;
 import org.hype.domain.pImgVO;
 import org.hype.domain.signInVO;
@@ -38,26 +38,26 @@ public class MemberServiceImpl implements MemberService{
 	    @Transactional
 	    @Override
 	    public int joinMember(signInVO svo, mCatVO mcvo) {
-	        log.warn("joinMember 호출: " + svo);
+	        log.warn("joinMember �몄�: " + svo);
 
 	        membermapper.joinMember(svo);
-	        log.warn("회원가입 후 userNo: " + svo.getUserNo());
+	        log.warn("����媛��� �� userNo: " + svo.getUserNo());
 
-	        // userNo가 null인지 확인
+	        // userNo媛� null�몄� ����
 	        if (svo.getUserNo() == 0) {
-	            throw new RuntimeException("회원가입 후 userNo를 가져오지 못했습니다.");
+	            throw new RuntimeException("����媛��� �� userNo瑜� 媛��몄�ㅼ� 紐삵���듬����.");
 	        }
 
-	        // 관심사 삽입
+	        // 愿��ъ�� �쎌��
 	        mcvo.setUserNo(svo.getUserNo());
 	        return membermapper.insertInterest(mcvo);
 	        
 
 	    }
 	    
-	    //아이디 중복 확인
+	    //���대�� 以�蹂� ����
 	    public boolean checkDuplicateId(String userId) {
-	        return membermapper.checkDuplicateId(userId) > 0; // userId 직접 전달
+	        return membermapper.checkDuplicateId(userId) > 0; // userId 吏��� ����
 	    }
 
 	    
@@ -89,11 +89,11 @@ public class MemberServiceImpl implements MemberService{
 			return membermapper.updateNewPhoneNum(oldPhoneNumber,newPhoneNumber,userNo);
 		}
 		
-		public List<LikedPopImgVO> pLikeList(@Param("userNo") int userNo){
+		public List<likedPopImgVO> pLikeList(@Param("userNo") int userNo){
 			return membermapper.pLikeList(userNo);
 		}
 		
-		public List<LikedGoodsImgVO> gLikeList(@Param("userNo") int userNo){
+		public List<likedGoodsImgVO> gLikeList(@Param("userNo") int userNo){
 			return membermapper.gLikeList(userNo);
 		}
 		
@@ -112,7 +112,7 @@ public class MemberServiceImpl implements MemberService{
 			membermapper.deleteUserInterest(userNo);
 		
 			  
-			// 관심사 삽입
+			// 愿��ъ�� �쎌��
 		    return membermapper.changeUserInterest(mcvo);
 			
 	    }

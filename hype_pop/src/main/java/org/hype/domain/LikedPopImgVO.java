@@ -11,14 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class LikedPopImgVO {
+public class likedPopImgVO {
 
 	
-	private int userNo; // 회원번호
-	private int psNo; // 팝업스토어 번호
-	private Date likeDate; // 좋아요 날짜
+	private int userNo; // ????�???
+	private int psNo; // ?????��???? �???
+	private Date likeDate; // �????? ??�?
 	private String uuid; // uuid
-	private String uploadPath; // 업로드 경로
-	private String fileName; // 파일 이름
-	private String psName; // 팝업스토어 이름
+	private String uploadPath; // ??�??? 경�?
+	private String fileName; // ???? ?��?
+	private String psName; // ?????��???? ?��?
 }

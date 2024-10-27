@@ -11,15 +11,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class LikedGoodsImgVO {
+public class likedGoodsImgVO {
 
-    private int userNo; // 회원 번호
-    private int gno; // 상품 번호
-    private Date likeDate; // 좋아요 날짜
-    private String gname; // 상품명
+    private int userNo; // ???? �???
+    private int gno; // ???? �???
+    private Date likeDate; // �????? ??�?
+    private String gname; // ????�?
     private String uuid; // uuid
-    private String uploadPath; // 업로드 경로
-    private String fileName; // 파일 이름
+    private String uploadPath; // ??�??? 경�?
+    private String fileName; // ???? ?��?
 
     @Override
     public String toString() {

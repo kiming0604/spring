@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.hype.domain.gImgVO;
 import org.hype.domain.gLikeVO;
 import org.hype.domain.likeVO;
-import org.hype.domain.LikedGoodsImgVO;
-import org.hype.domain.LikedPopImgVO;
+import org.hype.domain.likedGoodsImgVO;
+import org.hype.domain.likedPopImgVO;
 import org.hype.domain.mCatVO;
 import org.hype.domain.pImgVO;
 import org.hype.domain.signInVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public interface MemberService {
 
 	
-	//db에 저장
+	//db�� ����
 	
 	public signInVO loginMember(signInVO svo);
 
@@ -43,9 +43,9 @@ public interface MemberService {
     
 	public int updateNewPhoneNum(@Param("oldPhoneNumber") String oldPhoneNumber,@Param("newPhoneNumber") String newPhoneNumber,@Param("userNo") int userNo);
 
-	public List<LikedPopImgVO> pLikeList(@Param("userNo") int userNo);
+	public List<likedPopImgVO> pLikeList(@Param("userNo") int userNo);
 	
-	public List<LikedGoodsImgVO> gLikeList(@Param("userNo") int userNo);
+	public List<likedGoodsImgVO> gLikeList(@Param("userNo") int userNo);
 	
 	public int pLikeListDelete(@Param("userNo") int userNo,@Param("psNo") int psNo);
 	
