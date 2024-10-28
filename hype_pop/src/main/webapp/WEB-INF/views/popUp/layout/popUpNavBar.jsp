@@ -38,6 +38,7 @@
         <a href="/#map">내 주변</a>
         <a href="/hypePop/calendar">캘린더</a>
         <a href="/member/login">로그인</a>
+        <a href="/member/myPage?userNo=2">마이페이지</a>
     </div>
 
 </body>

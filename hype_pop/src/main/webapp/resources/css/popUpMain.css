@@ -159,12 +159,12 @@ body .popUpRecommend span:hover {
 .slider {
     display: flex;
     transition: transform 0.5s ease;
-    width: fit-content; /* 슬라이더 내용에 맞춰 크기 설정 */
+    width: calc(100% + 1%); /* 슬라이더 너비를 아이템의 마진을 고려하여 조정 */
 }
 
 /* 슬라이더 아이템 스타일 */
 .popUpItem {
-    flex: 0 0 24%; /* 아이템 크기를 25%로 설정하되 마진을 고려해 24%로 수정 */
+    flex: 0 0 23%; /* 아이템 크기를 25%에서 23%로 수정 */
     height: 200px; /* 높이를 정사각형으로 고정 */
     margin-right: 1%; /* 아이템 간 마진 */
     text-align: center;

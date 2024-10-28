@@ -1,5 +1,6 @@
 package org.hype.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -190,5 +191,33 @@ public class ReplyController {
                .contentType(MediaType.APPLICATION_JSON)
                .body(response);
    }
+   //추가(김윤)
+   @GetMapping(value = "/getMyPopupReply", produces = MediaType.APPLICATION_JSON_VALUE)
+   @ResponseBody // JSON으로 응답하기 위해 추가
+   public ResponseEntity<Map<String, Object>> getMyPopupReviews(@RequestParam int userNo) {
+       Map<String, Object> response = new HashMap<>();
+       try {
+           Map<String, Object> result = service.getMyPopupReviews(userNo);
+           
+           List<psReplyVO> replies = (List<psReplyVO>) result.get("replies");
+           List<String> psNames = (List<String>) result.get("psNames"); // psNames를 가져옵니다.
+           List<Map<String, Object>> replyList = new ArrayList<>();
 
+           for (int i = 0; i < replies.size(); i++) {
+               psReplyVO reply = replies.get(i);
+               Map<String, Object> replyData = new HashMap<>();
+               replyData.put("psName", psNames.get(i)); // psNames에서 psName을 가져옵니다.
+               replyData.put("psComment", reply.getPsComment()); // psComment는 psReplyVO에서 가져옵니다.
+               replyData.put("psRegDate", reply.getPsRegDate()); // psRegDate도 가져옵니다.
+               replyList.add(replyData);
+           }   response.put("replies", replyList);
+           return ResponseEntity.ok(response);
+       } catch (Exception e) {
+           log.error("Error retrieving popup reviews", e);
+           response.put("error", e.getMessage());
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+       }
+   
+
+   }
 }

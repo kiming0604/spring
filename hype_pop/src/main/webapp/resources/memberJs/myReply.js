@@ -25,7 +25,7 @@ function loadBoard(boardType, pageNum = 1) {
                 if (inquiryList.length === 0) {
                     boardContainer.innerHTML = '<p>문의가 없습니다.</p>';
                 } else {
-                	
+                   
                     inquiryList.forEach((inquiry) => {
                         boardContainer.innerHTML += `
                             <div class="board-item">
@@ -58,7 +58,8 @@ function loadBoard(boardType, pageNum = 1) {
                         boardContainer.innerHTML +=`
                             <div class="board-item">
                                 <span>${review.psName}</span>
-								<a href="/hypePop/popUpDetails?storeName=${encodeURIComponent(review.psName)}">                                    <span>${review.psComment}</span>
+                        <a href="/hypePop/popUpDetails?storeName=${encodeURIComponent(review.psName)}">                                    
+                        <span>${review.psComment}</span>
                                 </a>
                                 <span>${new Date(review.psRegDate).toLocaleDateString()}</span>
                             </div>
@@ -71,9 +72,9 @@ function loadBoard(boardType, pageNum = 1) {
                 boardContainer.innerHTML = `<p>오류 발생: ${error.message}</p>`; // 오류 메시지 출력
             });
     }else if (boardType === 'goodsComments') {
-    	  const userNo = document.getElementById('userNo').value; 
+         const userNo = document.getElementById('userNo').value; 
 
-          fetch(`/gReply/getUserReply?userNo=${userNo}&pageNum=${pageNum}&amount=5`)
+          fetch(`/gReply/getGreplyReviews?userNo=${userNo}`)
               .then((response) => {
                 if (!response.ok) {
                     return response.text().then((text) => {
@@ -82,29 +83,28 @@ function loadBoard(boardType, pageNum = 1) {
                 }
                 return response.json();
             })
-            .then((data) => {
-                const grList = data.goodsReply;
-                if (grList.length === 0) {
+            .then(data => {
+               if (data.greplies && data.greplies.length === 0) {
                     boardContainer.innerHTML = '<p>문의가 없습니다.</p>';
-                } else {
-                	grList.forEach( gr => {
-                        boardContainer.innerHTML += `
+                }else {
+                    data.greplies.forEach(greview => {
+                        boardContainer.innerHTML +=`
                             <div class="board-item">
-                            <span>${gr.gname}</span>
-                                <a href="/gReply/goodsDetails?gno=${gr.gno}">
-                                    ${gr.gcomment}
+                                <span>${greview.gname}</span>
+                        <a href="/goodsStore/goodsDetails?gno=${greview.gno}">                                    
+                        <span>${greview.psComment}</span>
                                 </a>
-                           <span>${new Date(gr.gregDate).toLocaleDateString()}</span>
-
+                                <span>${new Date(greview.gregDate).toLocaleDateString()}</span>
                             </div>
                         `;
                     });
                 }
-                updatePageNumbers(pageNum);
-            })
-            .catch((error) => console.error('Error fetching inquiry list:', error));
-                }
-}	
+            }) 
+            .catch(error => {
+                console.error('Fetch error:', error);
+                boardContainer.innerHTML = `<p>오류 발생: ${error.message}</p>`; // 오류 메시지 출력
+            });
+}   
 
 // 팝업 리뷰 로드 함수
 function loadPopupReviews(reviews) {
@@ -142,13 +142,14 @@ document.querySelector('.next').addEventListener('click', function () {
 });
 
 document.querySelectorAll('.board-item').forEach(a => {
-	  a.addEventListener('click', (event) => {
-	    event.preventDefault();
-	    
-	    let storeName = review.psName.value;
-	    
-	    console.log(storeName);
-	    
-	     location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(storeName)}`;
-	  });
-	});
+     a.addEventListener('click', (event) => {
+       event.preventDefault();
+       
+       let storeName = review.psName.value;
+       
+       console.log(storeName);
+       
+        location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(storeName)}`;
+     });
+   });
+}

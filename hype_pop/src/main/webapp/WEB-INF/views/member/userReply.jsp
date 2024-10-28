@@ -184,7 +184,7 @@
 </head>
 <body>
 <div class="header">
-    <a href="/home" class="home-link">홈</a>
+    <a href="/" class="home-link">홈</a>
 </div>
 
 <div class="container">

@@ -1,12 +1,16 @@
 package org.hype.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.gReplyVO;
 import org.hype.mapper.GReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.log4j.Log4j;
 @Log4j
@@ -63,5 +67,27 @@ public class GReplyServiceImpl implements GReplyService {
 	public int getReplyCount(@Param("gno") int gno,@Param("userNo") int userNo) {
 	    return gMapper.getReplyCount(gno, userNo);
 	}
-	
+	   //새로 추가(김윤)
+	   @Override
+	   @Transactional
+	   public Map<String, Object> getGreplyReviews(int userNo) {
+	    
+	      //내 댓글 리스트
+	      List<gReplyVO>greplies = gMapper.getGreply(userNo);
+	      // gName 저장할 리스트
+	      List<String> gnames = new ArrayList<>();
+	       
+	      // 각 gNo에 대해 gName 가져오기
+	       for (gReplyVO greply : greplies) {
+	              String gname = gMapper.getGname(greply.getGno()); 
+	              gnames.add(gname);
+	          }
+	      
+	      
+	          Map<String, Object> result = new HashMap<>();
+	          result.put("greplies", greplies);
+	          result.put("gnames", gnames);
+	          return result; // 결과를 Map 형태로 반환 
+	   }
+	   
 }

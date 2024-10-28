@@ -1,11 +1,24 @@
+
 package org.hype.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import org.hype.domain.cartVO;
+import org.hype.service.MemberService;
+import org.hype.service.PurchaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -13,60 +26,84 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/purchase/*")
 public class PurchaseController {
 
-    // Àå¹Ù±¸´Ï ÆäÀÌÁö·Î ÀÌµ¿
+   
+
+      
+   @Autowired
+   private PurchaseService pservice;
+   
+   //ì¥ë°”êµ¬ë‹ˆì— ì•„ì´í…œ ì¶”ê°€
+    @RequestMapping(value ="/addCart", produces = "application/json; charset=UTF-8")
+   @ResponseBody
+   public ResponseEntity<String> addToCart(@RequestBody cartVO cvo) {
+       
+       
+              pservice.addToCart(cvo);
+              return new ResponseEntity<>("ìƒí’ˆì´ ì¥ë°”êµ¬ë‹ˆì— ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤.", HttpStatus.OK);
+          }
+    
+
+      
+   
+    // ì¥ë°”êµ¬ë‹ˆ í˜ì´ì§€ë¡œ ì´ë™
     @GetMapping("/goCart")
-    public String goCart(Model model) {
-        log.info("Àå¹Ù±¸´Ï·Î ÀÌµ¿");
+    public String goCart(int userNo,  Model model) {
+        log.info("ì¥ë°”êµ¬ë‹ˆë¡œ ì´ë™,userNo :" + userNo);
+   
         
-        // ÁÖ¼®: Àå¹Ù±¸´Ï¿¡¼­ »óÇ° ¸ñ·Ï °¡Á®¿À´Â ·ÎÁ÷ ÇÊ¿ä
-        // List<Item> cartItems = cartService.getCartItems(userId);
-        // model.addAttribute("cartItems", cartItems);
+       
+        List<cartVO> cartInfo = pservice.getCartInfo(userNo); 
+        
+        //ì¥ë°”êµ¬ë‹ˆ êµ¿ì¦ˆ ì •ë³´
+        model.addAttribute("cartInfo", cartInfo);
+      
+        
         
         return "/purchase/myCart"; 
     }
 
-    // °áÁ¦ Á¤º¸ ÀÔ·Â ÆäÀÌÁö·Î ÀÌµ¿
+    // ê²°ì œ ì •ë³´ ì…ë ¥ í˜ì´ì§€ë¡œ ì´ë™
     @GetMapping("/goPurchase")
     public String goPurchase(@RequestParam("orderId") String orderId, Model model) {
-        log.info("°áÁ¦ Á¤º¸ ÀÔ·ÂÃ¢À¸·Î ÀÌµ¿");
+        log.info("ê²°ì œ ì •ë³´ ì…ë ¥ì°½ìœ¼ë¡œ ì´ë™");
 
-        // ÁÖ¼®: orderId¿¡ ÇØ´çÇÏ´Â ÁÖ¹® Á¤º¸ °¡Á®¿À±â
+        // ì£¼ì„: orderIdì— í•´ë‹¹í•˜ëŠ” ì£¼ë¬¸ ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         // Order order = purchaseService.getOrderDetails(orderId);
         // model.addAttribute("order", order);
         
         return "/purchase/goodsPurchase"; 
     }
 
-    // °áÁ¦ Á¤º¸ ÀÔ·Â ¹× °áÁ¦ Ã³¸®
+    // ê²°ì œ ì •ë³´ ì…ë ¥ ë° ê²°ì œ ì²˜ë¦¬
     @PostMapping("/processPurchase")
     public String processPurchase(@RequestParam("orderId") String orderId, 
                                   @RequestParam("paymentMethod") String paymentMethod, 
                                   @RequestParam("shippingAddress") String shippingAddress, 
                                   Model model) {
-        log.info("°áÁ¦ Á¤º¸ Ã³¸® Áß: ÁÖ¹® ID = " + orderId);
+        log.info("ê²°ì œ ì •ë³´ ì²˜ë¦¬ ì¤‘: ì£¼ë¬¸ ID = " + orderId);
 
-        // ÁÖ¼®: °áÁ¦ Ã³¸® ·ÎÁ÷ ÇÊ¿ä
+        // ì£¼ì„: ê²°ì œ ì²˜ë¦¬ ë¡œì§ í•„ìš”
         // boolean paymentSuccess = purchaseService.processPayment(orderId, paymentMethod, shippingAddress);
         
-        // ÁÖ¼®: °áÁ¦ ¼º°ø ¿©ºÎ¿¡ µû¸¥ °á°ú ÆäÀÌÁö ¹İÈ¯
-        // if (paymentSuccess) {	
-        //     model.addAttribute("message", "°áÁ¦°¡ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¾ú½À´Ï´Ù.");
-        //     return "/purchase/purchaseSuccess"; // °áÁ¦ ¼º°ø ÆäÀÌÁö·Î ÀÌµ¿
+        // ì£¼ì„: ê²°ì œ ì„±ê³µ ì—¬ë¶€ì— ë”°ë¥¸ ê²°ê³¼ í˜ì´ì§€ ë°˜í™˜
+        // if (paymentSuccess) {   
+        //     model.addAttribute("message", "ê²°ì œê°€ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+        //     return "/purchase/purchaseSuccess"; // ê²°ì œ ì„±ê³µ í˜ì´ì§€ë¡œ ì´ë™
         // } else {
-        //     model.addAttribute("error", "°áÁ¦ Ã³¸®¿¡ ½ÇÆĞÇß½À´Ï´Ù.");
-           return "/purchase/goodsPurchase"; // °áÁ¦ ½ÇÆĞ ½Ã ´Ù½Ã °áÁ¦ ÆäÀÌÁö·Î ÀÌµ¿
+        //     model.addAttribute("error", "ê²°ì œ ì²˜ë¦¬ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
+           return "/purchase/goodsPurchase"; // ê²°ì œ ì‹¤íŒ¨ ì‹œ ë‹¤ì‹œ ê²°ì œ í˜ì´ì§€ë¡œ ì´ë™
         // }
     }
 
-    // ±¸¸ÅÇÑ ¸ñ·Ï °¡Á®¿À±â
+    // êµ¬ë§¤í•œ ëª©ë¡ ê°€ì ¸ì˜¤ê¸°
     @GetMapping("/purchaseHistory")
     public String getPurchaseHistory(Model model) {
-        log.info("±¸¸ÅÇÑ ¸ñ·ÏÀ» °¡Á®¿É´Ï´Ù.");
+        log.info("êµ¬ë§¤í•œ ëª©ë¡ì„ ê°€ì ¸ì˜µë‹ˆë‹¤.");
 
-        // ÁÖ¼®: »ç¿ëÀÚÀÇ ±¸¸Å ³»¿ªÀ» DB¿¡¼­ °¡Á®¿À´Â ·ÎÁ÷ ÇÊ¿ä
+        // ì£¼ì„: ì‚¬ìš©ìì˜ êµ¬ë§¤ ë‚´ì—­ì„ DBì—ì„œ ê°€ì ¸ì˜¤ëŠ” ë¡œì§ í•„ìš”
         // List<Purchase> purchaseHistory = purchaseService.getPurchaseHistory(userId);
         // model.addAttribute("purchaseHistory", purchaseHistory);
 
-        return "/purchase/purchaseHistory"; // ±¸¸Å ³»¿ªÀ» º¸¿©ÁÙ JSP ÆäÀÌÁö
+        return "/purchase/purchaseHistory"; // êµ¬ë§¤ ë‚´ì—­ì„ ë³´ì—¬ì¤„ JSP í˜ì´ì§€
     }
 }

@@ -13,5 +13,5 @@ public class gImgVO {
 	private int gNo;
 	private String uuid;
 	private String uploadPath;
-	private String filename;
+	private String fileName;
 }

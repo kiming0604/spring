@@ -190,5 +190,28 @@ public class SupportController {
 	        return "errorPage"; 
 	    }
 	}
-	
+	   //특정 유저 1:1 문의글 가져오기(윤)
+    @GetMapping(value = "/userInquiry", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getUserInquiryList(
+            @RequestParam int userNo, // 요청 파라미터로 userNo를 받음
+            @RequestParam(defaultValue = "1") int pageNum,
+            @RequestParam(defaultValue = "5") int amount) {
+
+        List<qnaVO> inquiries = noticeService.getUserInquiriesWithPaging(userNo, pageNum, amount);
+
+        if (inquiries == null || inquiries.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+       int totalCount = noticeService.getTotalInquiryCountByUser(userNo); // 총 문의 개수 가져오기
+
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("inquiries", inquiries);
+        response.put("totalCount", totalCount);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

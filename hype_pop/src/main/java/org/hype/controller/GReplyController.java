@@ -1,5 +1,6 @@
 package org.hype.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.log4j.Log4j;
@@ -97,4 +100,46 @@ public class GReplyController {
             return ResponseEntity.status(500).body("error");
         }
     }
+    @GetMapping(value = "/getGreplyReviews", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody // JSON으로 응답하기 위해 추가
+    public ResponseEntity<Map<String, Object>> getGreplyReviews(@RequestParam int userNo) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Map<String, Object> result = gService.getGreplyReviews(userNo);
+
+            if (result == null) {
+                throw new NullPointerException("Service returned null result");
+            }
+
+            List<gReplyVO> greplies = (List<gReplyVO>) result.get("greplies");
+            List<String> gnames = (List<String>) result.get("gnames");
+
+            if (greplies == null || gnames == null) {
+                throw new NullPointerException("No greplies or gnames found");
+            }
+            if (greplies.size() != gnames.size()) {
+                throw new IllegalArgumentException("Mismatch in size between greplies and gnames");
+            }
+
+            List<Map<String, Object>> greplyList = new ArrayList<>();
+            for (int i = 0; i < greplies.size(); i++) {
+                gReplyVO greply = greplies.get(i);
+                Map<String, Object> greplyData = new HashMap<>();
+                greplyData.put("gno", greply.getGno());
+                greplyData.put("gname", gnames.get(i));
+                greplyData.put("gcomment", greply.getGcomment());
+                greplyData.put("gregDate", greply.getGregDate());
+                greplyList.add(greplyData);
+            }
+
+            response.put("greplies", greplyList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error retrieving popup reviews", e);
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+
+    
+}
 }

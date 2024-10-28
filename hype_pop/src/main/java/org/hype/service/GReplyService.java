@@ -1,6 +1,7 @@
 package org.hype.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.gReplyVO;
@@ -15,4 +16,8 @@ public interface GReplyService {
 	public int updateReply(gReplyVO vo);
 	public List<gReplyVO> getAllReplyListWithPaging(@Param("gno") int gno, @Param("userNo") int userNo, @Param("offset") int offset, @Param("size") int size);
 	public int getReplyCount(@Param("gno") int gno,@Param("userNo") int userNo);
+	
+	// 윤씨 추가 부분 
+	public Map<String, Object> getGreplyReviews(int userNo);
+
 }

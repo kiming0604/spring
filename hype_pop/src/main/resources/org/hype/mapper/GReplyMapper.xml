@@ -65,4 +65,16 @@
 		goods_reply_table
 		WHERE gno = #{gno} AND userNo != #{userNo}
 	</select>
+	  
+	   <!--추가(윤)-->
+   
+   <!--userNo 로 greply 조회  -->
+   <select id="getGreply" parameterType="int"
+      resultType="org.hype.domain.gReplyVO">
+      select * from goods_reply_table where userNo=#{userNo}
+   </select>
+   <!--ganme 조회  -->
+   <select id="getGname" resultType="String"> 
+      select gname from goods_info_tbl where gno=#{gno} 
+   </select>
 </mapper>

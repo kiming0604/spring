@@ -17,4 +17,8 @@ public interface GReplyMapper {
 	public int updateReplyCntMinus(@Param("gno") int gno);
 	public List<gReplyVO> getAllReplyListWithPaging(@Param("gno") int gno, @Param("userNo") int userNo, @Param("offset") int offset, @Param("size") int size);
 	public int getReplyCount(@Param("gno") int gno,@Param("userNo") int userNo);
+	
+	//새로 추가 (윤)
+	   public List<gReplyVO> getGreply(int userNo);
+	   public String getGname(int gno);
 }

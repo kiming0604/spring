@@ -1,21 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // 모든 스토어 카드를 선택
     const storeCards = document.querySelectorAll(".store-card");
-    const storesArray = [];
-
-    // 사용자 위치 정보
+    let popUpResults = [];
+    let filteredPopUps = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let displayedItems = 0;
+    let selectedInterests = [];
     let userLocation = {
         latitude: null,
         longitude: null
     };
 
-    // 사용자 위치 가져오기
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
             userLocation.latitude = position.coords.latitude;
             userLocation.longitude = position.coords.longitude;
             console.log("사용자 위치:", userLocation);
-            loadPageAgain(storesArray); // 위치 정보가 설정된 후 페이지 로드
+            loadPageAgain(popUpResults);
         }, (error) => {
             console.error("위치 정보 가져오기 실패:", error);
         });
@@ -23,50 +24,45 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("이 브라우저는 Geolocation을 지원하지 않습니다.");
     }
 
-    // 각 카드에 대해 필요한 정보를 추출하여 배열에 저장
     storeCards.forEach((card) => {
-        const storeName = card.querySelector(".storeName").textContent;
-        const likeCount = parseInt(card.querySelector(".likeCount").textContent.replace(/[^0-9]/g, ""));
-        const psNo = card.querySelector(".psNo").value;
-        const psAddress = card.querySelector("h3").textContent.replace("주소: ", "");
-        const interest = card.querySelector(".popUpCat").textContent;
-        const rating = parseFloat(card.querySelector(".rating").value);
-        const latitude = parseFloat(card.querySelector(".latitude").value); // 위도
-        const longitude = parseFloat(card.querySelector(".longitude").value); // 경도
-
-        // 날짜 정보를 가져오는 부분
-        const psStartDate = card.querySelector(".date-info span:nth-child(1)").textContent.replace("시작일: ", "").trim();
-        const psEndDate = card.querySelector(".date-info span:nth-child(2)").textContent.replace("종료일: ", "").trim();
-
-        // 저장할 객체 생성
         const storeInfo = {
-            name: storeName,
-            likeCount: likeCount,
-            psNo: psNo,
-            address: psAddress,
-            interest: interest,
-            rating: rating,
-            psStartDate: psStartDate,
-            psEndDate: psEndDate,
-            latitude: latitude, // 추가된 부분
-            longitude: longitude // 추가된 부분
+            name: card.querySelector(".storeName").textContent,
+            likeCount: parseInt(card.querySelector(".likeCount").textContent.replace(/[^0-9]/g, "")),
+            psNo: card.querySelector(".psNo").value,
+            address: card.querySelector("h3").textContent.replace("주소: ", ""),
+            interest: card.querySelector(".popUpCat").textContent,
+            rating: parseFloat(card.querySelector(".rating").value),
+            psStartDate: card.querySelector(".date-info span:nth-child(1)").textContent.replace("시작일: ", "").trim(),
+            psEndDate: card.querySelector(".date-info span:nth-child(2)").textContent.replace("종료일: ", "").trim(),
+            latitude: parseFloat(card.querySelector(".latitude").value),
+            longitude: parseFloat(card.querySelector(".longitude").value)
         };
-
-        // 배열에 추가
-        storesArray.push(storeInfo);
+        popUpResults.push(storeInfo);
     });
 
-    // 초기 상태 설정
-    let currentStoreIndex = 0; // 초기 인덱스 설정
-    const itemsPerPage = 10; // 페이지당 표시할 스토어 수
-
-    // 초기 로드 시 스토어 표시
     function loadPageAgain(storesArray) {
-        currentStoreIndex = 0; // 초기 인덱스 설정
-        displayStores(storesArray); // 초기 10개 스토어 표시
+        currentPage = 1;
+        displayedItems = 0;
+        selectedInterests = []; // 관심사 초기화
+        filteredPopUps = [...storesArray]; // 전체 목록 복사
+        displayStores(filteredPopUps); // 전체 스토어 표시
     }
 
-    // 스토어 표시 함수
+    function filterPopUpsBySearchAndCategory(storesArray) {
+        if (selectedInterests.length === 0) {
+            filteredPopUps = [...storesArray]; // 전체 목록 복사
+        } else {
+            filteredPopUps = storesArray.filter(store => {
+                const storeInterests = store.interest.split(",").map(s => s.trim()).filter(Boolean);
+                const hasMatchingInterest = storeInterests.some(storeInterest => selectedInterests.includes(storeInterest));
+                return hasMatchingInterest;
+            });
+        }
+
+        console.log("필터링된 스토어:", filteredPopUps);
+        displayStores(filteredPopUps); // 필터링된 스토어만 표시
+    }
+
     function displayStores(filteredStores) {
         const storeContainer = document.querySelector(".searchResultStore");
 
@@ -75,26 +71,26 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // 초기에 모든 카드 지우기
-        storeContainer.innerHTML = "";
+        storeContainer.innerHTML = ""; // 전체 스토어 카드 지우기
+        const initialStores = filteredStores.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-        // 초기에 10개만 보여주기
-        const initialStores = filteredStores.slice(currentStoreIndex, currentStoreIndex + itemsPerPage);
+        if (initialStores.length === 0) {
+            const noResultMessage = document.createElement("div");
+            noResultMessage.textContent = "조건에 맞는 스토어가 없습니다.";
+            storeContainer.appendChild(noResultMessage);
+            return;
+        }
+
         initialStores.forEach((store) => {
             const storeCard = createStoreCard(store);
             storeContainer.appendChild(storeCard);
         });
 
-        // 현재 인덱스 업데이트
-        currentStoreIndex += itemsPerPage;
-
-        // 더보기 버튼 추가 조건 수정
+        displayedItems += initialStores.length;
         addLoadMoreButton(storeContainer, filteredStores);
     }
 
-    // 더보기 버튼 추가
     function addLoadMoreButton(storeContainer, filteredStores) {
-        // 더보기 버튼이 이미 존재하는지 확인
         let loadMoreBtn = document.querySelector(".load-more-btn");
         if (!loadMoreBtn) {
             loadMoreBtn = document.createElement("button");
@@ -105,125 +101,31 @@ document.addEventListener("DOMContentLoaded", function () {
             };
         }
 
-        // 현재 인덱스가 필터링된 스토어 수보다 적으면 버튼을 추가
-        if (currentStoreIndex < filteredStores.length) {
-            storeContainer.appendChild(loadMoreBtn); // 스토어 카드 아래에 버튼 추가
-            loadMoreBtn.style.display = "block"; // 버튼을 보여줌
+        if (displayedItems < filteredStores.length) {
+            storeContainer.appendChild(loadMoreBtn);
+            loadMoreBtn.style.display = "block";
         } else {
-            loadMoreBtn.style.display = "none"; // 더 이상 로드할 항목이 없으면 버튼 숨기기
+            loadMoreBtn.style.display = "none";
         }
     }
 
-    // 더보기 기능 구현
     function loadMoreStores(filteredStores) {
         const storeContainer = document.querySelector(".searchResultStore");
 
-        // 다음 스토어 항목 로드
-        const nextStores = filteredStores.slice(currentStoreIndex, currentStoreIndex + itemsPerPage);
+        const nextStores = filteredStores.slice(displayedItems, displayedItems + itemsPerPage);
         nextStores.forEach((store) => {
             const storeCard = createStoreCard(store);
             storeContainer.appendChild(storeCard);
         });
 
-        // 현재 인덱스 업데이트
-        currentStoreIndex += itemsPerPage;
-
-        // 버튼의 표시 여부 조정
+        displayedItems += nextStores.length;
         addLoadMoreButton(storeContainer, filteredStores);
     }
 
-    // Haversine 거리 계산 함수
-    function calculateDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // 지구의 반경 (km)
-        const dLat = (lat2 - lat1) * (Math.PI / 180);
-        const dLon = (lon2 - lon1) * (Math.PI / 180);
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                  Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // 거리 (km)
-    }
-
-    // 거리 기준으로 정렬하는 함수
-    function sortStoresByDistance() {
-        if (userLocation.latitude && userLocation.longitude) {
-            storesArray.sort((a, b) => {
-                const distanceA = calculateDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
-                const distanceB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
-                return distanceA - distanceB; // 가까운 순서대로 정렬
-            });
-            loadPageAgain(storesArray); // 정렬된 스토어 표시
-        } else {
-            console.error("사용자 위치가 설정되지 않았습니다.");
-        }
-    }
-
-    // 관심사 선택 버튼 클릭 시 관심사 버튼 표시
-    document.getElementById("selectInterestsBtn").onclick = function () {
-        const interestButtons = document.getElementById("interestButtons");
-        interestButtons.style.display = interestButtons.style.display === "none" ? "block" : "none";
-    };
-
-    let selectedInterests = [];
-
-    // 관심사 버튼 클릭 시
-    document.querySelectorAll("#interestButtons button").forEach((interest) => {
-        interest.addEventListener("click", (event) => {
-            const selInterest = interest.textContent;
-
-            toggleInterest(selInterest, interest);
-            if (selectedInterests.length > 0) {
-                filterStoresByInterest();
-            } else {
-                loadPageAgain(storesArray); // 모든 스토어 표시
-            }
-        });
-    });
-
-    // 관심사 선택 토글
-    function toggleInterest(interest, buttonElement) {
-        if (selectedInterests.includes(interest)) {
-            selectedInterests = selectedInterests.filter((item) => item !== interest);
-            buttonElement.classList.remove("selected");
-        } else {
-            selectedInterests.push(interest);
-            buttonElement.classList.add("selected");
-        }
-        console.log(selectedInterests);
-    }
-
-    function filterStoresByInterest() {
-        const filteredStores = [];
-
-        // 모든 스토어를 순회
-        for (const store of storesArray) {
-            // 스토어의 관심사 문자열을 배열로 변환
-            const storeInterests = store.interest.split(",").map(s => s.trim()).filter(Boolean); // 빈 문자열 필터링
-
-            // 여기에 관심사 문자열 형식 확인을 위한 로그 추가
-            console.log("스토어 관심사:", storeInterests); // 디버깅을 위한 출력
-
-            // 스토어 관심사에 대해 selectedInterests 배열의 각 요소에 대해 일치 여부 확인
-            const hasMatchingInterest = storeInterests.some(storeInterest => 
-                selectedInterests.includes(storeInterest)
-            );
-
-            // 일치하는 관심사가 있으면 필터링된 배열에 추가
-            if (hasMatchingInterest) {
-                filteredStores.push(store);
-            }
-        }
-
-        console.log("필터링된 스토어:", filteredStores); // 디버깅을 위한 출력
-        displayStores(filteredStores); // 필터링된 스토어 표시
-    }
-   
- // 스토어 카드 생성 함수
     function createStoreCard(store) {
         const storeCard = document.createElement("div");
         storeCard.classList.add("store-card");
 
-        // 관심사를 콤마로 나눠 배열로 만듦
         const interestsArray = store.interest.split(",").map(s => s.trim());
 
         storeCard.innerHTML = `
@@ -232,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="store-info">
                 <div class="header">
-                    <h2><span class="storeName">${store.name}</span></h2>
+                    <h2 class="popUpItem"><span class="storeName">${store.name}</span></h2>
                     <span class="likeCount">좋아요 수: ${store.likeCount}</span>
                     <input type="hidden" class="psNo" value="${store.psNo}">
                     <input type="hidden" class="rating" value="${store.rating}">
@@ -249,65 +151,125 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             </div>
         `;
+        
+        // 이름 클릭 시 상세 페이지로 이동하는 이벤트 추가
+        const storeNameElement = storeCard.querySelector('.storeName');
+        storeNameElement.addEventListener('click', (event) => {
+            event.preventDefault();
+            const storeName = store.name;
+            console.log(storeName);
+            location.href = `/hypePop/popUpDetails?storeName=${encodeURIComponent(storeName)}`;
+        });
+
         return storeCard;
     }
 
-    // 정렬 기준 클릭 이벤트
+    document.getElementById("selectInterestsBtn").onclick = function () {
+        const interestButtons = document.getElementById("interestButtons");
+        interestButtons.style.display = interestButtons.style.display === "none" ? "block" : "none";
+    };
+
+    document.querySelectorAll("#interestButtons button").forEach((interest) => {
+        interest.addEventListener("click", (event) => {
+            const selInterest = interest.textContent;
+            toggleInterest(selInterest, interest);
+            if (selectedInterests.length > 0) {
+                filterPopUpsBySearchAndCategory(popUpResults);
+            } else {
+                loadPageAgain(popUpResults);
+            }
+        });
+    });
+
+    function toggleInterest(interest, buttonElement) {
+        if (selectedInterests.includes(interest)) {
+            selectedInterests = selectedInterests.filter((item) => item !== interest);
+            buttonElement.classList.remove("selected");
+        } else {
+            selectedInterests.push(interest);
+            buttonElement.classList.add("selected");
+        }
+        console.log(selectedInterests);
+    }
+
     document.querySelectorAll(".searchConditions span").forEach((option) => {
         option.addEventListener("click", (event) => {
             event.preventDefault();
 
-            // 모든 버튼의 selected 클래스 제거
+            const isSelected = option.classList.contains("selected");
+
+            // 모든 버튼 선택 해제
             document.querySelectorAll(".searchConditions span").forEach((btn) => {
                 btn.classList.remove("selected");
             });
 
-            // 클릭한 버튼에 selected 클래스 추가
-            option.classList.add("selected");
+            if (isSelected) {
+                // 이미 선택된 상태에서 클릭했을 경우 선택 해제
+                console.log(`선택 해제: ${option.id}`);
+                option.classList.remove("selected");
 
-            let sortBy = option.id;
+                // 선택 해제 시 전체 스토어 목록을 다시 로드
+                loadPageAgain(popUpResults); // 전체 스토어 다시 로드
+            } else {
+                // 새로운 버튼 선택
+                option.classList.add("selected");
+                let sortBy = option.id;
 
-            console.log(`정렬 기준: ${sortBy}`);
+                console.log(`정렬 기준: ${sortBy}`);
 
-            if (sortBy === "arrayByDis") {
-                console.log("거리순 정렬");
-                sortStoresByDistance(); // 거리순 정렬 함수 호출
-            } else if (sortBy === "arrayByLike") {
-                console.log("좋아요순 정렬");
-                sortStoresByLike(); // 좋아요순 정렬 함수 호출
-            } else if (sortBy === "arrayByLatest") {
-                console.log("최신순 정렬");
-                sortStoresByLatest(); // 최신순 정렬 함수 호출
-            } else if (sortBy === "arrayByRating") {
-                console.log("별점 순 정렬");
-                sortStoresByRating(); // 별점 순 정렬 함수 호출
+                // 정렬 기준에 따라 스토어 정렬
+                if (sortBy === "arrayByDis") {
+                    console.log("거리순 정렬");
+                    sortPopUpsByDistance();
+                } else if (sortBy === "arrayByLike") {
+                    console.log("좋아요순 정렬");
+                    sortPopUpsByLike();
+                } else if (sortBy === "arrayByLatest") {
+                    console.log("최신순 정렬");
+                    sortPopUpsByLatest();
+                } else if (sortBy === "arrayByRating") {
+                    console.log("별점 순 정렬");
+                    sortPopUpsByRating();
+                }
+                displayStores(filteredPopUps); // 정렬 후 스토어 표시
             }
         });
     });
- // 좋아요 수에 따라 정렬하는 함수
-    function sortStoresByLike() {
-        storesArray.sort((a, b) => b.likeCount - a.likeCount);
-        loadPageAgain(storesArray);
+
+    function sortPopUpsByDistance() {
+        if (userLocation.latitude && userLocation.longitude) {
+            filteredPopUps.sort((a, b) => {
+                const distanceA = calculateDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
+                const distanceB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
+                return distanceA - distanceB;
+            });
+        }
+        console.log("거리순 정렬 완료");
     }
 
-    // 최신순 정렬 함수
-    function sortStoresByLatest() {
-        const today = new Date();
-        storesArray.sort((a, b) => {
-            const dateA = new Date(a.psStartDate);
-            const dateB = new Date(b.psStartDate);
-            return dateB - dateA; // 최신순 정렬
-        });
-        loadPageAgain(storesArray);
+    function sortPopUpsByLike() {
+        filteredPopUps.sort((a, b) => b.likeCount - a.likeCount);
+        console.log("좋아요순 정렬 완료");
     }
 
-    // 별점 순으로 정렬하는 함수
-    function sortStoresByRating() {
-        storesArray.sort((a, b) => b.rating - a.rating);
-        loadPageAgain(storesArray);
+    function sortPopUpsByLatest() {
+        filteredPopUps.sort((a, b) => new Date(b.psStartDate) - new Date(a.psStartDate));
+        console.log("최신순 정렬 완료");
     }
 
+    function sortPopUpsByRating() {
+        filteredPopUps.sort((a, b) => b.rating - a.rating);
+        console.log("별점순 정렬 완료");
+    }
 
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // 지구의 반지름 (km)
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // 거리 (km)
+    }
 });
-
-
