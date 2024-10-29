@@ -8,16 +8,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            
         }
-        .navBar {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+         .navBar {
+        display: flex;
+        justify-content: center;
+        background-color: #333;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 100; /* 원하는 우선순위 값으로 설정 */
+    }
         .navBar a {
             color: white;
             text-decoration: none;

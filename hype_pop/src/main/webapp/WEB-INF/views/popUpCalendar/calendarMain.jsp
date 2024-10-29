@@ -48,7 +48,7 @@ body {
 }
 
 .content {
-    max-width: 80%; /* 너비를 70%로 설정 */
+    max-width: 90%; /* 너비를 70%로 설정 */
     margin: 20px;
     padding: 20px;
     background-color: #fff;
@@ -110,12 +110,14 @@ section.active {
 }
 
 .calendar-container {
+   width: 100%; /* 캘린더 전체 너비 */
     margin: 20px;
     padding: 20px;
 }
 
 .calendar-table {
-    width: 100%;
+    min-width: 280px; /* 최소 너비 설정 */
+    max-width: 100%; /* 최대 너비는 100%로 제한 */
     border-collapse: collapse; /* 경계를 겹치게 설정 */
 }
 
@@ -123,10 +125,21 @@ section.active {
     border: 1px solid #ccc;
     text-align: center;
     padding: 5px;
-    font-size: 10px;
-    width: 40px; /* 고정된 너비 설정 */
-    height: 40px; /* 고정된 높이 설정 */
+    font-size: 7.5px;
+    width: 35px; /* 고정된 너비 설정 */
+    height: 35px; /* 고정된 높이 설정 */
     vertical-align: middle; /* 수직 중앙 정렬 */
+    box-sizing: border-box; /* 여백을 포함한 크기 계산 */
+}
+.calendar-table td.monthDate {
+    font-size: 12px !important; /* !important로 우선순위 강제 */
+    font-weight : bold;
+}
+.calendar-table td.today {
+    background-color: yellow; /* 배경색을 노란색으로 */
+    font-weight: bold; /* 글자를 굵게 */
+    border: 2px solid red; /* 테두리를 빨간색으로 */
+    font-size : 12px;
 }
 
 thead th {    
@@ -226,6 +239,18 @@ thead th {
     white-space: nowrap; /* 툴팁 텍스트가 줄 바꿈되지 않도록 설정 */
     display: none; /* 기본적으로 숨김 */
 }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
 
 </style>
 </head>
@@ -253,6 +278,8 @@ thead th {
                   <label><input type="checkbox" class="category-checkbox" value="experience"> 경험</label>
                    <label><input type="checkbox" class="category-checkbox" value="collaboration"> 콜라보</label>
                  <label><input type="checkbox" class="category-checkbox" value="entertainment"> 방송</label>
+                 <label><input type="checkbox" class="category-checkbox" value="myInterest" id = "myInterest"> 내 관심사</label>
+                 <label><input type="checkbox" class="category-checkbox" value="myLike" id = "myLike"> 내 좋아요</label>
             </div>
 
 
@@ -282,14 +309,16 @@ thead th {
         </div>
 
         <div class="popUpList" id = "popUpList"></div>
-        
-    </div>
+
+
+   </div>
    
     <br>
     <hr>
     <br>
 
     <jsp:include page="layout/popUpFooter.jsp" />
+    <jsp:include page="layout/popUpNavBar.jsp" />
     <script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
     <script type="text/javascript" src="/resources/calendarJs/calendarMain.js"></script>
 </body>

@@ -1,5 +1,6 @@
 let currentPage = 1;
 let totalPages = 0; 
+const userNo = 2; // 나중에 로그인 시 처리 해야됨 
 
 function fetchNotices(pageNum = 1, amount = 5) {
     currentPage = pageNum; 
@@ -15,14 +16,24 @@ function fetchNotices(pageNum = 1, amount = 5) {
             } else {
                 data.notices.forEach(notice => {
                     const listItem = document.createElement('li');
+                    listItem.classList.add('notice');
+
+                    // 클릭 시 이동하는 이벤트 리스너
+                    listItem.addEventListener('click', function() {
+                        location.href = `/support/noticeInfo?noticeNo=${notice.noticeNo}`;
+                    });
+
+                    // innerHTML로 내용 추가
                     listItem.innerHTML = `
                         <span class="noticeNumber">${notice.noticeNo}</span>
-                        <a href="/support/noticeInfo?noticeNo=${notice.noticeNo}" class="noticeTitle">${notice.noticeTitle}</a>
+                        <span class="noticeTitle">${notice.noticeTitle}</span>
                         <span class="noticeRegDate">${new Date(notice.noticeRegDate).toLocaleDateString()}</span>
                     `;
+
                     noticeList.appendChild(listItem);
                 });
             }
+
             updateNoticePagination();
         })
         .catch(error => console.error('Fetch error:', error));
@@ -30,7 +41,7 @@ function fetchNotices(pageNum = 1, amount = 5) {
 
 function fetchInquiries(pageNum = 1, amount = 5) {
     currentPage = pageNum; 
-    fetch(`/support/inquiry?pageNum=${pageNum}&amount=${amount}`)
+    fetch(`/support/inquiry?pageNum=${pageNum}&amount=${amount}&userNo=${userNo}`)
         .then(response => response.json())
         .then(data => {
             const inquiryList = document.querySelector('.inquiry-list');
@@ -41,11 +52,18 @@ function fetchInquiries(pageNum = 1, amount = 5) {
                 inquiryList.innerHTML = '<p>문의 없음</p>';
             } else {
                 data.inquiries.forEach(inquiry => {
-                    const listItem = document.createElement('li');
+                   const listItem = document.createElement('li');
+                   listItem.classList.add('inquiry');
+                   // 클릭 시 이동하는 이벤트 리스너
+                    listItem.addEventListener('click', function() {
+                        location.href = `/support/inquiryInfo?qnaNo=${inquiry.qnaNo}`;
+                    });
+                    const hasAnswer = inquiry.qnaAnswer ? '답변 완료' : '답변 대기 중'; // 답변 여부 체크
                     listItem.innerHTML = `
-                        <span class="inquiryNumber">${inquiry.qnaNo}</span>
-                        <a href="/support/inquiryInfo?qnaNo=${inquiry.qnaNo}" class="inquiryTitle">${inquiry.qnaTitle}</a>
+                        <span class="inquiryType">${inquiry.qnaType}</span>
+                        <span class="inquiryTitle">${inquiry.qnaTitle}</span>
                         <span class="inquiryRegDate">${new Date(inquiry.qnaRegDate).toLocaleDateString()}</span>
+                        <span class="answerStatus">${hasAnswer}</span> <!-- 답변 여부 표시 -->
                     `;
                     inquiryList.appendChild(listItem);
                 });
@@ -175,21 +193,37 @@ function searchAnnouncements() {
     });
 }
 
-//let pageNum = new URLSearchParams(location.search).get('pageNum');
-//let amount = new URLSearchParams(location.search).get('amount');
-//
-//if (!pageNum || !amount) {
-//    pageNum = 1;
-//    amount = 5;
-//}
-//
-//// 페이지 링크 클릭 이벤트
-//document.querySelectorAll(".page-nation li a").forEach(a => {
-//    a.addEventListener('click', e => {
-//        e.preventDefault();
-//        
-//        pageNum = a.getAttribute('href');
-//        let sendData = `pageNum=${pageNum}&amount=${amount}`;
-//        location.href = `/hypePop/customerMain?${sendData}`;
-//    });
-//}); 
+// 답변 표시 함수
+document.addEventListener("DOMContentLoaded", function() {
+
+    const answers = document.querySelectorAll(".answer");
+    answers.forEach(answer => {
+        answer.style.display = "none";
+    });
+
+    const toggleButtons = document.querySelectorAll(".toggle-answer");
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function(event) {
+            event.preventDefault(); 
+            const answer = this.parentElement.nextElementSibling;
+
+            if (answer.style.display === "none" || !answer.style.display) {
+                answer.style.display = "block";
+                this.textContent = "▲"; 
+            } else {
+                answer.style.display = "none";
+                this.textContent = "▼";
+            }
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+

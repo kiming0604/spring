@@ -262,6 +262,7 @@ body {
 </body>
 <script type="text/javascript" src="/resources/goodsJs/goodsHeader.js"></script>
 <script type="text/javascript" src="/resources/goodsJs/goodsSearch.js"></script>
+<script type="text/javascript" src="/resources/goodsJs/goodsNav.js"></script>
 <script type="text/javascript">
     let searchText = "${searchText != null ? searchText : ''}";
 </script>

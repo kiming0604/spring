@@ -1,11 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+   pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>고객센터</title>
-    <style>
+<meta charset="UTF-8">
+<title>고객센터</title>
+<style>
 /* CSS 스타일 */
 /* a 태그의 기본 스타일 */
 a {
@@ -134,84 +135,144 @@ a:hover {
    background-color: #007bff;
    color: white;
 }
+
+.answerStatus {
+   margin-left: 10px; /* 여백 추가 */
+   color: green; /* 기본 색상 */
+}
+
+.answerStatus
+:contains
+ 
+('
+답변
+ 
+대기
+ 
+중
+ 
+')
+{
+color
+:
+ 
+orange
+; /* 대기 중일 때 색상 변경 */
+
+
+}
+.answerStatus
+:contains
+ 
+('
+답변
+ 
+완료
+ 
+')
+{
+color
+:
+ 
+blue
+; /* 완료 시 색상 변경 */
+
+
+}
+.answer {
+    display: none;
+    margin-left: 20px; /* 답변을 약간 들여쓰기 해서 구분 */
+}
 </style>
 </head>
 <body>
-    <jsp:include page="layout/popUpHeader.jsp" />
+   <jsp:include page="layout/popUpHeader.jsp" />
 
-    <br>
-    <div class="tab">
-        <div id="tab-announcement" class="active" onclick="switchTab('announcement')">공지사항</div>
-        <div id="tab-inquiry" onclick="switchTab('inquiry')">1:1 문의</div>
-        <div id="tab-faq" onclick="switchTab('faq')">FAQ</div>
-    </div>
+   <br>
+   <div class="tab">
+      <div id="tab-announcement" class="active"
+         onclick="switchTab('announcement')">공지사항</div>
+      <div id="tab-inquiry" onclick="switchTab('inquiry')">1:1 문의</div>
+      <div id="tab-faq" onclick="switchTab('faq')">FAQ</div>
+   </div>
 
-    <div class="content">
-        <!-- 공지사항 -->
-        <section id="section-announcement" class="active">
-            <div>
-                <h2>공지사항</h2>
-                <div class="search">
-                    <input type="text" id="search" placeholder="검색...">
-                    <img id="searchBtn" src="/resources/images/searchicon.png" alt="Search">
-                </div>
+   <div class="content">
+      <!-- 공지사항 -->
+      <section id="section-announcement" class="active">
+         <div>
+            <h2>공지사항</h2>
+            <div class="search">
+               <input type="text" id="search" placeholder="제목 검색..."> <img
+                  id="searchBtn" src="/resources/images/searchicon.png" alt="Search">
             </div>
-            <br>
-            <hr>
-            <br>
-            <ul class="announcement-list">
-                <li>로딩 중...</li> 
-            </ul>
+         </div>
+         <br>
+         <hr>
+         <br>
+         <ul class="announcement-list">
+            <li>로딩 중...</li>
+         </ul>
 
-         <br><br>
-         
-         <div class="pagination">         
+         <br> <br>
+
+         <div class="pagination">
             <span class="notice-page-numbers"></span>
          </div>
 
          <div class="createAnnouncementBtn">
-                <input type="button" onclick="createNotice()" value="공지작성">
-            </div>
-        </section>
+            <input type="button" onclick="createNotice()" value="공지작성">
+         </div>
+      </section>
 
-        <!-- 1:1 문의 -->
-        <section id="section-inquiry">
-            <h2>1:1 문의</h2>
-            <br>
-            <hr>
-            <br>
-            <ul class="inquiry-list">
-                <li>로딩 중...</li> 
-            </ul>
+      <!-- 1:1 문의 -->
+      <section id="section-inquiry">
+         <h2>1:1 문의</h2>
+         <br>
+         <hr>
+         <br>
+         <ul class="inquiry-list">
+            <li>로딩 중...</li>
+         </ul>
 
-         <br><br>
+         <br> <br>
 
          <div class="pagination">
             <span class="inquiry-page-numbers"></span>
          </div>
 
          <div>
-                <button type="button" onclick="createInquiry()" class="createInquiryBtn">문의 등록</button>
-            </div>
-        </section>
+            <button type="button" onclick="createInquiry()"
+               class="createInquiryBtn">문의 등록</button>
+         </div>
+      </section>
 
-        <!-- FAQ -->
-        <section id="section-faq">
-            <h2>FAQ</h2>
-            <ul class="faq-list">
-                <li>Q: 고객센터 운영 시간은 언제인가요?<br>A: 몰라용</li>
-                <li>Q: 개꿀팀 있을까요?<br>A: 없어용</li>
-                <li>Q: 회원 탈퇴는 어떻게 하나요?<br>A: 알아서 하세요</li>
-            </ul>
-        </section>
-    </div>
+      <!-- FAQ -->
+      <section id="section-faq">
+         <h2>FAQ</h2>
+         <ul class="faq-list">
+            <li>Q: 고객센터 운영 시간은 언제인가요? <a href="#" class="toggle-answer">▼</a></li>
+            <li class="answer">A: 몰라용</li>
 
-    <br><hr><br>
+            <li>Q: 개꿀팀 있을까요? <a href="#" class="toggle-answer">▼</a></li>
+            <li class="answer">A: 몰라용</li>
 
-    <jsp:include page="layout/popUpFooter.jsp" />
-    <jsp:include page="layout/popUpNavBar.jsp" />
-    <script type="text/javascript" src="/resources/customerServiceJs/customerService.js"></script>
-    <script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
-  
+            <li>Q: 회원 탈퇴는 어떻게 하나요? <a href="#" class="toggle-answer">▼</a></li>
+            <li class="answer">A: 몰라용</li>
+         </ul>
+      </section>
+
+
+   </div>
+
+   <br>
+   <hr>
+   <br>
+
+   <jsp:include page="layout/popUpFooter.jsp" />
+   <jsp:include page="layout/popUpNavBar.jsp" />
+   <script type="text/javascript"
+      src="/resources/customerServiceJs/customerService.js"></script>
+   <script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
+
 </body>
 </html>

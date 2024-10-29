@@ -424,6 +424,7 @@ h1, h2, p, span {
 <script type="text/javascript" src="/resources/goodsJs/gReply.js"></script>
 <script type="text/javascript" src="/resources/goodsJs/goodsDetail.js"></script>
 <script type="text/javascript" src="/resources/goodsJs/goodsHeader.js"></script>
+<script type="text/javascript" src="/resources/goodsJs/goodsNav.js"></script>
 <!--추가(윤) -->
 <script type="text/javascript" src="/resources/purchaseJs/myCart.js"></script>
 <script>

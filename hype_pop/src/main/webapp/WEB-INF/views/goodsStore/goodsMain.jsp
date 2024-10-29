@@ -382,4 +382,5 @@ h1, h2 {
 </body>
 <script type="text/javascript" src="/resources/goodsJs/goodsHeader.js"></script>
 <script type="text/javascript" src="/resources/goodsJs/goodsMain.js"></script> 
+<script type="text/javascript" src="/resources/goodsJs/goodsNav.js"></script>
 </html>

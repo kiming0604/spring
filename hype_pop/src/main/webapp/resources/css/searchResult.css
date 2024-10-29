@@ -251,3 +251,33 @@ span {
     box-shadow: none; /* 그림자 효과 제거 */
     outline: none; /* 외곽선 제거 */
 }
+/* 초기화 버튼 스타일 */
+#resetBtn {
+    padding: 10px 15px; /* 버튼의 패딩 */
+    border-radius: 5px; /* 둥근 모서리 */
+    background-color: #444; /* 기본 배경색 */
+    color: #e5e5e5; /* 기본 텍스트 색상 */
+    cursor: pointer; /* 커서 모양 변경 */
+    transition: background-color 0.3s; /* 부드러운 색상 변화 */
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px; /* y축 위치 조정 */
+}
+
+/* 선택된 초기화 버튼 스타일 */
+#resetBtn.selected {
+    background-color: #e50914; /* 넷플릭스 빨간색 */
+    color: white; /* 흰색 텍스트 */
+}
+
+/* 초기화 버튼 호버 효과 */
+#resetBtn:hover {
+    background-color: #f40612; /* 조금 더 어두운 빨간색 */
+}
+
+/* 중앙 정렬을 위한 wrapper */
+#resetWrapper {
+    display: flex;
+    justify-content: center; /* x축 중앙 정렬 */
+    margin-top: 20px; /* 버튼 상단 여백 */
+}

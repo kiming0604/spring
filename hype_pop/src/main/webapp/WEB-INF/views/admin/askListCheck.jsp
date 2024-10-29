@@ -36,13 +36,13 @@
 	
     <form action="#" id="qnaTypeBox">
         <label for="qnaType">문의 유형 선택:</label>
-        <select id="qnaType" onchange="filterQnaList()">
+        <select id="qnaType">
             <option value="refund">일반</option>
             <option value="delivery">결제</option>
             <option value="complain">기타</option>
         </select>
         <label for="answerStatus">답변 여부:</label>
-        <input type="checkbox" id="answerStatus" onchange="filterQnaList()"> 답변 완료
+        <input type="checkbox" id="answerStatus"> 답변 완료
     </form>
 
     <table id="qnaListCat">

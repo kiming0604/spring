@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="store-info">
                 <div class="header">
-                    <h2 class="popUpItem"><span class="storeName">${store.name}</span></h2>
+                    <h2 class="storeName"><span class="storeName">${store.name}</span></h2>
                     <span class="likeCount">좋아요 수: ${store.likeCount}</span>
                     <input type="hidden" class="psNo" value="${store.psNo}">
                     <input type="hidden" class="rating" value="${store.rating}">
@@ -272,4 +272,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c; // 거리 (km)
     }
+});
+
+document.getElementById("resetBtn").addEventListener("click", function() {
+	window.location.href = "/hypePop/search/noData";
 });

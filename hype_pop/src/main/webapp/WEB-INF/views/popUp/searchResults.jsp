@@ -12,6 +12,9 @@
         <button id="selectInterestsBtn">관심사 선택</button>
     </h3>
 </div>
+<div id="resetWrapper">
+    <span id="resetBtn">초기화(모든 스토어 출력)</span>
+</div>
 
 <!-- 관심사 종류 버튼들 -->
 <div id="interestButtons" style="display: none;">

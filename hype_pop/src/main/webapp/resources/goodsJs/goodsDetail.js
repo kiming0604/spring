@@ -233,6 +233,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // 별점 선택 기능 추가
                 newRatingDiv.querySelectorAll('span').forEach((star, index) => {
+                    star.addEventListener('mouseover', () => {
+                        newRatingDiv.querySelectorAll('span').forEach((s, i) => {
+                            s.style.color = i <= index ? 'gold' : 'gray';
+                        });
+                    });
+
+                    star.addEventListener('mouseout', () => {
+                        newRatingDiv.querySelectorAll('span').forEach((s, i) => {
+                            s.style.color = i < newGscore ? 'gold' : 'gray';
+                        });
+                    });
+
                     star.addEventListener('click', () => {
                         const rating = index + 1;
                         newRatingDiv.querySelectorAll('span').forEach((s, i) => {
@@ -348,9 +360,9 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 1; i <= 5; i++) {
             stars += `<span data-value="${i}" style="color: ${i <= score ? 'gold' : 'gray'};">★</span>`;
         }
+        container.setAttribute('data-value', score);
         container.innerHTML = stars;
     }
-
     function displayTime(unixTimeStamp) {
         const myDate = new Date(unixTimeStamp);
         const y = myDate.getFullYear();
