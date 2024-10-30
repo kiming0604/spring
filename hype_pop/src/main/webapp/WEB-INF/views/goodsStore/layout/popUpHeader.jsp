@@ -140,7 +140,7 @@ body {
 			<span id="goodsMainLogo">굿즈 메인 로고</span>
 		</div>
 		<div id="goodsSearchBoxDiv">
-			<input type="text" id="goodsSearchBox"> <span id="searchBTN">검색</span>
+			<input type="text" id="goodsSearchBox" > <span id="searchBTN">검색</span>
 		</div>
 		<div id="noticeDiv">
 			<span id="notice">알림</span>
