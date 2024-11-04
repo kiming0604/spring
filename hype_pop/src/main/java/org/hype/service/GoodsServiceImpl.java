@@ -229,4 +229,16 @@ public class GoodsServiceImpl implements GoodsService{
 	public List<popStoreVO> getAllStore() {
 		return mapper.getAllStore();
 	}
+	
+	@Override
+	public String goodsToPopup(int gno) {
+		goodsVO gvo = mapper.getPsnoByGno(gno);
+		int psno = gvo.getPsno();
+		log.warn("gvo.getPsno = " + gvo.getPsno());
+		popStoreVO pvo = mapper.getStoreName(psno);
+		log.warn("popStore name = " + pvo.getPsName());
+		String psName = pvo.getPsName();
+		log.warn(psName);
+		return psName;
+	}
 }

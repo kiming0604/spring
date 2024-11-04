@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-   전시관 메인
+ㅎㅇ
 </body>
 </html>

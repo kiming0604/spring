@@ -1,8 +1,12 @@
 package org.hype.controller;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,11 +15,17 @@ import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.log4j.Log4j;
 
@@ -148,5 +158,17 @@ public class GoodsController {
     @GetMapping("/goodsSearch")
     public String goodsSearch() {
         return "/goodsStore/goodsSearch";
+    }
+    
+    @GetMapping("/goodsToPopup")
+    public String goodsToPopup(@RequestParam("gno") int gno) throws UnsupportedEncodingException {
+        String storeName = gService.goodsToPopup(gno);
+        String encodedStoreName = URLEncoder.encode(storeName, "UTF-8");
+        return "redirect:/hypePop/popUpDetails?storeName=" + encodedStoreName;
+    }
+    
+    @GetMapping("/boardList")
+    public String goBoardList() {
+    	return "/goodsStore/boardList";
     }
 }

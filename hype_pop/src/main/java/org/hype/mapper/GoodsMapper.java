@@ -36,4 +36,6 @@ public interface GoodsMapper {
 	public gImgVO getImgByGno(int gno);
 	public gImgVO getGoodsDetailImg(int gno);
 	public List<popStoreVO> getAllStore();
+	public goodsVO getPsnoByGno(int gno);
+	public popStoreVO getStoreName(int psNo);
 }

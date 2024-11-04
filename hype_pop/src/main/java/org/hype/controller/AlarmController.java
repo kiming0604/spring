@@ -41,10 +41,8 @@ public class AlarmController extends TextWebSocketHandler {
     // 클라이언트가 메시지를 보낼 때마다 처리
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        // 클라이언트로부터 받은 메시지 파싱
         String payload = message.getPayload();
         NotificationRequest request = objectMapper.readValue(payload, NotificationRequest.class);
-
         log.info("유저 넘버는? : " + request.getUserNo());
 
         switch (request.getAction()) {
@@ -52,7 +50,7 @@ public class AlarmController extends TextWebSocketHandler {
                 handleCheckNotifications(session, request.getUserNo());
                 break;
             case "deleteNotifications":
-                handleDeleteNotifications(session, request.getNotificationNo());
+                handleDeleteNotifications(session, request.getUserNo(), request.getNotificationNo());
                 break;
             default:
                 log.warn("알 수 없는 액션: " + request.getAction());
@@ -93,27 +91,25 @@ public class AlarmController extends TextWebSocketHandler {
         }
 
         // 응답 메시지 작성 및 전송
-        String response = objectMapper.writeValueAsString(NotificationResponse.createWithAction("sendNotifications", notifications));
-        session.sendMessage(new TextMessage(response));
-    }
-
-    private void handleDeleteNotifications(WebSocketSession session, int notificationNo) throws Exception {
-        boolean isDeleted = service.deleteNotification(notificationNo); // 서비스 메서드 호출하여 삭제 시도
-        String responseMessage = isDeleted ? "알림 삭제 성공" : "알림 삭제 실패";
-        
-        // 응답 메시지에 삭제된 알림 ID 추가
         String response = objectMapper.writeValueAsString(
-            NotificationResponse.createWithMessage(responseMessage, notificationNo) // 추가된 ID를 포함
+            NotificationResponse.createWithAction("sendNotifications", notifications, null) // action만 사용
         );
-        session.sendMessage(new TextMessage(response));
+        session.sendMessage(new TextMessage(response)); // 응답 메시지를 전송
     }
+    private void handleDeleteNotifications(WebSocketSession session, int userNo, int notificationNo) throws Exception {
+        boolean isDeleted = service.deleteNotification(notificationNo); // deleteNotification 메서드 호출
 
+        // responseMessage 변수를 정의
+        String responseMessage = isDeleted ? "알림 삭제 성공" : "알림 삭제 실패";
 
-    // 연결이 종료될 때 세션 목록에서 제거
-    @Override
-    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws Exception {
-        log.info("Socket 연결 종료");
-        sessions.remove(session);
+        // 사용자 알림 목록 가져오기
+        List<NotificationVO> notifications = service.getAlarmsForUser(userNo); 
+
+        // 응답 메시지를 생성할 때 action과 message를 설정
+        String response = objectMapper.writeValueAsString(
+            NotificationResponse.createWithAction("deleteNotifications", notifications, responseMessage) // message 포함
+        );
+        session.sendMessage(new TextMessage(response)); // TextMessage로 전송
     }
 
     // 요청 데이터를 담는 내부 클래스
@@ -145,10 +141,9 @@ public class AlarmController extends TextWebSocketHandler {
         }
 
         // 정적 팩토리 메서드 1: action과 notifications를 받는 메서드
-        public static NotificationResponse createWithAction(String action, List<NotificationVO> notifications) {
-            return new NotificationResponse(action, notifications, null);
+        public static NotificationResponse createWithAction(String action, List<NotificationVO> notifications, String message) {
+            return new NotificationResponse(action, notifications, message);
         }
-
         // 정적 팩토리 메서드 2: message와 notifications를 받는 메서드
         public static NotificationResponse createWithMessage(String message, List<NotificationVO> notifications) {
             return new NotificationResponse(null, notifications, message);

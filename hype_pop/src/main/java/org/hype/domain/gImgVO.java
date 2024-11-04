@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class gImgVO {
-	private int gNo;
+	private int gno;
 	private String uuid;
 	private String uploadPath;
 	private String fileName;

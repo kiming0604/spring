@@ -232,6 +232,7 @@ body {
 		<span id="likeHigh">좋아요순</span>
 		<span id="replyHigh">후기 많은순</span>
 		<span id="newDate">최신순</span>
+		<span id="categorySelect">관심사 선택</span>
 	</div>
 	<div>
 		<button id="init">검색어 초기화(모든 리스트 출력)</button>

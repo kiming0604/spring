@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-   pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -137,28 +136,28 @@
             position: relative;
         }
         
-       #alarmDiv {
-    display: inline-block; /* 버튼이 세로로 쌓이지 않게 */
-    margin-left: 20px; /* 검색창과 알림 버튼 사이의 간격 */
-    position: relative; /* 절대 위치를 기준으로 하기 위해 relative로 설정 */
-}
+        #alarmDiv {
+            display: inline-block; /* 버튼이 세로로 쌓이지 않게 */
+            margin-left: 20px; /* 검색창과 알림 버튼 사이의 간격 */
+            position: relative; /* 절대 위치를 기준으로 하기 위해 relative로 설정 */
+        }
 
         /* 알림 목록 스타일 */
-    #notificationList {
-    display: none;
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    padding: 15px;
-    width: 500px; /* 너비 증가 */
-    max-height: 400px; /* 최대 높이 설정 */
-    overflow-y: auto; /* 스크롤 추가 */
-}
+        #notificationList {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 15px;
+            width: 500px; /* 너비 증가 */
+            max-height: 400px; /* 최대 높이 설정 */
+            overflow-y: auto; /* 스크롤 추가 */
+        }
 
         #notificationList div {
             margin: 5px 0; /* 여백 */
@@ -169,27 +168,29 @@
         #notificationList div:last-child {
             border-bottom: none; /* 마지막 아이템의 구분선 제거 */
         }
-      .notification-dot {
-    position: absolute; /* 아이콘에 겹치게 하기 위해 절대 위치 설정 */
-    bottom: 8px; /* 알림 버튼 아래 위치 */
-    right: 28px; /* 알림 버튼 오른쪽 위치 */
-    width: 10px; /* 점의 너비 */
-    height: 10px; /* 점의 높이 */
-    background-color: red; /* 빨간색 */
-    border-radius: 50%; /* 둥글게 만들기 */
-    z-index: 1003; /* 알림 아이콘 위에 표시 */
-}
-.delete-button {
-    background-color: transparent; /* 배경 투명 */
-    border: none; /* 테두리 없음 */
-    color: #00aff0; /* 버튼 색상 */
-    cursor: pointer; /* 커서 포인터로 변경 */
-    transition: color 0.3s; /* 색상 변화에 애니메이션 추가 */
-}
+        
+        .notification-dot {
+            position: absolute; /* 아이콘에 겹치게 하기 위해 절대 위치 설정 */
+            bottom: 8px; /* 알림 버튼 아래 위치 */
+            right: 28px; /* 알림 버튼 오른쪽 위치 */
+            width: 10px; /* 점의 너비 */
+            height: 10px; /* 점의 높이 */
+            background-color: red; /* 빨간색 */
+            border-radius: 50%; /* 둥글게 만들기 */
+            z-index: 1003; /* 알림 아이콘 위에 표시 */
+        }
 
-.delete-button:hover {
-    color: #ff0000; /* 호버 시 색상 변경 */
-}
+        .delete-button {
+            background-color: transparent; /* 배경 투명 */
+            border: none; /* 테두리 없음 */
+            color: #00aff0; /* 버튼 색상 */
+            cursor: pointer; /* 커서 포인터로 변경 */
+            transition: color 0.3s; /* 색상 변화에 애니메이션 추가 */
+        }
+
+        .delete-button:hover {
+            color: #ff0000; /* 호버 시 색상 변경 */
+        }
     </style>
 </head>
 <body>
@@ -204,10 +205,10 @@
             <input type="text" id="popUpSearchInput" placeholder="검색어 입력">
             <div id="popUpSearchClick"><span id="searchBTN">검색</span></div>
         </div>
-       <div id="alarmDiv">
-    <img src="/resources/images/alarm.png" alt="알림" id="alarmImage" style="cursor: pointer; max-height: 35px; width: auto;" onclick="handleAlarmClick()">
-    <span id="notificationDot" style="display: none;" class="notification-dot"></span> <!-- 빨간 점 추가 -->
-</div>
+        <div id="alarmDiv">
+            <img src="/resources/images/alarm.png" alt="알림" id="alarmImage" style="cursor: pointer; max-height: 35px; width: auto;" onclick="handleAlarmClick()">
+            <span id="notificationDot" style="display: none;" class="notification-dot"></span> <!-- 빨간 점 추가 -->
+        </div>
         <div id="notificationList"></div> <!-- 알림 목록 추가 -->
     </div>
 

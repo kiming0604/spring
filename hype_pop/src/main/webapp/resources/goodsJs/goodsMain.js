@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function setBackgroundImage(item) {
         const fileName = item.querySelector("#fileName").value;
 
-        fetch(`/goodsStore/images/${encodeURIComponent(fileName)}`)
+        fetch(`/goodsStore/goodsBannerImages/${encodeURIComponent(fileName)}`)
             .then(response => response.blob())
             .then(blob => {
                 const imageUrl = URL.createObjectURL(blob);
@@ -91,3 +91,15 @@ setupGoodsItemClick('goodsItem4');
 setupGoodsItemClick('goodsItem5');
 setupGoodsItemClick('goodsItem6');
 setupGoodsItemClick('goodsItem7');
+
+function checkExtension(fileName, fileSize){
+	if(fileSize >= MAX_SIZE){
+		alert("파일 사이즈 초과");
+		return false;
+	}
+	if(regex.test(fileName)){
+		alert("해당 종류의 파일은 업로드할 수 없습니다.")
+		return false;
+	}
+	return true;
+}

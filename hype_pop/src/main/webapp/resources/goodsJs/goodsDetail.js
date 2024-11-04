@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const fileNameBanner = document.getElementById("fileNameBanner").value;
     const fileNameDetail = document.getElementById("fileNameDetail").value;
 
-    // 페이지 로드 시 댓글 목록 및 별점 표시
     showReplyList(currentPage);
     displayAvgStars();
-
+    chkReplied();
+    
     function displayAvgStars() {
         const avgStarsContainer = document.getElementById('avgStarsContainer');
         const avgStarString = document.querySelector('.avgStarString');
@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(err => console.error('Error:', err));
     }
 
-    function setBackgroundImage(item, fileName) {
-        fetch(`/goodsStore/images/${encodeURIComponent(fileName)}`)
+    function setBackgroundImage(item, path, fileName) {
+        fetch(`/${path}/${encodeURIComponent(fileName)}`)
             .then(response => response.blob())
             .then(blob => {
                 const imageUrl = URL.createObjectURL(blob);
@@ -43,8 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error('Error:', error));
     }
-    setBackgroundImage(goodsBanner, fileNameBanner);
-    setBackgroundImage(goodsDetailImg, fileNameDetail);
+
+    // 사용 예
+    setBackgroundImage(goodsBanner, "goodsStore/goodsBannerImages", fileNameBanner);
+    setBackgroundImage(goodsDetailImg, "goodsStore/goodsDetailImages", fileNameDetail);
 
     // 수량 조절
     const decreaseBtn = document.getElementById('decreaseBtn');
@@ -71,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     totalPriceDisplay.textContent = (1 * goodsPrice).toLocaleString() + ' 원';
 
-    // 별점 선택 및 댓글 등록 기능
     const starRating = document.querySelectorAll('#newReviewStars span');
     const ratingInput = document.getElementById('rating');
     const selectedRating = document.getElementById('selectedRating');
@@ -107,7 +108,59 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 댓글 등록 기능
+    function chkReplied() {
+        const userNo = 1;
+        const gno = new URLSearchParams(location.search).get('gno');
+        fetch(`/gReply/chkReplied/${userNo}/${gno}`)
+            .then(response => response.text())
+            .then(result => {
+                const reviewForm = document.getElementById("reviewForm");
+                const reviewText = reviewForm.querySelector("#reviewText");
+                const ratingInput = reviewForm.querySelector("#newReviewStars");
+                const selectedRating = document.getElementById("selectedRating");
+                if (result === '1') {
+                    reviewForm.style.display = 'none';
+                } else {
+                    reviewForm.style.display = 'block';
+                    reviewText.value = '';
+                    ratingInput.value = '0';
+                    selectedRating.textContent = '선택한 별점: 0';
+                    document.querySelectorAll('#newReviewStars span').forEach(star => {
+                        star.style.color = 'gray';
+                    });
+                    starRating.forEach((star, index) => {
+                        star.addEventListener('mouseover', function () {
+                            for (let i = 0; i <= index; i++) {
+                                starRating[i].style.color = 'gold';
+                            }
+                            selectedRating.textContent = `선택한 별점: ${index + 1}`;
+                        });
+
+                        star.addEventListener('mouseout', function () {
+                            starRating.forEach(s => s.style.color = 'gray');
+                            const selectedValue = parseInt(ratingInput.value);
+                            for (let i = 0; i < selectedValue; i++) {
+                                starRating[i].style.color = 'gold';
+                            }
+                            selectedRating.textContent = `선택한 별점: ${selectedValue}`;
+                        });
+
+                        star.addEventListener('click', function () {
+                            const rating = this.getAttribute('dataValue');
+                            ratingInput.value = rating;
+                            selectedRating.textContent = `선택한 별점: ${rating}`;
+
+                            starRating.forEach(s => s.style.color = 'gray');
+                            for (let i = 0; i < rating; i++) {
+                                starRating[i].style.color = 'gold';
+                            }
+                        });
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    
     document.getElementById('addReply').addEventListener('click', function (event) {
         event.preventDefault();
         const rating = document.getElementById('rating').value;
@@ -116,29 +169,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const userId = "유저ID입니다.";
         const userNo = 1;
 
-        fetch(`/gReply/chkReplied/${userNo}/${gno}`)
-            .then(response => response.text())
-            .then(result => {
-                if (result === '1') {
-                    alert('댓글은 한 번만 작성할 수 있습니다.');
-                } else {
-                    rs.add({
-                        gno: gno,
-                        userNo: 1,
-                        gcomment: reviewText,
-                        gscore: rating,
-                        userId: userId
-                    }, function (result) {
-                        if (result === "success") {
-                            alert("댓글이 등록되었습니다.");
-                            showReplyList(currentPage);
-                        } else {
-                            alert("댓글 등록 실패");
-                        }
-                    });
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        rs.add({
+            gno: gno,
+            userNo: 1,
+            gcomment: reviewText,
+            gscore: rating,
+            userId: userId
+        }, function (result) {
+            if (result === "success") {
+                showReplyList(currentPage);
+                chkReplied();
+            } else {
+                alert("댓글 등록 실패");
+            }
+        })
     });
 
     function showReplyList(page) {
@@ -189,8 +233,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             displayPagingButtons(data.totalReplies);
             displayStarsForReplies(myReply, allReplies);
-            bindEditDeleteEvents(); // edit, delete 버튼 이벤트 추가
-            bindKebabMenuEvents();  // kebab 메뉴 이벤트 추가
+            bindEditDeleteEvents();
+            bindKebabMenuEvents();
+            displayAvgStars();
         });
     }
 
@@ -278,7 +323,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     .then(response => response.text())
                     .then(result => {
                         if (result === "success") {
-                            alert("댓글이 수정되었습니다.");
                             showReplyList(currentPage);
                             displayAvgStars();
                         } else {
@@ -300,8 +344,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     .then(response => response.json())
                     .then(result => {
                         if (result === 1) {
-                            alert("댓글이 삭제되었습니다.");
                             showReplyList(currentPage);
+                            chkReplied();
                         } else {
                             alert("댓글 삭제 실패");
                         }
@@ -398,6 +442,10 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(err => console.error('Error:', err));
     });
-
     likeBtnChange();
+    
+    document.getElementById("moveToStore").addEventListener('click', ()=>{
+        const gno = new URLSearchParams(location.search).get('gno');
+    	location.href=`/goodsStore/goodsToPopup?gno=${gno}`;
+    })
 });

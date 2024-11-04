@@ -14,6 +14,15 @@ function performSearch() {
     location.href = `/goodsStore/goodsSearch`;
 }
 
+if(localStorage.getItem('searchText') === '' || localStorage.getItem('searchText') === null) {
+    const searchText = document.getElementById('goodsSearchBox');
+    searchText.placeholder = '검색할 굿즈 이름을 입력하세요';
+} else {
+    const savedSearchText = localStorage.getItem('searchText');
+    const searchText = document.getElementById('goodsSearchBox');
+    searchText.placeholder = savedSearchText;
+}
+
 
 document.querySelectorAll('div').forEach(btn =>{
 	btn.addEventListener('click', (e)=>{

@@ -1,5 +1,6 @@
 package org.hype.controller;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -68,17 +69,42 @@ public class GoodsRestController {
     	return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
-    @GetMapping("/images/{fileName:.+}")
+    @GetMapping("/goodsBannerImages/{fileName:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveImage(@PathVariable String fileName) throws MalformedURLException {
-        String imagePath = "\\\\192.168.0.129\\storeGoodsImg\\" + fileName;
+    public ResponseEntity<Resource> serveBannerImage(@PathVariable String fileName) throws MalformedURLException {
+        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\굿즈 배너 사진";
+        String imagePath = uploadFolder + File.separator + fileName;
         Path path = Paths.get(imagePath);
+        
         if (!Files.exists(path)) {
             throw new RuntimeException("파일이 없어여: " + fileName);
         }
+        
         if (!Files.isReadable(path)) {
             throw new RuntimeException("파일을 읽을 수 없어요: " + fileName);
         }
+        
+        Resource file = new FileSystemResource(path.toFile());
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+            .body(file);
+    }
+    
+    @GetMapping("/goodsDetailImages/{fileName:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveDetailImage(@PathVariable String fileName) throws MalformedURLException {
+        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\굿즈 상세 사진";
+        String imagePath = uploadFolder + File.separator + fileName;
+        Path path = Paths.get(imagePath);
+        
+        if (!Files.exists(path)) {
+            throw new RuntimeException("파일이 없어여: " + fileName);
+        }
+        
+        if (!Files.isReadable(path)) {
+            throw new RuntimeException("파일을 읽을 수 없어요: " + fileName);
+        }
+        
         Resource file = new FileSystemResource(path.toFile());
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")

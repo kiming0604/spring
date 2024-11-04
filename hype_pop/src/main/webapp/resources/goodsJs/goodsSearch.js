@@ -13,6 +13,16 @@ let sortedGoods = {
 let selectedCategories = [];
 searchText = localStorage.getItem('searchText') || '';
 
+selectCat.style.display = "none";
+
+categorySelect.addEventListener("click", () => {
+    if (selectCat.style.display === "none") {
+        selectCat.style.display = "flex";
+    } else {
+        selectCat.style.display = "none";
+    }
+});
+
 function handleSortButton(sortButton) {
     const sortType = sortButton.id;
 
@@ -101,6 +111,15 @@ function displayItems() {
     const goodsContainer = document.getElementById("goodsContainer");
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
+    
+    if (filteredGoods.length === 0) {
+        const noResultMessage = document.createElement("div");
+        noResultMessage.classList.add("noResultMessage");
+        noResultMessage.textContent = "검색 결과가 없습니다.";
+        goodsContainer.appendChild(noResultMessage);
+        setMoreButtonVisibility();
+        return;
+    }
 
     const fragment = document.createDocumentFragment();
     const itemsToShow = filteredGoods.slice(startIndex, endIndex);
@@ -238,7 +257,7 @@ function setBackgroundImage(item) {
     const fileName = item.closest('.goodsResult').querySelector("#fileName").value;
 
     const loadImage = () => {
-        fetch(`/goodsStore/images/${encodeURIComponent(fileName)}`)
+        fetch(`/goodsStore/goodsBannerImages/${encodeURIComponent(fileName)}`)
             .then(response => response.blob())
             .then(blob => {
                 const imageUrl = URL.createObjectURL(blob);

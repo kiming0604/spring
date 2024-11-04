@@ -385,6 +385,7 @@ h1, h2, p, span {
          <div class="actionButtons">
             <button id="addToCart">장바구니 담기</button>
             <button id="directPurchase" class="directPurchase">바로 결제</button>
+            <button id="moveToStore">팝업스토어로 이동</button>
             <button id="chkLike"><img id="likeIcon" src="/resources/images/emptyHeart.png" alt="Like" width="24"></button>
          </div>
       </div>

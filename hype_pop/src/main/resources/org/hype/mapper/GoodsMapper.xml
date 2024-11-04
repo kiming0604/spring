@@ -123,4 +123,10 @@
 	<select id="getAllStore" resultType="org.hype.domain.popStoreVO">
 		select * from pop_main_tbl
 	</select>
+	<select id="getPsnoByGno" resultType="org.hype.domain.goodsVO">
+		select * from goods_info_tbl where gno = #{gno}
+	</select>
+	<select id="getStoreName" resultType="org.hype.domain.popStoreVO">
+		select psName from pop_main_tbl where psNo = #{psNo}
+	</select>
 </mapper>

@@ -37,4 +37,6 @@ public interface GoodsService {
 	public gImgVO getImgByGno(int gno);
 	public gImgVO getGoodsDetailImg(int gno);
 	public List<popStoreVO> getAllStore();
+	public String goodsToPopup(int gno);
+
 }

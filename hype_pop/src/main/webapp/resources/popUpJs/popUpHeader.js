@@ -1,3 +1,13 @@
+// 페이지 로드 시 알림 목록 숨기기
+document.addEventListener('DOMContentLoaded', () => {
+	const notificationList = document.getElementById('notificationList');
+	notificationList.style.display = 'none'; // 알림 목록 숨김
+	
+	// 웹소켓 연결 시 알림 체크
+	const userNo = 5; // 실제 사용자 ID로 변경
+	socket.send(JSON.stringify({ action: 'checkNotifications', userNo: userNo })); // 초기 알림 체크 요청
+});
+
 function showLogos() {
     var logoContainer = document.getElementById("logoContainer");
     var overlay = document.getElementById("overlay");
@@ -35,7 +45,6 @@ socket.onopen = function(event) {
 };
 
 // 서버로부터 메시지를 수신했을 때의 처리
-//서버로부터 메시지를 수신했을 때의 처리
 socket.onmessage = function(event) {
     console.log('서버로부터 받은 원본 데이터:', event.data);
     const notificationData = JSON.parse(event.data);
@@ -48,10 +57,8 @@ socket.onmessage = function(event) {
         // 알림이 있을 때 UI 업데이트
         updateNotificationUI(notificationData.notifications);
     } else if (notificationData.action === 'deleteNotifications') {
-        // 여기서 삭제 성공/실패 메시지에 따라 UI 업데이트
         handleDeleteResponse(notificationData);
     } else if (notificationData.action === 'checkNotifications') {
-        // 새로운 알림 목록 요청에 대한 응답 처리
         updateNotificationUI(notificationData.notifications);
     }
 };
@@ -62,8 +69,7 @@ let existingNotifications = new Set(); // 기존 알림 ID를 저장하는 Set
 function updateNotificationUI(notifications) {
     const alarmContent = document.getElementById('notificationList');
     const notificationDot = document.getElementById('notificationDot');
-    alarmContent.style.display = 'block';
-
+    
     // 알림 내용 초기화
     alarmContent.innerHTML = ''; 
 
@@ -130,38 +136,30 @@ function updateNotificationUI(notifications) {
         alarmContent.appendChild(notificationElement);
     });
 
+    // 레드닷 표시 여부 설정
     notificationDot.style.display = hasUnreadNotifications ? 'block' : 'none';
 }
 
-// 알림 삭제 함수
+// 알림 삭제 함수에서 userNo를 사용하도록 수정
 function handleDeleteNotification(notificationId) {
     console.log(`알림 ID ${notificationId} 삭제됨.`);
-    socket.send(JSON.stringify({ action: 'deleteNotifications', notificationNo: notificationId }));
+    socket.send(JSON.stringify({ action: 'deleteNotifications', notificationNo: notificationId })); // 삭제 요청 전송
 }
 
 // 서버의 삭제 응답 처리 함수
 function handleDeleteResponse(response) {
-    const notificationId = response.notificationNo; // 삭제된 알림 ID
-    if (response.message === "알림 삭제 성공") {
-        // 삭제된 알림 UI에서 제거
-        const notificationElement = document.querySelector(`div[data-id='${notificationId}']`);
-        if (notificationElement) {
-            notificationElement.remove(); // DOM에서 삭제
-            existingNotifications.delete(notificationId); // 기존 알림 목록에서 제거
-            console.log(`알림 ID ${notificationId}가 UI에서 제거되었습니다.`);
-        }
+    console.log(response);
 
-        // 알림 목록을 새로 고침하여 갱신
-        refreshNotificationList(); // 삭제 후 알림 목록을 다시 확인
+    if (response.message === "알림 삭제 성공") {
+        refreshNotificationList(response.userNo); // userNo를 사용하여 알림 목록 갱신
     } else {
         console.error("알림 삭제 실패: ", response.message);
     }
 }
 
 // 알림 목록 새로 고침 함수
-function refreshNotificationList() {
-    const userNo = 5; // 실제 사용자 ID로 변경
-    socket.send(JSON.stringify({ action: 'checkNotifications', userNo: userNo }));
+function refreshNotificationList(userNo) {
+    socket.send(JSON.stringify({ action: 'checkNotifications', userNo: userNo })); // userNo를 인자로 전달
 }
 
 // 알림 버튼 클릭 처리 함수
@@ -170,9 +168,3 @@ function handleAlarmClick() {
     const alarmContent = document.getElementById('notificationList'); // ID를 수정
     alarmContent.style.display = (alarmContent.style.display === 'block') ? 'none' : 'block'; // 토글
 }
-
-// 페이지 로드 시 알림 목록 숨기기
-document.addEventListener('DOMContentLoaded', () => {
-    const notificationList = document.getElementById('notificationList');
-    notificationList.style.display = 'none'; // 알림 목록 숨김
-});
