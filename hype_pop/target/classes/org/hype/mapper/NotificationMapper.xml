@@ -15,4 +15,12 @@
         DELETE FROM notification_tbl
         WHERE notificationNo = #{notificationNo}
     </delete>
+    
+     <update id="updateNotificationReadStatus" parameterType="int">
+        UPDATE notification_tbl
+        SET isRead = 1
+        WHERE userNo = #{userNo} AND isRead = 0
+    </update>
+    
+
 </mapper>

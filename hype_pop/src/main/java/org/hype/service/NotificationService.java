@@ -10,4 +10,7 @@ public interface NotificationService {
 
 	public boolean deleteNotification(int notificationNo);
 
+	public boolean updateNotificationReadStatus(int userNo);
+
+
 }

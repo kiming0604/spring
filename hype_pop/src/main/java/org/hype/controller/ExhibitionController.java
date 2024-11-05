@@ -34,23 +34,28 @@ public class ExhibitionController {
 
     // 초기 페이지 요청 시 첫 번째 페이지 데이터만 가져오기
     @GetMapping("/exhibitionMain")
-    public String exhibitionMain(Model model) {
+    public String exhibitionMain(Model model,
+                                 @RequestParam(value = "filter", defaultValue = "latest") String filter) { // 기본값으로 "latest" 사용
         int pageSize = 5; // 한 페이지에 표시할 전시 개수
-        List<exhVO> exhibitions = exhibitionService.getExhibitionsByPage(1, pageSize); // 첫 페이지만 가져오기
-        log.info("Exhibitions retrieved for page 1: " + exhibitions.size());
+        List<exhVO> exhibitions = exhibitionService.getExhibitionsByPage(1, pageSize, filter); // 첫 페이지만 가져오기
+        log.info("Exhibitions retrieved for page 1 with filter '" + filter + "': " + exhibitions.size());
         model.addAttribute("exhibitions", exhibitions);
+        model.addAttribute("selectedFilter", filter); // 선택된 필터를 모델에 추가
         return "/popUpExhibition/exhibitionMainPage";
     }
 
     // "더보기" 요청 시 추가 페이지 데이터 가져오기
     @GetMapping(value = "/exhibitionPage", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<exhVO> getExhibitionPage(@RequestParam("page") int page) {
-        int pageSize = 5;
-        List<exhVO> exhibitions = exhibitionService.getExhibitionsByPage(page, pageSize);
-        log.info("Exhibitions retrieved for page " + page + ": " + exhibitions.size());
+    public List<exhVO> getExhibitionPage(
+            @RequestParam("page") int page,
+            @RequestParam(value = "filter", defaultValue = "all") String filter) { 
+        int pageSize = 5; // 페이지당 항목 수
+        List<exhVO> exhibitions = exhibitionService.getExhibitionsByPage(page, pageSize, filter);
+        log.info("Exhibitions retrieved for page " + page + " with filter '" + filter + "': " + exhibitions.size());
         return exhibitions;
     }
+
     
     @GetMapping("/exhibitionDetail")
     public String exhibitionDetail(@RequestParam("exhNo") int exhNo, Model model) {
@@ -118,8 +123,8 @@ public class ExhibitionController {
     }
     @ResponseBody
     @GetMapping(value = "/userReviews", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<exhReplyVO> getUserReviews() {
-        return exhibitionService.getAllReplies(); 
+    public List<exhReplyVO> getUserReviews(@RequestParam("exhNo") int exhNo) {
+        return exhibitionService.getAllReplies(exhNo); 
     }
     
     @PutMapping("/updateReview")

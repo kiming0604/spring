@@ -10,4 +10,6 @@ public interface NotificationMapper {
 
 	public int deleteNotification(int notificationNo);
 
+	public int updateNotificationReadStatus(int userNo);
+
 }

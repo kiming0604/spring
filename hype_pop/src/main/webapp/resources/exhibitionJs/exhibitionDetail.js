@@ -1,6 +1,11 @@
+// 섹션 전환 이벤트 리스너 설정
 document.getElementById('viewingInfoToggle').addEventListener('click', () => showSection('viewingInfo'));
 document.getElementById('viewingDetailToggle').addEventListener('click', () => showSection('detailsSection'));
 document.getElementById('replyToggle').addEventListener('click', () => showSection('replySection'));
+
+document.addEventListener("DOMContentLoaded", (event) => {
+	showSection('viewingInfo');
+});
 
 // 특정 섹션을 표시하고 나머지 섹션은 숨기기
 function showSection(visibleSectionId) {
@@ -144,9 +149,12 @@ document.getElementById("addReply").onclick = function() {
 
     xhr.send(data);
 };
-// 댓글 목록을 렌더링할 때 수정하기 버튼에 클릭 이벤트 추가
-function fetchAndDisplayReviews() {
-    fetch('/exhibition/userReviews')
+
+function fetchAndDisplayReviews(exhNo) {
+    // exhNo 값을 URL 인코딩
+	exhNo = document.getElementById("exhNo").value;
+
+    fetch(`/exhibition/userReviews?exhNo=${exhNo}`)
         .then(response => response.json())
         .then(data => {
             const reviewsList = document.getElementById('reviewsList');
@@ -156,23 +164,23 @@ function fetchAndDisplayReviews() {
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `
                         <div class="reply-container">
-                    		<div class="reply-header">
-                    			<input type="hidden" class="exhReplyNo" value="${reply.exhReplyNo}">
-                    			<strong class="user-no" id="user-no">유저번호: ${reply.userNo}</strong>
-                    			<div class="exh-score">
-                    			${generateStarIcons(reply.exhScore, true)}
-                    			<input type="hidden" class="score-value" value="${reply.exhScore}"> <!-- 별점 값을 저장하는 hidden input -->
-                    			</div>
-                    			<span class="exh-reg-date">등록 날짜: ${new Date(reply.exhRegDate).toLocaleDateString()}</span>               			
-                    		</div>
-                    		<textarea class="exh-comment" rows="10" cols="3" readonly>${reply.exhComment}</textarea>
-                    		<div class="button-container">
-                    			<input type="button" class="updateReply" value="수정하기"> <!-- 수정 -->
-                    			<input type="button" class="updateReplySend" value="수정완료" style="display: none">                    			
-                    			<input type="button" class="updateReplyCancel" value="수정취소" style="display: none">                    			
-                    			<input type="button" class="deleteReply" value="삭제하기">
-                    		</div>
-                    	</div>
+                            <div class="reply-header">
+                                <input type="hidden" class="exhReplyNo" value="${reply.exhReplyNo}">
+                                <strong class="user-no" id="user-no">유저번호: ${reply.userNo}</strong>
+                                <div class="exh-score">
+                                    ${generateStarIcons(reply.exhScore, true)}
+                                    <input type="hidden" class="score-value" value="${reply.exhScore}">
+                                </div>
+                                <span class="exh-reg-date">등록 날짜: ${new Date(reply.exhRegDate).toLocaleDateString()}</span>
+                            </div>
+                            <textarea class="exh-comment" rows="10" cols="3" readonly>${reply.exhComment}</textarea>
+                            <div class="button-container">
+                                <input type="button" class="updateReply" value="수정하기">
+                                <input type="button" class="updateReplySend" value="수정완료" style="display: none">
+                                <input type="button" class="updateReplyCancel" value="수정취소" style="display: none">
+                                <input type="button" class="deleteReply" value="삭제하기">
+                            </div>
+                        </div>
                     `;
                     reviewsList.appendChild(listItem);
                 });
@@ -184,6 +192,7 @@ function fetchAndDisplayReviews() {
             console.error('데이터를 가져오는 중 오류 발생:', error);
         });
 }
+
 //이벤트 위임 설정
 document.getElementById('reviewsList').addEventListener('click', function(event) {
     if (event.target.classList.contains('updateReply')) {
@@ -378,4 +387,6 @@ function resetReviewForm() {
     document.querySelectorAll("#newReviewStars span").forEach(s => s.classList.remove("active")); // 별점 초기화
     document.querySelector("#selectedRating span").textContent = "0"; // 선택한 별점 표시 초기화
 }
+
+
 

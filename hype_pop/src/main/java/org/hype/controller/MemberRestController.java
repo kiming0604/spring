@@ -10,6 +10,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.likeVO;
 import org.hype.domain.mCatVO;
+import org.hype.domain.signInVO;
 import org.hype.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -113,6 +114,10 @@ public class MemberRestController {
                 .contentType(MediaType.valueOf("text/html; charset=UTF-8")) // 적절한 미디어 타입 설정
                 .body(content);
     }
+    
+    
+
+    
 
 	// 이메일로 인증코드 전송
 	@RequestMapping(value = "/sendMail/{userEmail}", method = RequestMethod.GET)
@@ -122,8 +127,10 @@ public class MemberRestController {
 		String subject = "test 인증 코드";
 		String content = authCode;
 		String from = mailSender.getUsername(); // 보내는 이메일
-		String to = userEmail; // 받는 이메일 (수정: .com 제거)
-
+		//String to = userEmail;
+		String to = userEmail+ ".com"; // 받는 이메일 (수정: .com 제거)
+		System.out.println(to);
+		
 		try {
 			MimeMessage mail = mailSender.createMimeMessage();
 			MimeMessageHelper mailHelper = new MimeMessageHelper(mail, "UTF-8");
@@ -176,6 +183,7 @@ public class MemberRestController {
 	// 메소드 레벨에서 @DeleteMapping 사용
 	@DeleteMapping(value = "/removePopup/{psNo}", produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<String> removePopup(@PathVariable("psNo") int psNo, @RequestParam(value = "userNo") int userNo) {
+		log.info("psno,usno:" + userNo + psNo);
 		int deleted = memberService.pLikeListDelete(userNo,psNo);
 
 		if (deleted > 0) { // deleted가 0보다 크면 성공
@@ -196,5 +204,86 @@ public class MemberRestController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("fail"); // 삭제할 데이터가 없는 경우
 		}
 	}
+
+	
+	//로그인 아이디 찾기 이메일 일치 여부
+	@PostMapping("/checkEmail")
+	public ResponseEntity<String> checkEmail(@RequestBody signInVO svo) {
+		
+		log.info("signInVO svo : " + svo);
+		
+		if (svo == null || svo.getUserEmail() == null || svo.getUserName() == null) {
+			return ResponseEntity.badRequest().body("Invalid input");
+		}
+		boolean exists = memberService.checkEmail(svo);
+		
+		if (exists) {
+			return ResponseEntity.ok("exists");
+		} else {
+			return ResponseEntity.ok("not_exists");
+		}
+	}
+	
+	
+	
+	
+	@GetMapping("/confirmId")
+	public ResponseEntity<String> confirmId(@RequestParam String userId) {
+		
+		log.info("Searching for userId: " + userId); // 
+		
+		int result = memberService.searchId(userId);
+		
+		if(result>0) {
+			return ResponseEntity.ok()
+			.contentType(MediaType.APPLICATION_JSON_UTF8) // UTF-8로 설정
+            .body("아이디가 존재합니다");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("fail");
+		}
+		
+		
+	}
+	
+	//로그인 비밀번호  찾기 이메일 일치 여부
+	@PostMapping("/checkEmailSeachPw")
+	public ResponseEntity<String> checkEmailPw(@RequestBody signInVO svo) {
+		
+		log.info("signInVO svo : " + svo);
+		log.info("Received request: userEmail = " + svo.getUserEmail() + ", userId = " + svo.getUserId());
+
+		if (svo == null || svo.getUserEmail() == null || svo.getUserId() == null) {
+			return ResponseEntity.badRequest().body("Invalid input");
+		}
+		
+		
+		boolean exists = memberService.checkEmailPw(svo);
+		log.info("exists:" + exists);
+		
+		if (exists) {
+			return ResponseEntity.ok("exists");
+		} else {
+			return ResponseEntity.ok("not_exists");
+		}
+	}
+	
+	//로그인
+	@PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> login(@RequestBody signInVO svo) {
+	    signInVO member = memberService.loginMember(svo);
+
+	    Map<String, Object> response = new HashMap<>();
+	    if (member != null) {
+	        response.put("status", "success");
+	        response.put("userNo", member.getUserNo()); // userNo를 응답에 포함
+	        return ResponseEntity.ok(response);
+	    } else {
+	        response.put("status", "error");
+	        response.put("message", "로그인 오류입니다.");
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+	    }
+	}
+	
 
 }

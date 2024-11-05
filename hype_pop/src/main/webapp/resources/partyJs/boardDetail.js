@@ -1,7 +1,7 @@
 let name;
 let ws;
 const bno = new URLSearchParams(location.search).get('bno');
-const url = `ws://localhost:9090/chatserver.do?bno=${bno}`;
+const url = `ws://192.168.0.121:9080/chatserver.do?bno=${bno}`;
 const userNo = 1;
 const userId = "user1"; 
 const userMap = {}; // userNo와 userId를 매핑하여 저장할 객체

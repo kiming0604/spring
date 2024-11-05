@@ -48,4 +48,17 @@ public class NotificationServiceImpl implements NotificationService {
 
 	        return isDeleted;
 	    }
+	    @Override
+	    public boolean updateNotificationReadStatus(int userNo) {
+	        int result = mapper.updateNotificationReadStatus(userNo);
+	        boolean isUpdate = (result > 0); // result가 1 이상이면 삭제 성공
+
+	        if (isUpdate) {
+	            log.info("알림 삭제 성공, ID: " + userNo);
+	        } else {
+	            log.warn("알림 삭제 실패, ID: " + userNo);
+	        }
+
+	        return isUpdate;
+	    }
 }

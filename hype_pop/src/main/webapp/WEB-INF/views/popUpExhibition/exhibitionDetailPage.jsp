@@ -1,4 +1,3 @@
-exhibitionDetailPage.jsp.txt
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -357,7 +356,7 @@ ul {
 				</tr>
 				<tr>
 					<th>전시 기간</th>
-					<td>${exhibition.exhStartDate}~${exhibition.exhEndDate}</td>
+					<td>${exhibition.exhStartDate} ~ ${exhibition.exhEndDate}</td>
 				</tr>
 				<tr>
 					<th>관람 시간</th>

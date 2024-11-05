@@ -54,12 +54,13 @@ socket.onmessage = function(event) {
 
     // 알림 데이터 처리
     if (notificationData.action === 'sendNotifications') {
-        // 알림이 있을 때 UI 업데이트
         updateNotificationUI(notificationData.notifications);
     } else if (notificationData.action === 'deleteNotifications') {
         handleDeleteResponse(notificationData);
     } else if (notificationData.action === 'checkNotifications') {
         updateNotificationUI(notificationData.notifications);
+    } else if (notificationData.action === 'markAsRead') {
+        console.log('알림이 읽음 상태로 업데이트되었습니다.');
     }
 };
 
@@ -113,7 +114,7 @@ function updateNotificationUI(notifications) {
 
         // 읽음 여부 표시 요소
         const readStatus = document.createElement('span');
-        readStatus.textContent = notification.isRead === 1 ? '읽음' : '읽지 않음'; // 수정
+        readStatus.textContent = notification.isRead === 1 ? '읽음' : '읽지 않음';
         readStatus.style.marginLeft = '10px'; 
 
         if (notification.isRead === 0) { // 0일 경우 읽지 않은 알림
@@ -126,7 +127,7 @@ function updateNotificationUI(notifications) {
         deleteButton.classList.add('delete-button'); 
         deleteButton.style.marginLeft = '10px'; 
         deleteButton.onclick = function() {
-            handleDeleteNotification(notification.notificationNo); // 수정
+            handleDeleteNotification(notification.notificationNo);
         };
 
         notificationElement.appendChild(messageElement);
@@ -143,7 +144,7 @@ function updateNotificationUI(notifications) {
 // 알림 삭제 함수에서 userNo를 사용하도록 수정
 function handleDeleteNotification(notificationId) {
     console.log(`알림 ID ${notificationId} 삭제됨.`);
-    socket.send(JSON.stringify({ action: 'deleteNotifications', notificationNo: notificationId })); // 삭제 요청 전송
+    socket.send(JSON.stringify({ action: 'deleteNotifications', notificationNo: notificationId }));
 }
 
 // 서버의 삭제 응답 처리 함수
@@ -165,6 +166,23 @@ function refreshNotificationList(userNo) {
 // 알림 버튼 클릭 처리 함수
 function handleAlarmClick() {
     console.log("알림 버튼 클릭됨!");
-    const alarmContent = document.getElementById('notificationList'); // ID를 수정
-    alarmContent.style.display = (alarmContent.style.display === 'block') ? 'none' : 'block'; // 토글
+    const alarmContent = document.getElementById('notificationList');
+    alarmContent.style.display = (alarmContent.style.display === 'block') ? 'none' : 'block';
+
+    // 알림창을 열었을 때만 읽지 않은 알림을 읽음으로 표시
+    if (alarmContent.style.display === 'block') {
+        const userNo = 5;
+        
+        // 서버에 읽음 상태 업데이트 요청 전송
+        socket.send(JSON.stringify({ action: 'markNotificationsAsRead', userNo: userNo }));
+
+        // UI 업데이트: 모든 알림을 읽음 처리
+        Array.from(alarmContent.children).forEach(notificationElement => {
+            const readStatus = notificationElement.querySelector('span:nth-child(3)');
+            if (readStatus) readStatus.textContent = '읽음';
+        });
+
+        // 레드닷 숨김
+        document.getElementById('notificationDot').style.display = 'none';
+    }
 }

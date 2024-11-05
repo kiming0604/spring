@@ -17,10 +17,26 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 	public ExhibitionMapper exhibitionmapper;
 	
 	@Override
-	public List<exhVO> getExhibitionsByPage(int page, int pageSize) {
+	public List<exhVO> getExhibitionsByPage(int page, int pageSize, String filter) {
 	    int offset = (page - 1) * pageSize;
-	    return exhibitionmapper.getExhibitionsByPage(offset, pageSize);
+	    
+	    switch (filter) {
+	        case "latest":
+	            // 최신 전시회 기준으로 가져오는 쿼리
+	            return exhibitionmapper.getLatestExhibitions(offset, pageSize);	            
+	        case "dueSoon":
+	            return exhibitionmapper.getDueSoonExhibitions(offset, pageSize);	        
+	        case "lowerPrice":
+	            return exhibitionmapper.getExhibitionsOrderByPrice("ASC", offset, pageSize);	        
+	        case "higherPrice":
+	            return exhibitionmapper.getExhibitionsOrderByPrice("DESC", offset, pageSize);	        
+	        case "earlyBird":
+	            return exhibitionmapper.getEarlyBirdExhibitions(offset, pageSize);
+	        default:
+	            return exhibitionmapper.getExhibitionsByPage(offset, pageSize);
+	    }
 	}
+
 
 	@Override
 	public exhVO getExhibitionByNo(int exhNo) {
@@ -46,9 +62,9 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 	}
 
 	@Override
-	public List<exhReplyVO> getAllReplies() {
+	public List<exhReplyVO> getAllReplies(int exhNo) {
 		
-		return exhibitionmapper.getAllReplies();
+		return exhibitionmapper.getAllReplies(exhNo);
 	}
 
 	@Override

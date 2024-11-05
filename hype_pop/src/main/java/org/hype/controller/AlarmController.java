@@ -52,6 +52,9 @@ public class AlarmController extends TextWebSocketHandler {
             case "deleteNotifications":
                 handleDeleteNotifications(session, request.getUserNo(), request.getNotificationNo());
                 break;
+            case "markNotificationsAsRead":
+                handleMarkNotificationsAsRead(session, request.getUserNo());
+                break;
             default:
                 log.warn("알 수 없는 액션: " + request.getAction());
                 break;
@@ -96,6 +99,7 @@ public class AlarmController extends TextWebSocketHandler {
         );
         session.sendMessage(new TextMessage(response)); // 응답 메시지를 전송
     }
+
     private void handleDeleteNotifications(WebSocketSession session, int userNo, int notificationNo) throws Exception {
         boolean isDeleted = service.deleteNotification(notificationNo); // deleteNotification 메서드 호출
 
@@ -110,6 +114,24 @@ public class AlarmController extends TextWebSocketHandler {
             NotificationResponse.createWithAction("deleteNotifications", notifications, responseMessage) // message 포함
         );
         session.sendMessage(new TextMessage(response)); // TextMessage로 전송
+    }
+
+    // 알림을 읽음 상태로 업데이트하는 메서드 추가
+    private void handleMarkNotificationsAsRead(WebSocketSession session, int userNo) throws Exception {
+        // 사용자의 모든 알림을 읽음 상태로 업데이트
+        boolean isUpdated = service.updateNotificationReadStatus(userNo);
+
+        // 업데이트가 성공했는지 여부에 따라 응답 메시지 설정
+        String responseMessage = isUpdated ? "알림 읽음 상태 업데이트 성공" : "알림 읽음 상태 업데이트 실패";
+
+        // 업데이트 후 알림 목록을 다시 가져오기
+        List<NotificationVO> notifications = service.getAlarmsForUser(userNo);
+
+        // 응답 메시지를 생성 및 전송
+        String response = objectMapper.writeValueAsString(
+            NotificationResponse.createWithAction("markNotificationsAsRead", notifications, responseMessage)
+        );
+        session.sendMessage(new TextMessage(response)); // 응답 메시지 전송
     }
 
     // 요청 데이터를 담는 내부 클래스
