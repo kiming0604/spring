@@ -36,9 +36,9 @@ public interface AdminMapper {
 	public signInVO getMembersById (String userId);  
 	
 	// 팝업스토어 등록하기
-	public int insertPopStore(popStoreVO pvo);
-	public int insertPsImage(pImgVO imgVo);  // 이미지 등록
-	public int insertPsCat(pCatVO cvo);  // 카테고리 등록
+	   public int insertPopStore(popStoreVO pvo);
+	   public int insertPsImage(pImgVO imgVo);  // 이미지 등록
+	   public int insertPsCat(pCatVO cvo);  // 카테고리 등록
 	
 	// 굿즈 등록하기
 	public List<popStoreVO> getAllPopStores();	

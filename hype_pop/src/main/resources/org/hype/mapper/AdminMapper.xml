@@ -117,31 +117,31 @@
 	</select>
 	
 	
-	<!-- 팝업스토어 등록하기 페이지 -->	
-	<insert id="insertPopStore" parameterType="org.hype.domain.popStoreVO">
-		<selectKey keyProperty="psNo" resultType="int" order="BEFORE">
-         	SELECT popmain_seq.nextVal FROM dual
-      	</selectKey>
-	    INSERT INTO pop_main_tbl 
-	    (psNo, psName, latitude, longitude, psStartDate, 
-	    psEndDate, psAddress, snsAd, comInfo, transInfo, parkingInfo, psExp)
-	    VALUES 
-	    (#{psNo}, #{psName}, #{latitude}, #{longitude}, 
-	    #{psStartDate}, #{psEndDate}, #{psAddress}, #{snsAd}, 
-	    #{comInfo}, #{transInfo}, #{parkingInfo}, #{psExp})
-	</insert>
-	
-	<insert id="insertPsImage" parameterType="org.hype.domain.pImgVO">
-        INSERT INTO pop_img_tbl (psNo, uuid, uploadPath, filename)
-        VALUES (#{psNo}, #{uuid}, #{uploadPath}, #{filename})
+	<!-- 팝업스토어 등록하기 페이지 -->   
+   <insert id="insertPopStore" parameterType="org.hype.domain.popStoreVO">
+      <selectKey keyProperty="psNo" resultType="int" order="BEFORE">
+            SELECT popmain_seq.nextVal FROM dual
+         </selectKey>
+       INSERT INTO pop_main_tbl 
+       (psNo, psName, latitude, longitude, psStartDate, 
+       psEndDate, psAddress, snsAd, comInfo, transInfo, parkingInfo, psExp)
+       VALUES 
+       (#{psNo}, #{psName}, #{latitude}, #{longitude}, 
+       #{psStartDate}, #{psEndDate}, #{psAddress}, #{snsAd}, 
+       #{comInfo}, #{transInfo}, #{parkingInfo}, #{psExp})
+   </insert>
+   
+   <insert id="insertPsImage" parameterType="org.hype.domain.pImgVO">
+        INSERT INTO pop_img_tbl (psNo, uuid, uploadPath, fileName)
+        VALUES (#{psNo}, #{uuid}, #{uploadPath}, #{fileName})
     </insert>
     
     <insert id="insertPsCat" parameterType="org.hype.domain.pCatVO">
-	    INSERT INTO pop_cat_tbl 
-	    (psNo, healthBeauty, game, culture, shopping, supply, kids, design, foods, interior, policy, character, experience, collaboration, entertainment)
-	    VALUES 
-	    (#{psNo}, #{healthBeauty}, #{game}, #{culture}, #{shopping}, #{supply}, #{kids}, #{design}, #{foods}, #{interior}, #{policy}, #{character}, #{experience}, #{collaboration}, #{entertainment})
-	</insert>
+       INSERT INTO pop_cat_tbl 
+       (psNo, healthBeauty, game, culture, shopping, supply, kids, design, foods, interior, policy, character, experience, collaboration, entertainment)
+       VALUES 
+       (#{psNo}, #{healthBeauty}, #{game}, #{culture}, #{shopping}, #{supply}, #{kids}, #{design}, #{foods}, #{interior}, #{policy}, #{character}, #{experience}, #{collaboration}, #{entertainment})
+   </insert>
 	
 	<!-- 상품(굿즈) 등록하기 페이지 -->
 	<select id="getAllPopStores" resultType="org.hype.domain.popStoreVO">

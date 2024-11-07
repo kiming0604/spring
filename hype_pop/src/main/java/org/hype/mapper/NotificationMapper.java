@@ -12,4 +12,8 @@ public interface NotificationMapper {
 
 	public int updateNotificationReadStatus(int userNo);
 
+	public List<Integer> getLikedPopUpStoresByUser(int userNo);
+
+	public void insertPopUpNotification(NotificationVO notification);
+
 }

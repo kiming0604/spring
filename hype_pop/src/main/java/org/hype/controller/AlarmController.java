@@ -7,6 +7,7 @@ import org.hype.domain.NotificationVO;
 import org.hype.service.NotificationService;
 import org.hype.service.PopUpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.TextMessage;
@@ -75,8 +76,8 @@ public class AlarmController extends TextWebSocketHandler {
                 String type = notification.getType();
                 switch (type) {
                     case "psNo":
-                        String psName = popService.getStoreNameByPsNo(notification.getReferenceNo());
-                        notification.setPsName(psName); // psName 설정
+                        String storeName = popService.getStoreNameByPsNo(notification.getReferenceNo());
+                        notification.setPsName(storeName); // storeName만 설정
                         break;
                     case "exhNo":
                     case "gNo":
@@ -132,6 +133,73 @@ public class AlarmController extends TextWebSocketHandler {
             NotificationResponse.createWithAction("markNotificationsAsRead", notifications, responseMessage)
         );
         session.sendMessage(new TextMessage(response)); // 응답 메시지 전송
+    }
+
+    // 모든 클라이언트에게 새 알림 전송
+    private void notifyAllUsers(NotificationVO notification) throws Exception {
+        String notificationMessage = objectMapper.writeValueAsString(
+            NotificationResponse.createWithAction("newNotification", List.of(notification), null)
+        );
+
+        for (WebSocketSession session : sessions) {
+            if (session.isOpen()) {
+                session.sendMessage(new TextMessage(notificationMessage));
+            }
+        }
+    }
+
+    // 유저가 좋아요한 팝업스토어에 대해 알림을 자동으로 생성
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정 실행
+    public void sendDailyNotifications() {
+        List<NotificationVO> notifications = new ArrayList<>();
+
+        // 로그인한 유저에 대해 처리
+        // 예시로 userNo는 이미 로그인된 유저의 값이라고 가정
+        int userNo = 5;
+
+        // 해당 유저가 좋아요한 스토어 ID 목록 가져오기
+        List<Integer> likedStoreIds = service.getLikedPopUpStoresByUser(userNo); // 해당 유저가 좋아요한 스토어들의 ID
+
+        // 각 스토어의 정보를 가져와서 알림을 생성
+        for (int psNo : likedStoreIds) {
+
+            // 유저에게 보낼 알림 생성
+            NotificationVO notification = createNotificationForUser(psNo , userNo);
+            notifications.add(notification);
+
+            try {
+                // 해당 유저에게 알림 보내기
+                notifySpecificUser(notification, userNo);
+            } catch (Exception e) {
+                log.error("알림 전송 중 오류 발생: ", e);
+            }
+        }
+    }
+
+    // 알림을 생성하는 메서드 (스토어 정보를 기반으로)
+    private NotificationVO createNotificationForUser(int psNo,int userNo) {
+        NotificationVO notification = new NotificationVO();
+        // 알림에 필요한 정보 설정 (예: 좋아요한 팝업스토어 정보)
+        notification.setType("psNo");
+        notification.setReferenceNo(psNo);
+        notification.setTitle("좋아요한");
+        notification.setMessage("의 종료일이 5일남았습니다");
+        notification.setUserNo(userNo); 
+        service.insertPopUpNotification(notification);
+        return notification;
+        
+    }
+
+    // 특정 유저에게 알림을 전송하는 메서드 추가
+    private void notifySpecificUser(NotificationVO notification, int userNo) throws Exception {
+        for (WebSocketSession session : sessions) {
+            if (session.isOpen() && session.getAttributes().get("userNo").equals(userNo)) {
+                String notificationMessage = objectMapper.writeValueAsString(
+                    NotificationResponse.createWithAction("newNotification", List.of(notification), null)
+                );
+                session.sendMessage(new TextMessage(notificationMessage)); // 해당 유저에게 알림 전송
+            }
+        }
     }
 
     // 요청 데이터를 담는 내부 클래스

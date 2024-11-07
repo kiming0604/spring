@@ -257,10 +257,10 @@ public class AdminController {
     	return "admin/goodsRegister"; // JSP 페이지로 이동
     }    
     
-    // *** 팝업스토어 등록 페이지 ***
+ // *** 팝업스토어 등록 페이지 ***
     // yyyy-MM--dd 형식으로 들어오는 데이터들을
- 	// java.sql.Date.class로 바꿔서
- 	// popStoreVO에 있는 date 타입들이랑 매칭해주겠다는 뜻
+    // java.sql.Date.class로 바꿔서
+    // popStoreVO에 있는 date 타입들이랑 매칭해주겠다는 뜻
     @InitBinder("popStoreVO")
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -269,17 +269,17 @@ public class AdminController {
         // java.sql.Date 변환을 위해 CustomDateEditor 사용
         binder.registerCustomEditor(java.sql.Date.class, new CustomDateEditor(dateFormat, true));
     }
-      	
+         
     @PostMapping("/psRegister")
     public String registerPopUpStore(@ModelAttribute popStoreVO vo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-    	log.warn("registerPopUpStore......");
-    	
-    	// 이 코드는 vo를 get, set하지 않고 쓸 수 있는 코드이기 때문에
-    	// 확인용이라고 생각하면 됨 확인이 완료되면 for문까지 다 지워도 되고
- 		// throws IllegalAccessException, IllegalArgumentException, InvocationTargetException 도 같이 지우면 됨
-    	Method[] methods = vo.getClass().getDeclaredMethods();
-    	
-    	for (Method method : methods) {
+       log.warn("registerPopUpStore......");
+       
+       // 이 코드는 vo를 get, set하지 않고 쓸 수 있는 코드이기 때문에
+       // 확인용이라고 생각하면 됨 확인이 완료되면 for문까지 다 지워도 되고
+       // throws IllegalAccessException, IllegalArgumentException, InvocationTargetException 도 같이 지우면 됨
+       Method[] methods = vo.getClass().getDeclaredMethods();
+       
+       for (Method method : methods) {
             // 메서드 이름이 'get'으로 시작하는지 확인
             if (method.getName().startsWith("get")) {
                 // 메서드를 호출하여 값을 가져옴
@@ -287,9 +287,9 @@ public class AdminController {
                 System.out.println(method.getName().substring(3) + ": " + value);
             }
          }
-    	
-    	// 컨트롤러에서 전달받는 것까지만 한 거고 이제 insert 하면 됨 
-    	// 유효 아이디랑 업로드 과정
+       
+       // 컨트롤러에서 전달받는 것까지만 한 거고 이제 insert 하면 됨 
+       // 유효 아이디랑 업로드 과정
         // 이미지 등록 처리 로직 추가
         if (vo.getImageFile() != null && !vo.getImageFile().isEmpty()) {
             log.info("Image file upload process started...");
@@ -325,8 +325,8 @@ public class AdminController {
                 log.error("Image upload failed: " + e.getMessage());
             }
         }
-    	
-    	return "redirect:/admin/adminPage";
+       
+       return "redirect:/admin/adminPage";
     }
     
     // *** 상품(굿즈) 등록 페이지 ***

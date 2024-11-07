@@ -37,7 +37,7 @@ public interface AdminService {
 	public signInVO getMembersById (String userId); 
 	
 	// 팝업스토어 등록하기
-	public int insertPopStore(popStoreVO pvo); 
+	   public int insertPopStore(popStoreVO pvo); 
 	
 	// 굿즈 등록하기 
 	// selectbox 모든 팝업스토어 가져오기

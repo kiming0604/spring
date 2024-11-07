@@ -1,40 +1,14 @@
 // 페이지 로드 시 알림 목록 숨기기
 document.addEventListener('DOMContentLoaded', () => {
-	const notificationList = document.getElementById('notificationList');
-	notificationList.style.display = 'none'; // 알림 목록 숨김
-	
-	// 웹소켓 연결 시 알림 체크
-	const userNo = 5; // 실제 사용자 ID로 변경
-	socket.send(JSON.stringify({ action: 'checkNotifications', userNo: userNo })); // 초기 알림 체크 요청
+    const notificationList = document.getElementById('notificationList');
+    notificationList.style.display = 'none'; // 알림 목록 숨김
+    
+    // 웹소켓 연결 시 알림 체크
+    const userNo = 5; // 실제 사용자 ID로 변경
+    socket.send(JSON.stringify({ action: 'checkNotifications', userNo: userNo })); // 초기 알림 체크 요청
 });
 
-function showLogos() {
-    var logoContainer = document.getElementById("logoContainer");
-    var overlay = document.getElementById("overlay");
-
-    // 슬라이드 메뉴 및 오버레이 표시
-    logoContainer.classList.toggle("show");
-    overlay.classList.toggle("show");
-
-    // 오버레이 클릭 시 메뉴 숨기기
-    overlay.onclick = function() {
-        logoContainer.classList.remove("show");
-        overlay.classList.remove("show");
-    }
-}
-
-// 검색 버튼 클릭 이벤트
-document.getElementById("searchBTN").addEventListener('click', () => {
-    let inputText = document.getElementById("popUpSearchInput").value;
-
-    if (inputText.trim() !== "") {
-        location.href = "/hypePop/search?searchData=" + encodeURIComponent(inputText);
-    } else {
-        alert("검색어를 입력하세요.");
-    }
-});
-
-// SockJS 연결
+// 웹소켓 연결 설정
 const socket = new SockJS('http://localhost:9010/alarm');
 
 socket.onopen = function(event) {
@@ -144,7 +118,7 @@ function updateNotificationUI(notifications) {
 // 알림 삭제 함수에서 userNo를 사용하도록 수정
 function handleDeleteNotification(notificationId) {
     console.log(`알림 ID ${notificationId} 삭제됨.`);
-    socket.send(JSON.stringify({ action: 'deleteNotifications', notificationNo: notificationId }));
+    socket.send(JSON.stringify({ action: 'deleteNotifications', notificationNo: notificationId })); // notificationNo만 전달
 }
 
 // 서버의 삭제 응답 처리 함수
@@ -171,7 +145,7 @@ function handleAlarmClick() {
 
     // 알림창을 열었을 때만 읽지 않은 알림을 읽음으로 표시
     if (alarmContent.style.display === 'block') {
-        const userNo = 5;
+        const userNo = 5; // 실제 사용자 ID로 변경
         
         // 서버에 읽음 상태 업데이트 요청 전송
         socket.send(JSON.stringify({ action: 'markNotificationsAsRead', userNo: userNo }));
@@ -186,3 +160,30 @@ function handleAlarmClick() {
         document.getElementById('notificationDot').style.display = 'none';
     }
 }
+
+// 로고를 표시하는 함수 (예시)
+function showLogos() {
+    var logoContainer = document.getElementById("logoContainer");
+    var overlay = document.getElementById("overlay");
+
+    // 슬라이드 메뉴 및 오버레이 표시
+    logoContainer.classList.toggle("show");
+    overlay.classList.toggle("show");
+
+    // 오버레이 클릭 시 메뉴 숨기기
+    overlay.onclick = function() {
+        logoContainer.classList.remove("show");
+        overlay.classList.remove("show");
+    }
+}
+
+// 검색 버튼 클릭 이벤트
+document.getElementById("searchBTN").addEventListener('click', () => {
+    let inputText = document.getElementById("popUpSearchInput").value;
+
+    if (inputText.trim() !== "") {
+        location.href = "/hypePop/search?searchData=" + encodeURIComponent(inputText);
+    } else {
+        alert("검색어를 입력하세요.");
+    }
+});

@@ -61,4 +61,23 @@ public class NotificationServiceImpl implements NotificationService {
 
 	        return isUpdate;
 	    }
+	    @Override
+	    public List<Integer> getLikedPopUpStoresByUser(int userNo) {
+	        // 유저가 좋아요한 팝업스토어들의 ID를 반환
+	        List<Integer> likedStoreIds = mapper.getLikedPopUpStoresByUser(userNo);
+	        
+	        // 로깅
+	        if (likedStoreIds != null && !likedStoreIds.isEmpty()) {
+	            log.info("유저 " + userNo + "가 좋아요한 스토어 개수: " + likedStoreIds.size());
+	        } else {
+	            log.warn("유저 " + userNo + "가 좋아요한 스토어가 없습니다.");
+	        }
+
+	        return likedStoreIds;
+	    }
+	    @Override
+	    public void insertPopUpNotification(NotificationVO notification) {
+	    	  mapper.insertPopUpNotification(notification);
+	    
+	    }
 }

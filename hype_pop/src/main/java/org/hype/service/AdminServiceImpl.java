@@ -84,26 +84,25 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	// 팝업스토어 등록 페이지 영역
-	// 팝업스토어 정보 등록
-	@Transactional
-	@Override
-	public int insertPopStore(popStoreVO pvo) {
-		
-		int result1 = mapper.insertPopStore(pvo);
-		pvo.getPsImg().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
-		log.warn(pvo.getPsNo());
-		int result2 = mapper.insertPsImage(pvo.getPsImg());	 // vo 가져오기
-		
-		pvo.getPsCat().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
-		
-		int result3 = mapper.insertPsCat(pvo.getPsCat());	 // vo 가져오기
+	   // 팝업스토어 정보 등록
+	   @Transactional
+	   @Override
+	   public int insertPopStore(popStoreVO pvo) {
+	      
+	      int result1 = mapper.insertPopStore(pvo);
+	      pvo.getPsImg().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
+	      log.warn(pvo.getPsNo());
+	      int result2 = mapper.insertPsImage(pvo.getPsImg());    // vo 가져오기
+	      
+	      pvo.getPsCat().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
+	      
+	      int result3 = mapper.insertPsCat(pvo.getPsCat());    // vo 가져오기
 
-		log.warn("result1의 값은 " + result1);
-		log.warn("result2의 값은 " + result2);
+	      log.warn("result1의 값은 " + result1);
+	      log.warn("result2의 값은 " + result2);
 
-		return result1;		
-	}
-	
+	      return result1;      
+	   }
 	// 상품(굿즈) 등록 페이지 영역
 	// 상품(굿즈) 정보 등록	
 	@Override

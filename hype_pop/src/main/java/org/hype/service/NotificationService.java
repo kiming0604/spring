@@ -12,5 +12,9 @@ public interface NotificationService {
 
 	public boolean updateNotificationReadStatus(int userNo);
 
+	public List<Integer> getLikedPopUpStoresByUser(int userNo);
+
+	public void insertPopUpNotification(NotificationVO notification);
+
 
 }
