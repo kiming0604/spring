@@ -1,4 +1,4 @@
-goodsHeader.js
+partyHeader.js
 document.getElementById('searchBTN').addEventListener('click', function() {
     performSearch();
 });
@@ -21,7 +21,7 @@ if(localStorage.getItem('searchText') === '' || localStorage.getItem('searchText
 } else {
     const savedSearchText = localStorage.getItem('searchText');
     const searchText = document.getElementById('goodsSearchBox');
-    searchText.value = savedSearchText;
+    searchText.placeholder = savedSearchText;
 }
 
 
@@ -33,9 +33,6 @@ document.querySelectorAll('div').forEach(btn =>{
 			location.href = "/";
 			break;
 		case "goodsMainLogoDiv":
-		    const searchedText = document.getElementById('goodsSearchBox');
-		    localStorage.setItem('searchText', '');
-		    searchedText.placeholder = '검색할 굿즈 이름을 입력하세요';
 			location.href = "/goodsStore/goodsMain";
 			break;
 		case "hamburgerDiv":

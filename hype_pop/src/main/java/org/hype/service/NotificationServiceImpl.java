@@ -1,5 +1,6 @@
 package org.hype.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.hype.domain.NotificationVO;
@@ -80,4 +81,5 @@ public class NotificationServiceImpl implements NotificationService {
 	    	  mapper.insertPopUpNotification(notification);
 	    
 	    }
+	  
 }

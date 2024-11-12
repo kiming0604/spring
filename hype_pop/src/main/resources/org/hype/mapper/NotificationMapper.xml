@@ -23,11 +23,16 @@
     </update>
     
  <!-- 유저가 좋아요한 팝업스토어들의 ID 조회 쿼리 -->
-    <select id="getLikedPopUpStoresByUser" resultType="int">
-        SELECT psNo
-        FROM like_list_tbl
-        WHERE userNo = #{userNo}
-    </select>
+  <select id="getLikedPopUpStoresByUser" resultType="int">
+    SELECT psNo
+    FROM like_list_tbl
+    WHERE userNo = #{userNo}
+    AND psNo IN (
+        SELECT PSNO
+        FROM pop_main_tbl
+        WHERE endDate = TRUNC(SYSDATE) + 5
+    )
+</select>
     
      <!-- 알림 삽입 쿼리 -->
 <insert id="insertPopUpNotification" parameterType="org.hype.domain.NotificationVO">

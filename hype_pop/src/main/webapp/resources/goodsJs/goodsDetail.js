@@ -1,3 +1,4 @@
+goodsDetail.js
 const rs = replyService;
 
 document.addEventListener("DOMContentLoaded", function () {

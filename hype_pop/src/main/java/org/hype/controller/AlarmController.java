@@ -189,7 +189,7 @@ public class AlarmController extends TextWebSocketHandler {
 
             // 유저에게 보낼 알림 생성
             NotificationVO notification = createNotificationForUser(psNo , userNo);
-            notifications.add(notification);
+            //notifications.add(notification);
 
             try {
                 // 해당 유저에게 알림 보내기
@@ -201,7 +201,7 @@ public class AlarmController extends TextWebSocketHandler {
     }
 
     // 알림을 생성하는 메서드 (스토어 정보를 기반으로)
-    private NotificationVO createNotificationForUser(int psNo,int userNo) {
+    private NotificationVO createNotificationForUser(int psNo, int userNo) {
         NotificationVO notification = new NotificationVO();
         // 알림에 필요한 정보 설정 (예: 좋아요한 팝업스토어 정보)
         notification.setType("psNo");

@@ -1,3 +1,4 @@
+goodsMain.js
 document.addEventListener("DOMContentLoaded", function() {
 	localStorage.setItem('searchText', ""); // 검색어 저장
     function setBackgroundImage(item) {

@@ -1,6 +1,8 @@
+partyBoard.js
 let dataList = [];
 let currentPage = 1;
 const itemsPerPage = 10;
+let userNo = localStorage.getItem('userNo');
 
 document.getElementById("goInsertBoard").addEventListener('click', () => {
     location.href = "/party/boardInsert";
@@ -24,11 +26,12 @@ function renderTable() {
     pageData.forEach(vo => {
     	const formattedDate = formatDate(vo.regDate);
         msg += `
-            <tr class="partyTr" data-bno="${vo.bno}">
+            <tr class="partyTr" data-bno="${vo.bno}" data-current="${vo.currentUser}" data-max="${vo.maxUser}">
                 <td>${vo.category}</td>
                 <td>${vo.targetName}</td>
                 <td>${vo.boardTitle}</td>
                 <td>${formattedDate}</td>
+                <td>${vo.currentUser}/${vo.maxUser}</td>
             </tr>
         `;
     });
@@ -40,8 +43,22 @@ function renderTable() {
     
     document.querySelectorAll(".partyTr").forEach(row => {
         row.addEventListener('click', (e) => {
-            const bno = e.currentTarget.getAttribute("data-bno");
-            location.href = `/party/boardDetail?bno=${bno}`;
+            const currentBno = e.currentTarget.getAttribute("data-bno");
+            const currentUser = parseInt(e.currentTarget.getAttribute("data-current"));
+            const maxUser = parseInt(e.currentTarget.getAttribute("data-max"));
+            
+            fetch(`/party/chkJoinedOrNot/${currentBno}`)
+                .then(response => response.json())
+                .then(data => {
+                    const isUserInRoom = data.some(room => room.userNo === parseInt(userNo));
+
+                    if (currentUser === maxUser && !isUserInRoom) {
+                        alert("풀방입니다");
+                        return;
+                    }
+                    location.href = `/party/boardDetail?bno=${currentBno}`;
+                })
+                .catch(error => console.error("Error checking room status:", error));
         });
     });
 }
