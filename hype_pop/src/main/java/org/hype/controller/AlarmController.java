@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hype.domain.NotificationVO;
+import org.hype.domain.exhVO;
+import org.hype.domain.goodsVO;
+import org.hype.domain.noticeVO;
+import org.hype.domain.qnaVO;
+import org.hype.service.ExhibitionService;
+import org.hype.service.GoodsService;
+import org.hype.service.NoticeService;
 import org.hype.service.NotificationService;
 import org.hype.service.PopUpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +35,16 @@ public class AlarmController extends TextWebSocketHandler {
     
     @Autowired
     private PopUpService popService;
+    
+    @Autowired
+    private ExhibitionService exhService;
+    
+    @Autowired 
+    private GoodsService gService;
+    
+    @Autowired
+    private NoticeService nService;
+
 
     private List<WebSocketSession> sessions = new ArrayList<>();
     private ObjectMapper objectMapper = new ObjectMapper(); // JSON 변환용
@@ -79,11 +96,18 @@ public class AlarmController extends TextWebSocketHandler {
                         String storeName = popService.getStoreNameByPsNo(notification.getReferenceNo());
                         notification.setPsName(storeName); // storeName만 설정
                         break;
-                    case "exhNo":
-                    case "gNo":
-                    case "noticeNo":
-                    case "qNo":
-                        log.info("처리 중: " + type + " - " + notification.getReferenceNo());
+                    case "exhNo": exhVO exh = exhService.getExhibitionByNo(notification.getReferenceNo());
+                        notification.setPsName(exh.getExhName());
+                        break;
+                    case "gNo": goodsVO gvo = gService.getOneByGno(notification.getReferenceNo());
+                        notification.setGoodsName(gvo.getGname());
+                        break;
+                    case "noticeNo": noticeVO nvo = nService.getNoticeInfo(notification.getReferenceNo());
+                        notification.setNoticeTitle(nvo.getNoticeTitle());
+                        break;
+                    case "qNo": qnaVO qvo = nService.getInquiryInfo(notification.getReferenceNo());
+                        log.warn("문의 제목은 "+qvo.getQnaTitle());
+                        notification.setQnaTitle(qvo.getQnaTitle());
                         break;
                     default:
                         log.warn("정의되지 않은 타입: " + type);

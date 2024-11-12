@@ -15,7 +15,9 @@ public interface ExhibitionMapper {
 
 	public void deleteLike(exhLikeVO exhLikeVO);
 
-	public void insertReply(exhReplyVO exhReplyVO);
+	public int countReviewsByUser(@Param("exhNo") int exhNo,@Param("userNo") int userNo);
+	
+	public int insertReply(exhReplyVO exhReplyVO);
 
 	public List<exhReplyVO> getAllReplies(@Param("exhNo") int exhNo);
 
@@ -35,4 +37,5 @@ public interface ExhibitionMapper {
 			@Param("pageSize") int pageSize);
 
 	public List<exhVO> getEarlyBirdExhibitions(@Param("offset") int offset, @Param("pageSize") int pageSize);
+
 }

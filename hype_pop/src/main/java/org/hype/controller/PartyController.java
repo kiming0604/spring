@@ -2,6 +2,7 @@ package org.hype.controller;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.hype.domain.ChatContentVO;
 import org.hype.domain.ChatRoomVO;
 import org.hype.domain.PartyBoardVO;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,14 +55,11 @@ public class PartyController {
 	
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<popStoreVO> search(@RequestParam String searchText, @RequestParam String category) {
-	    if(category == "popup") {
+	public Object search(@RequestParam String searchText, @RequestParam String category) {
+	    if("popup".equals(category)) {
 	    	return service.getPopupName(searchText);
 	    }
-	    return service.getPopupName(searchText);
-//	    if(category == "exhibition") {
-//	    	return service.getExhName(searchText);
-//	    }
+	    return service.getExhName(searchText);
 	}
 	
 	@PostMapping(value = "/insertBoard")
@@ -77,6 +76,7 @@ public class PartyController {
 		return "/party/boardDetail";
 	}
 	
+	@Transactional
 	@GetMapping(value = "/chkJoined/{bno}/{userNo}", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String chkJoined(@PathVariable("bno") int bno, @PathVariable("userNo") int userNo) {
@@ -116,5 +116,45 @@ public class PartyController {
 			log.info(vo.getLastJoinTime());
 		}
 		return voList;
+	}
+	
+	@GetMapping(value = "/updateLeftTime/{bno}/{userNo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public int updateLeftTime(@PathVariable("bno") int bno, @PathVariable("userNo") int userNo) {
+		log.warn("updateLeftTime에서" + bno + userNo);
+		int result = service.updateLeftTime(bno, userNo);
+		return result;
+	}
+	
+	@GetMapping(value="/leaveParty")
+	public String leaveParty(@RequestParam("bno") int bno, @RequestParam("userNo") int userNo, @RequestParam("isMaster") int isMaster) {
+		log.warn("이거 타는거에여?"+bno+userNo+isMaster);
+		if(isMaster == 0) {
+			int result1 = service.updateLeaveMember(bno, userNo);
+			return "redirect:/party/partyBoard";
+		}else {
+			int result2 = service.deleteAllPartyMember(bno);
+			int result3 = service.deleteParty(bno, userNo);
+			return "redirect:/party/partyBoard";
+		}
+	}
+	
+	@GetMapping(value="/chkJoinedOrNot/{bno}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<ChatRoomVO> chkJoinedOrNot(@PathVariable("bno") int bno){
+		return service.getPartyInfo(bno);
+	}
+	
+	@GetMapping(value="/partyUserCount/{bno}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public PartyBoardVO partyUserCount(@PathVariable("bno") int bno) {
+		return service.getOneParty(bno);
+	}
+	
+	@GetMapping(value="/chkMaster/{bno}/{userNo}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public String chkMaster(@PathVariable("bno") int bno, @PathVariable("userNo") int userNo) {
+		int result = service.chkMaster(bno, userNo);
+		return Integer.toString(result);
 	}
 }

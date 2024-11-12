@@ -41,7 +41,7 @@ public class ExhibitionController {
         log.info("Exhibitions retrieved for page 1 with filter '" + filter + "': " + exhibitions.size());
         model.addAttribute("exhibitions", exhibitions);
         model.addAttribute("selectedFilter", filter); // 선택된 필터를 모델에 추가
-        return "/popUpExhibition/exhibitionMainPage";
+        return "/exhibition/exhibitionMainPage";
     }
 
     // "더보기" 요청 시 추가 페이지 데이터 가져오기
@@ -68,7 +68,7 @@ public class ExhibitionController {
             log.warn("No exhibition found with exhNo: " + exhNo);
             model.addAttribute("errorMessage", "전시회를 찾을 수 없습니다.");
         }
-        return "/popUpExhibition/exhibitionDetailPage"; 
+        return "/exhibition/exhibitionDetailPage"; 
     }
 
     @ResponseBody
@@ -109,18 +109,29 @@ public class ExhibitionController {
         return ResponseEntity.ok(count);
     }
     
+    @GetMapping(value = "/checkUserReview", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkUserReview(@RequestParam int exhNo, @RequestParam int userNo) {
+    	boolean hasReview = exhibitionService.hasUserReviewed(exhNo, userNo);
+    	Map<String, Object> response = new HashMap<>();
+    	response.put("hasReview", hasReview);
+    	
+    	return ResponseEntity.ok(response); 
+    }
     
     @ResponseBody
     @PostMapping("/addReview")
     public ResponseEntity<String> addReview(@RequestBody exhReplyVO exhReplyVO) {
-        try {
-
-            exhibitionService.saveReview(exhReplyVO);
-            return ResponseEntity.ok("후기가 등록되었습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("후기 등록 실패: " + e.getMessage());
+    	
+    	boolean success = exhibitionService.saveReview(exhReplyVO);
+        if (success) {
+            return ResponseEntity.ok("댓글이 등록되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 등록에 실패했습니다.");
         }
-    }
+
+    }   
+        
     @ResponseBody
     @GetMapping(value = "/userReviews", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<exhReplyVO> getUserReviews(@RequestParam("exhNo") int exhNo) {

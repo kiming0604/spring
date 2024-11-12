@@ -36,24 +36,23 @@ public class MemberServiceImpl implements MemberService{
        }
 
        @Transactional
-       @Override
-       public int joinMember(signInVO svo, mCatVO mcvo) {
-           log.warn("joinMember 호출: " + svo);
+      @Override
+      public int joinMember(signInVO svo) {
+         log.warn("joinMember 호출: " + svo);
 
-           membermapper.joinMember(svo);
-           log.warn("회원가입 후 userNo: " + svo.getUserNo());
+         membermapper.joinMember(svo);
+         log.warn("회원가입 후 userNo: " + svo.getUserNo());
 
-           // userNo가 null인지 확인
-           if (svo.getUserNo() == 0) {
-               throw new RuntimeException("회원가입 후 userNo를 가져오지 못했습니다.");
-           }
+         // userNo가 null인지 확인
+         if (svo.getUserNo() == 0) {
+            throw new RuntimeException("회원가입 후 userNo를 가져오지 못했습니다.");
+         }
 
-           // 관심사 삽입
-           mcvo.setUserNo(svo.getUserNo());
-           return membermapper.insertInterest(mcvo);
-           
-
-       }
+         svo.getUserInterest().setUserNo(svo.getUserNo());
+         
+         // 관심사 삽입
+         return membermapper.insertInterest(svo.getUserInterest());
+      }
        
        //아이디 중복 확인
        @Override
@@ -119,6 +118,7 @@ public class MemberServiceImpl implements MemberService{
            
          // 관심사 삽입
           return membermapper.changeUserInterest(mcvo);
+          
          
        }
       

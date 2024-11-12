@@ -18,7 +18,9 @@ public interface ExhibitionService {
 
 	public void removeExhLike(exhLikeVO exhLikeVO);
 
-	public void saveReview(exhReplyVO exhReplyVO);
+	public boolean hasUserReviewed(int exhNo, int userNo);
+	
+	public boolean saveReview(exhReplyVO exhReplyVO);
 
 	public List<exhReplyVO> getAllReplies(int exhNo);
 

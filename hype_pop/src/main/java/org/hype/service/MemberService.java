@@ -25,7 +25,7 @@ public interface MemberService {
    
    public signInVO loginMember(signInVO svo);
 
-   public int joinMember(signInVO svo, mCatVO mcvo);
+   public int joinMember(signInVO svo);
    
    public boolean checkDuplicateId(String userId);
    

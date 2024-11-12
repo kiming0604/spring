@@ -142,5 +142,6 @@
     </div>
 
 </body>
+   <script type="text/javascript" src="/resources/memberJs/login.js"></script>
 </html>
 

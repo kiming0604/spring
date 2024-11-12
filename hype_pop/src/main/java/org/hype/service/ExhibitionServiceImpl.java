@@ -57,8 +57,15 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 	}
 
 	@Override
-	public void saveReview(exhReplyVO exhReplyVO) {
-		exhibitionmapper.insertReply(exhReplyVO);
+	public boolean hasUserReviewed(int exhNo, int userNo) {
+
+		return exhibitionmapper.countReviewsByUser(exhNo, userNo) > 0;
+	}
+	
+	@Override
+	public boolean saveReview(exhReplyVO exhReplyVO) {
+		int result = exhibitionmapper.insertReply(exhReplyVO);
+		return result > 0;
 	}
 
 	@Override

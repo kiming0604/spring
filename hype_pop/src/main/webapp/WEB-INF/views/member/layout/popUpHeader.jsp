@@ -178,6 +178,7 @@
             background-color: red; /* 빨간색 */
             border-radius: 50%; /* 둥글게 만들기 */
             z-index: 1003; /* 알림 아이콘 위에 표시 */
+            display: none;
         }
 
         .delete-button {
@@ -207,7 +208,7 @@
         </div>
         <div id="alarmDiv">
             <img src="/resources/images/alarm.png" alt="알림" id="alarmImage" style="cursor: pointer; max-height: 35px; width: auto;" onclick="handleAlarmClick()">
-            <span id="notificationDot" style="display: none;" class="notification-dot"></span> <!-- 빨간 점 추가 -->
+            <span id="notificationDot"  class="notification-dot"></span> <!-- 빨간 점 추가 -->
         </div>
         <div id="notificationList"></div> <!-- 알림 목록 추가 -->
     </div>

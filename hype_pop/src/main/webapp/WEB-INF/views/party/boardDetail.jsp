@@ -136,42 +136,45 @@ button:hover {
 	max-width: 80%; /* 채팅창 너비를 화면의 80%로 제한 */
 }
 
-/* 내 메시지 (왼쪽 정렬) */
 .my-message {
-	justify-content: flex-start;
+    justify-content: flex-end; /* 내 메시지를 오른쪽으로 */
 }
 
 .my-message .name {
-	font-weight: bold;
-	color: #e50914;
-	margin-right: 8px;
+    color: #e50914;
+    margin-left: 8px;
 }
 
 .my-message .content {
-	background-color: #222;
-	padding: 5px 10px;
-	border-radius: 8px;
-	color: #fff;
-	margin-left: 5px;
+    background-color: #222;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-right: 5px;
 }
 
-/* 다른 사람 메시지 (오른쪽 정렬) */
 .other-message {
-	justify-content: flex-end;
+    justify-content: flex-start; /* 다른 유저의 메시지를 왼쪽으로 */
 }
 
 .other-message .name {
-	font-weight: bold;
-	color: #00aaff;
-	margin-left: 8px;
+    color: #00aaff;
+    margin-right: 8px;
 }
 
 .other-message .content {
-	background-color: #444;
-	padding: 5px 10px;
-	border-radius: 8px;
-	color: #fff;
-	margin-right: 5px;
+    background-color: #444;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-left: 5px;
+}
+/* 상태 메시지 (중앙 정렬) */
+.state-message {
+    text-align: center;
+    color: #999; /* 상태 메시지 색상 */
+    font-size: 0.9em;
+    margin: 10px 0; /* 위아래 여백 추가 */
 }
 </style>
 </head>
@@ -186,6 +189,7 @@ button:hover {
 		</div>
 		<div class="boardTitle">${vo.boardTitle}</div>
 		<div class="chat-title">실시간 채팅</div>
+		<div class="memberCount"></div>
 		<div class="joinMember"></div>
 
 		<div id="chatArea"></div>
@@ -194,6 +198,9 @@ button:hover {
 			<input type="text" id="msg" placeholder="메시지를 입력하세요">
 			<button id="sendButton">전송</button>
 		</div>
+		<div id="leaveParty">
+			<button id="leavePartyBtn">파티 나가기</button>
+		</div>
 	</div>
 	<jsp:include page="layout/popUpFooter.jsp" />
 	<jsp:include page="layout/goodsNavBar.jsp" />
@@ -201,4 +208,6 @@ button:hover {
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="/resources/partyJs/boardDetail.js"></script>
+<script type="text/javascript" src="/resources/partyJs/partyHeader.js"></script>
+<script type="text/javascript" src="/resources/partyJs/partyNav.js"></script>
 </html>

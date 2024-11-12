@@ -6,6 +6,7 @@ import java.util.List;
 import org.hype.domain.ChatContentVO;
 import org.hype.domain.ChatRoomVO;
 import org.hype.domain.PartyBoardVO;
+import org.hype.domain.exhVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.signInVO;
 import org.hype.mapper.PartyMapper;
@@ -63,8 +64,10 @@ public class PartyServiceImpl implements PartyService {
 		return mapper.chkJoined(bno, userNo);
 	}
 	
+	@Transactional
 	@Override
 	public int joinParty(int bno, int userNo) {
+		mapper.updatePlusMember(bno);
 		return mapper.insertChatRoom(bno, userNo);
 	}
 	
@@ -94,4 +97,37 @@ public class PartyServiceImpl implements PartyService {
 		return mapper.getPartyUser(bno);
 	}
 	
+	@Override
+	public int updateLeftTime(int bno, int userNo) {
+		return mapper.updateLeftTime(bno, userNo);
+	}
+	
+	@Override
+	public int updatePlusJoin(int bno) {
+		return mapper.updatePlusMember(bno);
+	}
+	
+	@Override
+	public int updateLeaveMember(int bno, int userNo) {
+		int result1= mapper.chkMaster(bno, userNo);
+		return mapper.deleteLeaveMember(bno, userNo);
+	}
+	
+	@Override
+	public int deleteParty(int bno, int userNo) {
+		return mapper.deleteParty(bno, userNo);
+	}
+	public int deleteAllPartyMember(int bno) {
+		return mapper.deleteAllPartyMember(bno);
+	}
+	
+	@Override
+	public int chkMaster(int bno, int userNo) {
+		return mapper.chkMaster(bno, userNo);
+	}
+	
+	@Override
+	public List<exhVO> getExhName(String searchText) {
+		return mapper.getExhName(searchText);
+	}
 }

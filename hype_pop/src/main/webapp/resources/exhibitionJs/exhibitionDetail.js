@@ -17,7 +17,7 @@ function showSection(visibleSectionId) {
 
 document.addEventListener("DOMContentLoaded", function() {
     const exhNo = document.getElementById("exhNo").value;
-    const userNo = 2; // 현재 사용자 ID (실제로는 로그인한 사용자 ID로 설정해야 함)
+    const userNo = localStorage.getItem("userNo");
 
     // 좋아요 상태 확인 요청
     const xhrLikeStatus = new XMLHttpRequest();
@@ -55,7 +55,18 @@ document.addEventListener("DOMContentLoaded", function() {
 // 좋아요 표시 기능
 function toggleHeart(element) {
     const exhNo = document.getElementById("exhNo").value;
-    const userNo = 2; // 현재 사용자 ID (실제로는 로그인한 사용자 ID로 설정해야 함)
+    const userNo = localStorage.getItem("userNo");
+
+    // userNo가 없으면 confirm 창 띄우기
+    if (!userNo) {
+        const isConfirmed = confirm("로그인 후 이용해주세요. 로그인 페이지로 이동하시겠습니까?");
+        if (!isConfirmed) {
+            return; 
+        }
+        location.href = "/member/login"; // 로그인 페이지로 이동
+        return;
+    }
+
     const isActive = element.classList.toggle("active");
 
     const xhr = new XMLHttpRequest();
@@ -79,6 +90,7 @@ function toggleHeart(element) {
     const data = JSON.stringify({ exhNo: exhNo, userNo: userNo });
     xhr.send(data);
 }
+
 
 //별점 선택 함수
 document.addEventListener("DOMContentLoaded", () => {
@@ -106,12 +118,81 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-//댓글 등록 함수
+document.addEventListener("DOMContentLoaded", function() {
+    var exhNo = document.getElementById("exhNo").value;
+    var userNo = localStorage.getItem("userNo");
+
+    if (!userNo) {
+        // 유저가 로그인하지 않은 경우 처리
+        return;
+    }
+
+    // 유저가 이미 댓글을 작성했는지 확인하는 AJAX 요청
+    var xhrCheck = new XMLHttpRequest();
+    xhrCheck.open("GET", "/exhibition/checkUserReview?exhNo=" + exhNo + "&userNo=" + userNo, true);
+    xhrCheck.onreadystatechange = function() {
+        if (xhrCheck.readyState === 4) {
+            if (xhrCheck.status === 200) {
+                var response = JSON.parse(xhrCheck.responseText);
+                if (response.hasReview) {
+                    // 유저가 이미 댓글을 작성했으면 폼 숨기기
+                    document.getElementById("reviewForm").style.display = "none";
+                } else {
+                    // 유저가 댓글을 작성하지 않았다면 폼을 보여주기
+                    document.getElementById("reviewForm").style.display = "block";
+                }
+            } else {
+                alert("댓글 작성 여부 확인에 실패했습니다.");
+            }
+        }
+    };
+    xhrCheck.send();
+});
+
 document.getElementById("addReply").onclick = function() {
     var reviewText = document.getElementById("reviewText").value;
     var selectedRating = document.querySelector("#selectedRating span").textContent; // 선택한 별점 값을 가져옴
     var exhNo = document.getElementById("exhNo").value;
-    var userNo = 2; // 예시로 userNo를 1로 설정, 실제로는 로그인 사용자 ID로 대체
+    var userNo = localStorage.getItem("userNo"); 
+    var reviewForm = document.getElementById("reviewForm");
+
+    if (!userNo) {
+        const isConfirmed = confirm("로그인 후 이용해주세요. 로그인 페이지로 이동하시겠습니까?");
+        if (!isConfirmed) {
+            return; 
+        }
+        location.href = "/member/login"; // 로그인 페이지로 이동
+        return;
+    }
+
+    // 유저가 이미 댓글을 작성했는지 확인하는 AJAX 요청
+    var xhrCheck = new XMLHttpRequest();
+    xhrCheck.open("GET", "/exhibition/checkUserReview?exhNo=" + exhNo + "&userNo=" + userNo, true);
+    xhrCheck.onreadystatechange = function() {
+        if (xhrCheck.readyState === 4) {
+            if (xhrCheck.status === 200) {
+                var response = JSON.parse(xhrCheck.responseText);
+                if (response.hasReview) {
+                    reviewForm.style.display = "none";
+                    return;
+                }
+                // 댓글 등록
+                registerReview(); // 매개변수 없이 호출
+            } else {
+                alert("댓글 등록 여부 확인에 실패했습니다.");
+            }
+        }
+    };
+    xhrCheck.send();
+};
+
+// 댓글 등록 함수 (매개변수 없이 호출)
+function registerReview() {
+    var reviewText = document.getElementById("reviewText").value;
+    var selectedRating = document.querySelector("#selectedRating span").textContent;
+    var exhNo = document.getElementById("exhNo").value;
+    var userNo = localStorage.getItem("userNo");
+    var reviewForm = document.getElementById("reviewForm");
 
     // 유효성 검사
     if (!reviewText) {
@@ -132,8 +213,9 @@ document.getElementById("addReply").onclick = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 alert("댓글이 등록되었습니다.");
-                resetReviewForm(); // 댓글 등록 후 폼 초기화
-                fetchAndDisplayReviews(); // 댓글 목록 새로 고침
+                reviewForm.style.display = "none";
+                resetReviewForm(); 
+                fetchAndDisplayReviews(); 
             } else {
                 alert("댓글 등록이 실패했습니다.");
             }
@@ -148,11 +230,11 @@ document.getElementById("addReply").onclick = function() {
     });
 
     xhr.send(data);
-};
+}
 
 function fetchAndDisplayReviews(exhNo) {
-    // exhNo 값을 URL 인코딩
-	exhNo = document.getElementById("exhNo").value;
+    exhNo = document.getElementById("exhNo").value;
+    const userNo = localStorage.getItem("userNo");
 
     fetch(`/exhibition/userReviews?exhNo=${exhNo}`)
         .then(response => response.json())
@@ -166,6 +248,7 @@ function fetchAndDisplayReviews(exhNo) {
                         <div class="reply-container">
                             <div class="reply-header">
                                 <input type="hidden" class="exhReplyNo" value="${reply.exhReplyNo}">
+                                <input type="hidden" class="userNo" value="${reply.userNo}">
                                 <strong class="user-no" id="user-no">유저번호: ${reply.userNo}</strong>
                                 <div class="exh-score">
                                     ${generateStarIcons(reply.exhScore, true)}
@@ -182,7 +265,22 @@ function fetchAndDisplayReviews(exhNo) {
                             </div>
                         </div>
                     `;
+                    
                     reviewsList.appendChild(listItem);
+                    
+                    const updateReplyBtn = listItem.querySelector('.updateReply');
+                    const updateReplySendBtn = listItem.querySelector('.updateReplySend');
+                    const updateReplyCancelBtn = listItem.querySelector('.updateReplyCancel');
+                    const deleteReplyBtn = listItem.querySelector('.deleteReply');
+                    const userNoInput = listItem.querySelector('.userNo'); // hidden input 요소 선택
+                    const replyUserNo = userNoInput.value; // userNo 값 가져오기
+
+                    if (userNo !== replyUserNo) {
+                        updateReplyBtn.style.display = 'none';
+                        updateReplySendBtn.style.display = 'none';
+                        updateReplyCancelBtn.style.display = 'none';
+                        deleteReplyBtn.style.display = 'none';
+                    }
                 });
             } else {
                 reviewsList.innerHTML = '<li>후기가 없습니다.</li>';
@@ -315,8 +413,9 @@ function handleUpdateCancel(button) {
 
 function handleDeleteClick(button) {
     const replyContainer = button.closest('.reply-container');
-    const userNo = replyContainer.querySelector('.user-no').textContent.split(': ')[1]; // 유저번호 추출
-    const exhReplyNo = replyContainer.querySelector('.exhReplyNo').value; // 전시회 댓글 번호 추출
+    const userNo = replyContainer.querySelector('.user-no').textContent.split(': ')[1]; 
+    const exhReplyNo = replyContainer.querySelector('.exhReplyNo').value;
+    var reviewForm = document.getElementById("reviewForm");
 
     // 삭제 확인 대화상자 표시
     const isConfirmed = confirm('정말로 이 댓글을 삭제하시겠습니까?');
@@ -329,6 +428,7 @@ function handleDeleteClick(button) {
             if (response.ok) {
                 replyContainer.remove();
                 alert('댓글이 삭제되었습니다.');
+                reviewForm.style.display = "block";
             } else {
                 alert('댓글 삭제에 실패했습니다.');
             }
@@ -387,6 +487,4 @@ function resetReviewForm() {
     document.querySelectorAll("#newReviewStars span").forEach(s => s.classList.remove("active")); // 별점 초기화
     document.querySelector("#selectedRating span").textContent = "0"; // 선택한 별점 표시 초기화
 }
-
-
 

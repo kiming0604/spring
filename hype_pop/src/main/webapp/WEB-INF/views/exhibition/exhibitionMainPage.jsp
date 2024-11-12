@@ -152,6 +152,26 @@ ul {
     text-align: center; /* `option` 안의 글자들을 중앙 정렬 */
     text-align-last: center; /* 선택된 항목의 글자를 중앙 정렬 */
 }
+#search {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* filterSelect와 간격을 줌 */
+}
+
+#searchExh {
+    height: 25px; /* 원하는 높이로 설정 */
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#searchBtn {
+    width: 30px; /* 이미지의 너비 */
+    height: 25px; /* 텍스트 입력의 높이와 동일하게 설정 */
+    margin-left: 5px; /* 텍스트 입력과 이미지 간격 */
+    cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -166,6 +186,10 @@ ul {
 	<br>
 
 	<div class="filter">
+		<div id = "search">
+			<input type = "text" id = "searchExh" placeholder = "검색...">
+			<img id="searchBtn" src="/resources/images/searchicon.png" alt="Search">
+		</div>
 		<select id="filterSelect" onchange="filterExhibitions()">
 			<option value="latest">시작일순</option>
 			<option value="dueSoon">마감순</option>
@@ -222,7 +246,6 @@ ul {
 	<hr>
 	<br>
 
-	<jsp:include page="layout/popUpNavBar.jsp" />
 	<jsp:include page="layout/popUpFooter.jsp" />
 	<script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
 	<script type="text/javascript"

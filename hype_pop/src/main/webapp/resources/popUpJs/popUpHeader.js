@@ -80,7 +80,27 @@ function updateNotificationUI(notifications) {
         });
 
         // 메시지 구성
-        const message = `${notification.title} ${notification.psName} 스토어의 ${notification.message} <br> 전송날짜: ${formattedDate}`;
+        let message = "";
+        switch (notification.type) {
+            case 'psNo':
+                message = `${notification.title} ${notification.psName}의 스토어 종료까지 5일 남았습니다.<br>전송날짜: ${formattedDate}`;
+                break;
+            case 'exhNo':
+                message = `${notification.title} ${notification.exhName}의 전시회 종료까지 5일 남았습니다.<br>전송날짜: ${formattedDate}`;
+                break;
+            case 'gNo':
+                message = `${notification.title} ${notification.goodsName} 상품의 판매 종료까지 5일 남았습니다.<br>전송날짜: ${formattedDate}`;
+                break;
+            case 'noticeNo':
+                message = `${notification.title} ${notification.noticeTitle}<br>전송날짜: ${formattedDate}`;
+                break;
+            case 'qNo':
+                message = `${notification.title} ${notification.qnaTitle}<br>전송날짜: ${formattedDate}`;
+                break;
+            default:
+                message = `${notification.title}<br>전송날짜: ${formattedDate}`;
+        }
+    
 
         // 메시지 요소
         const messageElement = document.createElement('span');
