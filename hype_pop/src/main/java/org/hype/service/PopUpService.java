@@ -7,12 +7,16 @@ import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
 import org.hype.domain.mCatVO;
 import org.hype.domain.pCatVO;
+import org.hype.domain.pImgVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
 
 public interface PopUpService {
 	// 인기많은 친구 8개 가져오기
     public List<popStoreVO> getPopularPopUps();
+    
+    // 전체 관심사 중 좋아요 수가 가장 많은 상위 3개의 카테고리를 선정하고 3개의 카테고리별 각각 8개의 스토어를 가져옴 
+    public Map<String, List<popStoreVO>> getTopCategoriesByLikes();
     //유저가 고른 관심사 별 상위 8개
     public Map<String, List<popStoreVO>> getTopStoresByInterests(int userno);
     //이름으로 스토어 정보 가져오기
@@ -49,5 +53,8 @@ public interface PopUpService {
 
 		// 좋아요한 팝업스토어 가져오기
 		public List<likeVO> getUserLike(int userNo);
+
+		public pImgVO getImageByStoreId(int psNo);
+
 	
 }

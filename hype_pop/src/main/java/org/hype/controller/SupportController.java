@@ -101,24 +101,29 @@ public class SupportController {
 	}	
 	
 	@PostMapping("/createNotice") // 공지 생성
-    public String createNotice(@RequestParam String title, 
-                                @RequestParam String content, 
-                                Model model) {
-        noticeVO notice = new noticeVO();
-        notice.setNoticeTitle(title);
-        notice.setNoticeContent(content);
+	public String createNotice(@RequestParam String title, 
+	                           @RequestParam String content, 
+	                           Model model) {
+	    noticeVO notice = new noticeVO();
+	    notice.setNoticeTitle(title);
+	    notice.setNoticeContent(content);
 
-        boolean isSaved = noticeService.createNotice(notice); // 공지사항 저장
+	    boolean isSaved = noticeService.createNotice(notice); // 공지사항 저장
 
-        if (isSaved) {
-            model.addAttribute("message", "공지사항이 성공적으로 저장되었습니다.");
-        } else {
-            model.addAttribute("message", "공지사항 저장에 실패하였습니다.");
-        }
+	    if (isSaved) {
+	        model.addAttribute("message", "공지사항이 성공적으로 저장되었습니다.");
 
-        return "redirect:/hypePop/customerMain"; // 공지사항 리스트로 리다이렉트
-    }
-	
+	        // 공지사항 저장 후 알림 전송
+	        int noticeNo = notice.getNoticeNo(); // 저장된 공지사항의 ID를 가져옴
+	        AlarmController alc = new AlarmController(); 
+	        alc.sendNoticeNotifications(noticeNo); // 알림 전송 메서드 호출
+
+	    } else {
+	        model.addAttribute("message", "공지사항 저장에 실패하였습니다.");
+	    }
+
+	    return "redirect:/hypePop/customerMain"; // 공지사항 리스트로 리다이렉트
+	}
 	// 문의 작성 페이지로 이동
 	@GetMapping("/createInquiry")
 	public String createInquiry() {

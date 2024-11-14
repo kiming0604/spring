@@ -10,6 +10,7 @@ import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
 import org.hype.domain.mCatVO;
 import org.hype.domain.pCatVO;
+import org.hype.domain.pImgVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
 import org.hype.service.PopUpService;
@@ -30,49 +31,58 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Controller
-@RequestMapping("/hypePop")
+@RequestMapping("/hypePop/*")
 public class PopUpController {
 	@Autowired
 	PopUpService service;
 	
-	  @RequestMapping(value = "/popUpMain", method = RequestMethod.GET)
-	    public String home(Locale locale, Model model) {
-	        int userno = 5; // 임의의 사용자 번호 (예: 로그인한 사용자의 번호)
+	@RequestMapping(value = "/popUpMain", method = RequestMethod.GET)
+	public String home(Locale locale, Model model) {
+	    int userno = 5; // 임의의 사용자 번호 (예: 로그인한 사용자의 번호)
 
-	        // 인기 팝업 스토어 조회
-	        List<popStoreVO> popularPopUps = service.getPopularPopUps(); 
+	    // 인기 팝업 스토어 조회
+	    List<popStoreVO> popularPopUps = service.getPopularPopUps(); 
 
-	        // 각 스토어에 이미지 데이터 추가
-	        for (popStoreVO popUp : popularPopUps) {
-	           
-	        	// 이미지 삽입 기능
-	        	
-	        	//  List<pImgVO> imgVo = service.getImageByStoreId(popUp.getPsNo()); // 스토어 ID로 이미지 조회
-	           // popUp.setPsImg(imgVo); // 이미지 설정 (setImage() 메소드가 필요함)
+	    // 각 스토어에 이미지 데이터 추가
+	    for (popStoreVO popUp : popularPopUps) {
+	        pImgVO imgVo = service.getImageByStoreId(popUp.getPsNo());
+	        if (imgVo != null) {
+	            popUp.setPsImg(imgVo); // pImgVO를 바로 설정
 	        }
+	    }
+	    model.addAttribute("popularPopUps", popularPopUps); // 모델에 인기 팝업 추가
 
-	        model.addAttribute("popularPopUps", popularPopUps); // 모델에 인기 팝업 추가
+	    // 사용자 관심사에 따른 상위 스토어 조회
+	    Map<String, List<popStoreVO>> topStoresByInterest = service.getTopStoresByInterests(userno);
 
-	        // 사용자 관심사에 따른 상위 스토어 조회
-	        Map<String, List<popStoreVO>> topStoresByInterest = service.getTopStoresByInterests(userno);
-
-	        // 각 관심사별 상위 스토어에 이미지 데이터 추가
-	        for (List<popStoreVO> storeList : topStoresByInterest.values()) {
-	            for (popStoreVO popUp : storeList) {
-	         
-	            	
-	              // 이미지 삽입 기능 	
-	           //  	List<pImgVO> imgVo = service.getImageByStoreId(popUp.getPsNo()); // 스토어 ID로 이미지 조회
-	          //      popUp.setPsImg(imgVo); // 이미지 설정
+	    // 각 관심사별 상위 스토어에 이미지 데이터 추가
+	    for (List<popStoreVO> storeList : topStoresByInterest.values()) {
+	        for (popStoreVO popUp2 : storeList) {
+	            pImgVO imgVo = service.getImageByStoreId(popUp2.getPsNo());
+	            if (imgVo != null) {
+	                popUp2.setPsImg(imgVo); // pImgVO를 바로 설정
 	            }
 	        }
-
-	        model.addAttribute("topStoresByInterest", topStoresByInterest); // 모델에 관심사별 상위 스토어 추가
-
-	        return "popUp/popUpMainPage"; // JSP 페이지 이름 반환
 	    }
-	
+	    model.addAttribute("topStoresByInterestMap", topStoresByInterest); // 모델에 관심사별 상위 스토어 추가
 
+	    // 비로그인 사용자를 위한 인기 관심사 상위 3개 스토어 조회
+	    Map<String, List<popStoreVO>> topCategoriesByLikes = service.getTopCategoriesByLikes();
+	    for (List<popStoreVO> storeList : topCategoriesByLikes.values()) {
+	        for (popStoreVO popUp3 : storeList) {
+	            pImgVO imgVo = service.getImageByStoreId(popUp3.getPsNo());
+	            if (imgVo != null) {
+	                popUp3.setPsImg(imgVo); // pImgVO를 바로 설정
+	            }
+	        }
+	    }
+	    model.addAttribute("topCategoriesByLikesMap", topCategoriesByLikes); // 모델에 인기 관심사별 상위 스토어 추가
+
+	    return "popUp/popUpMainPage"; // JSP 페이지 이름 반환
+	}
+
+
+	
 	@GetMapping("/search") // URL 매핑에 해당하는 메서드
 	public String search(@RequestParam("searchData") String searchData, Model model) {
 	    // searchData를 받아 검색 결과를 처리
@@ -153,6 +163,7 @@ public class PopUpController {
   	    
   	    return "/popUp/searchResultPage"; // 검색 결과를 보여주는 JSP 경로
     }
+    
 
     @GetMapping("/popUpDetails")
     public String popUpDetails(@RequestParam("storeName") String storeName, Model model) {

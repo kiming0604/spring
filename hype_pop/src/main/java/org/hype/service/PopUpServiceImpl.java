@@ -9,6 +9,7 @@ import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
 import org.hype.domain.mCatVO;
 import org.hype.domain.pCatVO;
+import org.hype.domain.pImgVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
 import org.hype.mapper.AttachMapper;
@@ -196,7 +197,23 @@ public List<popStoreVO> findNearbyStores(double lat, double lng, double radius) 
 
 		return mapper.getUserLike(userNo);
 	} 
-	
-	
+	@Transactional
+	@Override
+	public Map<String, List<popStoreVO>> getTopCategoriesByLikes() {
+		   List<String> interests = mapper.getTopInterestsByLikes();
+	        Map<String, List<popStoreVO>> results = new HashMap<>();
+
+	        if (interests != null && !interests.isEmpty()) {
+	            for (String interest : interests) {
+	                List<popStoreVO> topStores = mapper.getTopStoresByInterest(interest);
+	                results.put(interest, topStores); // 관심사와 관련된 상위 스토어 목록을 Map에 추가
+	            }
+	        }
+	        return results;
+	}
+	@Override
+	public pImgVO getImageByStoreId(int psNo) {
+		  return mapper.getImageByStoreId(psNo);
+	}
 
 }
