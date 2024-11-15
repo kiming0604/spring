@@ -215,5 +215,24 @@ public List<popStoreVO> findNearbyStores(double lat, double lng, double radius) 
 	public pImgVO getImageByStoreId(int psNo) {
 		  return mapper.getImageByStoreId(psNo);
 	}
-
+@Override
+public double getAvgRating(int psNo) {
+	double result = mapper.getAvgRating(psNo);
+	
+	return result;
+}
+@Override
+public boolean checkUserLiked(int psNo, int userNo) {
+    // Map을 사용하여 파라미터 전달
+    Map<String, Object> params = new HashMap<>();
+    params.put("userNo", userNo);  // 전달된 userNo를 Map에 추가
+    params.put("psNo", psNo);      // 전달된 psNo를 Map에 추가
+    
+    // 매퍼 메서드 호출
+    int result = mapper.checkUserLiked(params);
+    System.out.println("쿼리 결과 result: " + result);  // 쿼리 결과 확인
+    
+    // result가 0보다 크면 true, 아니면 false 반환
+    return result > 0;
+}
 }

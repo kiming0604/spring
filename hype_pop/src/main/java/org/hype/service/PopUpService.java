@@ -43,18 +43,23 @@ public interface PopUpService {
 	// 1km 이내 스토어 찾기 로직
 	public List<popStoreVO> findNearbyStores(double lat, double lng, double radius);
 	
+	public pImgVO getImageByStoreId(int psNo);
+	
+	public double getAvgRating(int psNo);
+	
+	// 관심사 가져오기
+	public List<mCatVO> getUserInterest(int userNo);
+	
+	// 좋아요한 팝업스토어 가져오기
+	public List<likeVO> getUserLike(int userNo);
+	
+	public boolean checkUserLiked(int psNo, int userNo);
 	//요셉이 병합부분 
 	public List<popStoreVO> showCalendar();
 
 	public List<pCatVO> getCategoryData();
 	
-	    // 관심사 가져오기
-		public List<mCatVO> getUserInterest(int userNo);
 
-		// 좋아요한 팝업스토어 가져오기
-		public List<likeVO> getUserLike(int userNo);
-
-		public pImgVO getImageByStoreId(int psNo);
 
 	
 }

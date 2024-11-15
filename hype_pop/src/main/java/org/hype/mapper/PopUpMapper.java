@@ -68,6 +68,10 @@ public interface PopUpMapper {
 
 	public pImgVO getImageByStoreId(int psNo);
 
+	public double getAvgRating(int psNo);
+
+	int checkUserLiked(Map<String, Object> params);
+
 
 
 

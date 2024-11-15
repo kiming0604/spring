@@ -172,15 +172,26 @@ public class PopUpController {
         
         // DB에서 상세 정보를 가져오는 로직 작성
         popStoreVO vo = service.getStoreInfoByName(storeName);
-       
-         List<goodsVO> gvo = service.getGoodsInfoByName(storeName);
-         
-         for (goodsVO goods : gvo) {
-        	    System.out.println("상품명: " + goods.getGname() + ", 가격: " + goods.getGprice() + "원");
-        	}
         
-    
-        // storeName을 JSP에 전달
+        System.out.println("상세 스토어 번호는 : " + vo.getPsNo());
+        
+        pImgVO imgVo = service.getImageByStoreId(vo.getPsNo());
+        vo.setPsImg(imgVo);
+        
+        List<goodsVO> gvo = service.getGoodsInfoByName(storeName);
+        
+        for (goodsVO goods : gvo) {
+            System.out.println("상품명: " + goods.getGname() + ", 가격: " + goods.getGprice() + "원" +
+        "상품 번호" + goods.getGno());
+        }
+        
+        // 평균 별점 계산
+        double avgRating = service.getAvgRating(vo.getPsNo());
+        
+        // popStoreVO 객체에 평균 별점 추가
+        vo.setAvgRating(avgRating);  // popStoreVO에 avgRating 필드를 추가한 경우
+        
+        // storeName과 관련된 데이터 전달
         model.addAttribute("storeInfo", vo);
         model.addAttribute("goodsInfo", gvo);
         

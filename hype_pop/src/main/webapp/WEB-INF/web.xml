@@ -31,8 +31,10 @@
             <max-request-size>41943040</max-request-size>
             <file-size-threshold>20971520</file-size-threshold>
         </multipart-config>
-    </servlet>
 
+        <async-supported>true</async-supported> <!-- 비동기 지원 추가 -->
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
@@ -50,6 +52,8 @@
             <param-name>forceEncoding</param-name>
             <param-value>true</param-value>
         </init-param>
+
+        <async-supported>true</async-supported> <!-- 비동기 지원 추가 -->
     </filter>
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>

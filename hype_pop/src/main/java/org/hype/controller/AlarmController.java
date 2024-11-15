@@ -179,6 +179,8 @@ public class AlarmController extends TextWebSocketHandler {
             }
         }
     }
+    
+    // 공지사항 알림
     public void sendNoticeNotifications(int noticeNo) {
         
         List<Integer> allUserNos = service.getAllUserNos(); // 전체 사용자 목록 가져오기

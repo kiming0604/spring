@@ -7,11 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hype.domain.gCatVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
+import org.hype.domain.likedPopImgVO;
 import org.hype.domain.pImgVO;
 import org.hype.service.GoodsService;
 import org.hype.service.PopUpService;
@@ -25,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -87,6 +91,26 @@ public class PopUpRestController {
         } catch (Exception e) {
             log.error("이미지 정보 가져오기 실패: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);  // 오류 발생 시 500 반환
+        }
+    }
+    @PostMapping(value = "/checkUserLiked", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> checkUserLiked(@RequestBody likedPopImgVO likeRequest) {
+        try {
+        	
+        	System.out.println("서버에서 받은 PSNO USERNO : " +likeRequest.getPsNo() );
+        	System.out.println("서버에서 받은 PSNO USERNO : " +likeRequest.getUserNo() );
+        	
+            boolean isLiked = service.checkUserLiked(likeRequest.getPsNo(), likeRequest.getUserNo());
+            
+            // 'liked'라는 이름의 boolean 값을 반환
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("liked", isLiked);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 오류 발생 시 'liked' 값을 false로 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("liked", false));
         }
     }
 }

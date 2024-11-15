@@ -9,6 +9,8 @@ import org.hype.domain.noticeVO;
 import org.hype.domain.qnaVO;
 import org.hype.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,11 @@ public class SupportController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+
+    @Autowired
+    @Qualifier("alarmController")  // 어떤 빈을 사용할지 명시
+    private AlarmController alarmController;
 	
 	@GetMapping(value = "/notices", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -112,11 +119,7 @@ public class SupportController {
 
 	    if (isSaved) {
 	        model.addAttribute("message", "공지사항이 성공적으로 저장되었습니다.");
-
-	        // 공지사항 저장 후 알림 전송
-	        int noticeNo = notice.getNoticeNo(); // 저장된 공지사항의 ID를 가져옴
-	        AlarmController alc = new AlarmController(); 
-	        alc.sendNoticeNotifications(noticeNo); // 알림 전송 메서드 호출
+             alarmController.sendNoticeNotifications(notice.getNoticeNo()); // 알림 전송 메서드 호출
 
 	    } else {
 	        model.addAttribute("message", "공지사항 저장에 실패하였습니다.");

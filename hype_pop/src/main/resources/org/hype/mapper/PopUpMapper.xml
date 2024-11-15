@@ -218,47 +218,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     GROUP BY PSNO
     ]]>
 </select>
-
-	<!-- 특정 팝업 스토어의 평균 별점을 계산하는 쿼리 -->
-	<select id="findRatingsByPsNo" parameterType="int"
-		resultType="double">
-		SELECT NVL(AVG(psScore), 0)
-		FROM pop_reply_tbl
-		WHERE psNo =
-		#{psNo}
-	</select>
-
-
-	<!-- 근처 스토어 찾기 -->
-	<select id="findNearbyStores" parameterType="map"
-		resultType="org.hype.domain.popStoreVO">
-    <![CDATA[
-        SELECT *
-        FROM pop_main_tbl
-        WHERE (
-            6371000 * acos(
-                cos(#{lat} * 3.14159 / 180) * 
-                cos(latitude * 3.14159 / 180) * 
-                cos(longitude * 3.14159 / 180 - #{lng} * 3.14159 / 180) + 
-                sin(#{lat} * 3.14159 / 180) * 
-                sin(latitude * 3.14159 / 180)
-            )
-        ) <= #{radius}
-    ]]>
-	</select>
-
-
-
-	<!--요셉이 캘린더 부분 -->
-	<select id="showCalendar"
-		resultType="org.hype.domain.popStoreVO">
-		select * from pop_main_tbl order by psno
-	</select>
-
-	<select id="getCategoryData" resultType="org.hype.domain.pCatVO">
-		select * from
-		pop_cat_tbl order by psno
-	</select>
 	
 	<!-- 관심사 가져오기 -->
 	<select id="getUserInterest" resultType="org.hype.domain.mCatVO">
@@ -322,6 +281,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             WHERE ROWNUM <= 3
         ]]>
     </select>
+<select id="getAvgRating" parameterType="int" resultType="double">
+    SELECT NVL(AVG(psScore), 0)
+    FROM pop_reply_tbl
+    WHERE psNo = #{psNo}
+</select>
 
+	<!-- 특정 팝업 스토어의 평균 별점을 계산하는 쿼리 -->
+	<select id="findRatingsByPsNo" parameterType="int"
+		resultType="double">
+		SELECT NVL(AVG(psScore), 0)
+		FROM pop_reply_tbl
+		WHERE psNo =
+		#{psNo}
+	</select>
+	
+	
+<select id="checkUserLiked" resultType="int">
+    SELECT COUNT(*)
+    FROM like_list_tbl
+    WHERE userNo = #{userNo} AND psNo = #{psNo}
+</select>
+
+
+
+	<!-- 근처 스토어 찾기 -->
+	<select id="findNearbyStores" parameterType="map"
+		resultType="org.hype.domain.popStoreVO">
+    <![CDATA[
+        SELECT *
+        FROM pop_main_tbl
+        WHERE (
+            6371000 * acos(
+                cos(#{lat} * 3.14159 / 180) * 
+                cos(latitude * 3.14159 / 180) * 
+                cos(longitude * 3.14159 / 180 - #{lng} * 3.14159 / 180) + 
+                sin(#{lat} * 3.14159 / 180) * 
+                sin(latitude * 3.14159 / 180)
+            )
+        ) <= #{radius}
+    ]]>
+	</select>
+
+
+
+	<!--요셉이 캘린더 부분 -->
+	<select id="showCalendar"
+		resultType="org.hype.domain.popStoreVO">
+		select * from pop_main_tbl order by psno
+	</select>
+
+	<select id="getCategoryData" resultType="org.hype.domain.pCatVO">
+		select * from
+		pop_cat_tbl order by psno
+	</select>
 
 </mapper>
