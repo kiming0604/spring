@@ -71,16 +71,16 @@ public class GoodsRestController {
     @GetMapping("/goodsBannerImages/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveBannerImage(@PathVariable String fileName) throws MalformedURLException {
-        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\êµ¿ì¦ˆ ë°°ë„ˆ ì‚¬ì§„";
+        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\±ÂÁî ¹è³Ê »çÁø";
         String imagePath = uploadFolder + File.separator + fileName;
         Path path = Paths.get(imagePath);
         
         if (!Files.exists(path)) {
-            throw new RuntimeException("íŒŒì¼ì´ ì—†ì–´ì—¬: " + fileName);
+            throw new RuntimeException("ÆÄÀÏÀÌ ¾ø¾î¿©: " + fileName);
         }
         
         if (!Files.isReadable(path)) {
-            throw new RuntimeException("íŒŒì¼ì„ ì½ì„ ìˆ˜ ì—†ì–´ìš”: " + fileName);
+            throw new RuntimeException("ÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø¾î¿ä: " + fileName);
         }
         
         Resource file = new FileSystemResource(path.toFile());
@@ -92,16 +92,16 @@ public class GoodsRestController {
     @GetMapping("/goodsDetailImages/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveDetailImage(@PathVariable String fileName) throws MalformedURLException {
-        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\êµ¿ì¦ˆ ìƒì„¸ ì‚¬ì§„";
+        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\±ÂÁî »ó¼¼ »çÁø";
         String imagePath = uploadFolder + File.separator + fileName;
         Path path = Paths.get(imagePath);
         
         if (!Files.exists(path)) {
-            throw new RuntimeException("íŒŒì¼ì´ ì—†ì–´ì—¬: " + fileName);
+            throw new RuntimeException("ÆÄÀÏÀÌ ¾ø¾î¿©: " + fileName);
         }
         
         if (!Files.isReadable(path)) {
-            throw new RuntimeException("íŒŒì¼ì„ ì½ì„ ìˆ˜ ì—†ì–´ìš”: " + fileName);
+            throw new RuntimeException("ÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø¾î¿ä: " + fileName);
         }
         
         Resource file = new FileSystemResource(path.toFile());

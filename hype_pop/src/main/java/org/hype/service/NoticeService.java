@@ -35,7 +35,7 @@ public interface NoticeService {
    public int deleteInquiry(int qnaNo);
    
    
-   //ì¶”ê°€
+   //Ãß°¡
    public List<qnaVO> getUserInquiriesWithPaging(int userNo, int pageNum, int amount);
    
    public int getTotalInquiryCountByUser(@Param("userNo") int userNo);

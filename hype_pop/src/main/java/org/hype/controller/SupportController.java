@@ -9,8 +9,6 @@ import org.hype.domain.noticeVO;
 import org.hype.domain.qnaVO;
 import org.hype.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +32,6 @@ public class SupportController {
 	@Autowired
 	private NoticeService noticeService;
 	
-
-    @Autowired
-    @Qualifier("alarmController")  // ì–´ë–¤ ë¹ˆì„ ì‚¬ìš©í• ì§€ ëª…ì‹œ
-    private AlarmController alarmController;
-	
 	@GetMapping(value = "/notices", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> getNoticeList(
@@ -48,7 +41,7 @@ public class SupportController {
 	    int totalCount = noticeService.getTotalNoticeCount(); 
 
 	    Map<String, Object> response = new HashMap<>();
-	    response.put("notices", notices);// ì´ ê°œìˆ˜ í¬í•¨
+	    response.put("notices", notices);// ÃÑ °³¼ö Æ÷ÇÔ
 	    response.put("totalCount", totalCount); 
 	    
 	    return new ResponseEntity<>(response, HttpStatus.OK);
@@ -61,7 +54,7 @@ public class SupportController {
 	    @RequestParam(defaultValue = "5") int amount,
 	    @RequestParam int userNo) {
 	    List<qnaVO> inquiries = noticeService.getInquiriesWithPaging(pageNum, amount, userNo);
-	    int totalCount = noticeService.getTotalInquiryCount(userNo); // ì´ ë¬¸ì˜ ê°œìˆ˜ ê°€ì ¸ì˜¤ê¸°
+	    int totalCount = noticeService.getTotalInquiryCount(userNo); // ÃÑ ¹®ÀÇ °³¼ö °¡Á®¿À±â
 
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("inquiries", inquiries);
@@ -76,7 +69,7 @@ public class SupportController {
 	    @RequestParam(defaultValue = "1") int pageNum,
 	    @RequestParam(defaultValue = "5") int amount,
 	    @RequestParam int userNo,
-	    @RequestParam(required = false) Boolean answered) { // Booleanìœ¼ë¡œ ë³€ê²½
+	    @RequestParam(required = false) Boolean answered) { // BooleanÀ¸·Î º¯°æ
 
 	    Map<String, Object> response = new HashMap<>();
 	    
@@ -84,11 +77,11 @@ public class SupportController {
 	    int totalCount;
 
 	    if (answered == null) {
-	        // ì „ì²´ë³´ê¸°
-	        inquiries = noticeService.getInquiriesWithPaging(pageNum, amount, userNo); // ì „ì²´ ì¡°íšŒ ë©”ì„œë“œ í˜¸ì¶œ
-	        totalCount = noticeService.getTotalInquiryCount(userNo); // ì „ì²´ ê°œìˆ˜ ì¡°íšŒ ë©”ì„œë“œ í˜¸ì¶œ
+	        // ÀüÃ¼º¸±â
+	        inquiries = noticeService.getInquiriesWithPaging(pageNum, amount, userNo); // ÀüÃ¼ Á¶È¸ ¸Ş¼­µå È£Ãâ
+	        totalCount = noticeService.getTotalInquiryCount(userNo); // ÀüÃ¼ °³¼ö Á¶È¸ ¸Ş¼­µå È£Ãâ
 	    } else {
-	        // ë‹µë³€ ìƒíƒœì— ë”°ë¼ ì¡°íšŒ
+	        // ´äº¯ »óÅÂ¿¡ µû¶ó Á¶È¸
 	        inquiries = noticeService.replyCheckInquiries(pageNum, amount, userNo, answered);
 	        totalCount = noticeService.replyCheckCount(userNo, answered);
 	    }
@@ -100,78 +93,77 @@ public class SupportController {
 	}
 
 
-	// ê³µì§€ì‚¬í•­ ì‘ì„± í˜ì´ì§€ë¡œ ì´ë™
+	// °øÁö»çÇ× ÀÛ¼º ÆäÀÌÁö·Î ÀÌµ¿
 	@GetMapping("/createNotice")
 	public String createNotice() {
 		
 		return "/customerService/createNotice";
 	}	
 	
-	@PostMapping("/createNotice") // ê³µì§€ ìƒì„±
-	public String createNotice(@RequestParam String title, 
-	                           @RequestParam String content, 
-	                           Model model) {
-	    noticeVO notice = new noticeVO();
-	    notice.setNoticeTitle(title);
-	    notice.setNoticeContent(content);
+	@PostMapping("/createNotice") // °øÁö »ı¼º
+    public String createNotice(@RequestParam String title, 
+                                @RequestParam String content, 
+                                Model model) {
+        noticeVO notice = new noticeVO();
+        notice.setNoticeTitle(title);
+        notice.setNoticeContent(content);
 
-	    boolean isSaved = noticeService.createNotice(notice); // ê³µì§€ì‚¬í•­ ì €ì¥
+        boolean isSaved = noticeService.createNotice(notice); // °øÁö»çÇ× ÀúÀå
 
-	    if (isSaved) {
-	        model.addAttribute("message", "ê³µì§€ì‚¬í•­ì´ ì„±ê³µì ìœ¼ë¡œ ì €ì¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
-             alarmController.sendNoticeNotifications(notice.getNoticeNo()); // ì•Œë¦¼ ì „ì†¡ ë©”ì„œë“œ í˜¸ì¶œ
+        if (isSaved) {
+            model.addAttribute("message", "°øÁö»çÇ×ÀÌ ¼º°øÀûÀ¸·Î ÀúÀåµÇ¾ú½À´Ï´Ù.");
+        } else {
+            model.addAttribute("message", "°øÁö»çÇ× ÀúÀå¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+        }
 
-	    } else {
-	        model.addAttribute("message", "ê³µì§€ì‚¬í•­ ì €ì¥ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
-	    }
-
-	    return "redirect:/hypePop/customerMain"; // ê³µì§€ì‚¬í•­ ë¦¬ìŠ¤íŠ¸ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
-	}
-	// ë¬¸ì˜ ì‘ì„± í˜ì´ì§€ë¡œ ì´ë™
+        return "redirect:/hypePop/customerMain"; // °øÁö»çÇ× ¸®½ºÆ®·Î ¸®´ÙÀÌ·ºÆ®
+    }
+	
+	// ¹®ÀÇ ÀÛ¼º ÆäÀÌÁö·Î ÀÌµ¿
 	@GetMapping("/createInquiry")
 	public String createInquiry() {
 		
 		return "/customerService/createInquiry";
 	}
 	
-	@PostMapping("/createInquiry") // ê³µì§€ ìƒì„±
+	@PostMapping("/createInquiry") // °øÁö »ı¼º
 	public String createInquiry(@RequestParam String title, @RequestParam String qnaType, 
 	                            @RequestParam String content, /*HttpSession session,*/ Model model) {
-	    // ì„¸ì…˜ì—ì„œ userNo ê°€ì ¸ì˜¤ê¸°
+	    // ¼¼¼Ç¿¡¼­ userNo °¡Á®¿À±â
 //	    Integer userNo = (Integer) session.getAttribute("userNo");
 	    
-	    // qnaVO ê°ì²´ ìƒì„± ë° í•„ë“œ ì„¤ì •
+	    // qnaVO °´Ã¼ »ı¼º ¹× ÇÊµå ¼³Á¤
 	    qnaVO qna = new qnaVO();
 	    qna.setQnaTitle(title);
 	    qna.setQnaType(qnaType);
 	    qna.setQnaContext(content);
-	    qna.setQnaAnswer("ë‹µë³€ì—†ìŒ");
+	    qna.setQnaAnswer("´äº¯¾øÀ½");
 	    qna.setUserNo(1);
 	    
-	    // userNo ì„¤ì •
-//	    qna.setUserNo(userNo); // userNoë¥¼ qnaVOì— ì„¤ì •í•´ì•¼ í•˜ëŠ” ë©”ì„œë“œ ì¶”ê°€ í•„ìš”
+	    // userNo ¼³Á¤
+//	    qna.setUserNo(userNo); // userNo¸¦ qnaVO¿¡ ¼³Á¤ÇØ¾ß ÇÏ´Â ¸Ş¼­µå Ãß°¡ ÇÊ¿ä
 
-	    // ë¬¸ì˜ ì €ì¥
+	    // ¹®ÀÇ ÀúÀå
 	    boolean isSaved = noticeService.createInquiry(qna); 
 
 	    if (isSaved) {
-	        model.addAttribute("message", "ë¬¸ì˜ê°€ ì„±ê³µì ìœ¼ë¡œ ì €ì¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
+	        model.addAttribute("message", "¹®ÀÇ°¡ ¼º°øÀûÀ¸·Î ÀúÀåµÇ¾ú½À´Ï´Ù.");
 	    } else {
-	        model.addAttribute("message", "ë¬¸ì˜ ì €ì¥ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
+	        model.addAttribute("message", "¹®ÀÇ ÀúÀå¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
 	    }
 
-	    return "redirect:/hypePop/customerMain?tab=inquiry"; // ë¬¸ì˜ì‚¬í•­ ë¦¬ìŠ¤íŠ¸ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+	    return "redirect:/hypePop/customerMain?tab=inquiry"; // ¹®ÀÇ»çÇ× ¸®½ºÆ®·Î ¸®´ÙÀÌ·ºÆ®
 	}
 
 
-	@GetMapping("/noticeInfo") // ê³µì§€ ìƒì„¸ ì •ë³´
+	@GetMapping("/noticeInfo") // °øÁö »ó¼¼ Á¤º¸
 	public String noticeInfoList(@RequestParam("noticeNo") int noticeNo, Model model) {
 		 noticeVO noticeInfo = noticeService.getNoticeInfo(noticeNo);
 	     model.addAttribute("noticeInfo", noticeInfo);
 	     return "/customerService/noticeInfo";  
 	}
 	
-	@GetMapping("/inquiryInfo") // ë¬¸ì˜ ìƒì„¸ ì •ë³´
+	@GetMapping("/inquiryInfo") // ¹®ÀÇ »ó¼¼ Á¤º¸
 	public String inquiryInfoList(@RequestParam("qnaNo") int qnaNo, Model model) {
 		qnaVO inquiryInfo = noticeService.getInquiryInfo(qnaNo);
 		model.addAttribute("inquiryInfo", inquiryInfo);
@@ -189,15 +181,15 @@ public class SupportController {
 	@PostMapping("/deleteNotice")
 	public String deleteNotice(@RequestParam("noticeNo") int noticeNo, RedirectAttributes redirectAttributes) {
 		try {
-	        // ì„œë¹„ìŠ¤ í˜¸ì¶œí•˜ì—¬ noticeNoì— í•´ë‹¹í•˜ëŠ” ê³µì§€ ì‚­ì œ
+	        // ¼­ºñ½º È£ÃâÇÏ¿© noticeNo¿¡ ÇØ´çÇÏ´Â °øÁö »èÁ¦
 	        noticeService.deleteNotice(noticeNo);
 
-	        // ì„±ê³µ ë©”ì‹œì§€ 
-	        redirectAttributes.addFlashAttribute("message", "ê³µì§€ ì‚­ì œê°€ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+	        // ¼º°ø ¸Ş½ÃÁö 
+	        redirectAttributes.addFlashAttribute("message", "°øÁö »èÁ¦°¡ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¾ú½À´Ï´Ù.");
 	    } catch (Exception e) {
-	    	// ì˜¤ë¥˜ ë©”ì„¸ì§€
-	        log.error("ê³µì§€ ì‚­ì œ ì¤‘ ì˜¤ë¥˜ ë°œìƒ", e);
-	        redirectAttributes.addFlashAttribute("message", "ê³µì§€ ì‚­ì œ ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
+	    	// ¿À·ù ¸Ş¼¼Áö
+	        log.error("°øÁö »èÁ¦ Áß ¿À·ù ¹ß»ı", e);
+	        redirectAttributes.addFlashAttribute("message", "°øÁö »èÁ¦ Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
 	    }
 		
 	    return "redirect:/hypePop/customerMain";
@@ -208,10 +200,10 @@ public class SupportController {
 	public ResponseEntity<String> updateAnswer(@RequestBody qnaVO qna) {
 	    try {
 	        noticeService.updateAnswer(qna);
-	        return ResponseEntity.ok("ë‹µë³€ì´ ì„±ê³µì ìœ¼ë¡œ ì—…ë°ì´íŠ¸ë˜ì—ˆìŠµë‹ˆë‹¤.");
+	        return ResponseEntity.ok("´äº¯ÀÌ ¼º°øÀûÀ¸·Î ¾÷µ¥ÀÌÆ®µÇ¾ú½À´Ï´Ù.");
 	    } catch (Exception e) {
-	        log.error("ë‹µë³€ ì—…ë°ì´íŠ¸ ì¤‘ ì˜¤ë¥˜ ë°œìƒ", e);
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ë‹µë³€ ì—…ë°ì´íŠ¸ ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
+	        log.error("´äº¯ ¾÷µ¥ÀÌÆ® Áß ¿À·ù ¹ß»ı", e);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("´äº¯ ¾÷µ¥ÀÌÆ® Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
 	    }
 	}
 
@@ -221,15 +213,15 @@ public class SupportController {
 	        noticeService.deleteInquiry(qnaNo); 
 	        return "redirect:/hypePop/customerMain?tab=inquiry"; 
 	    } catch (Exception e) {
-	        model.addAttribute("errorMessage", "ë¬¸ì˜ ì‚­ì œ ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
+	        model.addAttribute("errorMessage", "¹®ÀÇ »èÁ¦ Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
 	        return "errorPage"; 
 	    }
 	}
-	  //íŠ¹ì • ìœ ì € 1:1 ë¬¸ì˜ê¸€ ê°€ì ¸ì˜¤ê¸°(ìœ¤)
+	  //Æ¯Á¤ À¯Àú 1:1 ¹®ÀÇ±Û °¡Á®¿À±â(À±)
     @GetMapping(value = "/userInquiry", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getUserInquiryList(
-            @RequestParam int userNo, // ìš”ì²­ íŒŒë¼ë¯¸í„°ë¡œ userNoë¥¼ ë°›ìŒ
+            @RequestParam int userNo, // ¿äÃ» ÆÄ¶ó¹ÌÅÍ·Î userNo¸¦ ¹ŞÀ½
             @RequestParam(defaultValue = "1") int pageNum,
             @RequestParam(defaultValue = "5") int amount) {
 
@@ -239,7 +231,7 @@ public class SupportController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-       int totalCount = noticeService.getTotalInquiryCountByUser(userNo); // ì´ ë¬¸ì˜ ê°œìˆ˜ ê°€ì ¸ì˜¤ê¸°
+       int totalCount = noticeService.getTotalInquiryCountByUser(userNo); // ÃÑ ¹®ÀÇ °³¼ö °¡Á®¿À±â
 
 
         Map<String, Object> response = new HashMap<>();
@@ -248,7 +240,7 @@ public class SupportController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    // íŠ¹ì • ìœ ì € ë¬¸ì˜ê¸€ ê°œìˆ˜ ê°€ì ¸ì˜¤ê¸°
+    // Æ¯Á¤ À¯Àú ¹®ÀÇ±Û °³¼ö °¡Á®¿À±â
     @GetMapping(value = "/getInquiryCounts", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String, Integer> getInquiryCounts(@RequestParam int userNo) {

@@ -2,6 +2,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -122,7 +124,7 @@ td {
 .starRating span {
 	font-size: 30px;
 	cursor: pointer;
-	color : gray;
+	color: gray;
 }
 
 .starRating span:hover, .starRating span.active {
@@ -186,7 +188,7 @@ td {
 #selectedRating {
 	margin-bottom: 15px;
 	text-align: center;
-	color : white;
+	color: white;
 }
 
 #reviewForm {
@@ -228,6 +230,7 @@ td {
 #addReply:hover {
 	background-color: #c3070a;
 }
+
 .editCommentInput {
 	width: 100%;
 	padding: 10px;
@@ -238,64 +241,70 @@ td {
 	background-color: #222;
 	color: #fff;
 }
+
 .reply-container {
-    border: 1px solid #ccc; /* 테두리 추가 */
-    border-radius: 8px; /* 모서리 둥글게 */
-    padding: 10px; /* 내부 여백 */
-    margin: 10px 0; /* 항목 간격 */
-    background-color: #f9f9f9; /* 배경색 추가 */
+	border: 1px solid #ccc; /* 테두리 추가 */
+	border-radius: 8px; /* 모서리 둥글게 */
+	padding: 10px; /* 내부 여백 */
+	margin: 10px 0; /* 항목 간격 */
+	background-color: #f9f9f9; /* 배경색 추가 */
 }
 
 .reply-header {
-    display: flex; /* 플렉스 박스 사용하여 정렬 */
-    justify-content: space-between; /* 양쪽 끝으로 정렬 */
-    margin-bottom: 5px; /* 헤더와 본문 간격 */
+	display: flex; /* 플렉스 박스 사용하여 정렬 */
+	justify-content: space-between; /* 양쪽 끝으로 정렬 */
+	margin-bottom: 5px; /* 헤더와 본문 간격 */
 }
 
 .user-no {
-    font-weight: bold; /* 사용자 번호 강조 */
+	font-weight: bold; /* 사용자 번호 강조 */
 }
 
 .exh-score {
-    color: #ff9800; /* 별점 색상 설정 */
+	color: #ff9800; /* 별점 색상 설정 */
 }
 
 .exh-reg-date {
-    color: #757575; /* 등록 날짜 색상 설정 */
+	color: #757575; /* 등록 날짜 색상 설정 */
 }
 
 .exh-comment {
-    font-size: 16px; /* 댓글 내용 글자 크기 */
-    color: #333; /* 댓글 내용 글자 색상 */
-    margin-top: 5px; /* 상단 여백 */
-    line-height: 1.5; /* 줄 높이 설정 */
-    width : 100%;
-    height : 100px;
-    resize: none;
-    padding : 5px;
+	font-size: 16px; /* 댓글 내용 글자 크기 */
+	color: #333; /* 댓글 내용 글자 색상 */
+	margin-top: 5px; /* 상단 여백 */
+	line-height: 1.5; /* 줄 높이 설정 */
+	width: 100%;
+	height: 100px;
+	resize: none;
+	padding: 5px;
 }
+
 ul {
-    list-style-type: none; /* 마커 제거 */
-    padding: 0; /* 기본 패딩 제거 */
-    margin: 0; /* 기본 마진 제거 */
+	list-style-type: none; /* 마커 제거 */
+	padding: 0; /* 기본 패딩 제거 */
+	margin: 0; /* 기본 마진 제거 */
 }
+
 .reply-container {
-    position: relative;
-    padding-bottom: 40px; /* 버튼 컨테이너 공간 확보 */
+	position: relative;
+	padding-bottom: 40px; /* 버튼 컨테이너 공간 확보 */
 }
 
 .button-container {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+	position: absolute;
+	right: 0;
+	bottom: 0;
 }
+
 .fa-star {
-    font-size: 18px;
-    color: #ccc; /* 기본 색상 */
+	font-size: 18px;
+	color: #ccc; /* 기본 색상 */
 }
+
 .fa-star.active {
-    color: #FFD700; /* 채워진 별 색상 */
+	color: #FFD700; /* 채워진 별 색상 */
 }
+
 .image-section {
     flex: 1;
     margin-right: 20px;
@@ -304,6 +313,15 @@ ul {
     padding: 10px;
     position: relative; /* 절대 위치 설정을 위한 상대 위치 */
     display: flex;
+    justify-content: center; /* 이미지를 중앙에 배치 */
+    align-items: center; /* 이미지를 수직으로 중앙에 배치 */
+    overflow: hidden; /* 이미지가 넘치지 않도록 자르기 */
+}
+
+.image-section img {
+    width: 100%; /* 이미지 너비를 컨테이너의 너비에 맞추기 */
+    height: auto; /* 이미지 비율을 유지하면서 높이를 자동으로 맞추기 */
+    object-fit: cover; /* 이미지의 비율을 유지하면서 컨테이너에 맞게 잘라내기 */
 }
 
 #likeContainer {
@@ -312,6 +330,7 @@ ul {
     right: 10px; /* 오른쪽 위치 */
     display: flex; /* 수평으로 나열하기 위해 flex 사용 */
     align-items: center; /* 수직 중앙 정렬 */
+    z-index: 10; /* 이미지 위에 표시되도록 z-index 설정 */
 }
 
 #likeCount {
@@ -321,30 +340,161 @@ ul {
 
 #heartIcon {
     font-size: 30px; /* 하트 크기 */
-    color: white; /* 초기 색상 변경 */
+    color: black; /* 초기 색상 변경 */
     cursor: pointer; /* 커서 모양 변경 */
 }
 
 #heartIcon.active {
     color: red; /* 활성화된 상태 */
 }
+.filled {
+    color: gold;  /* 채운 별의 색 */
+}
+
+.empty {
+    color: lightgray;  /* 빈 별의 색 */
+}
+/* 버튼이 포함된 컨테이너를 중앙 정렬 */
+#paginationControls {
+    display: flex; /* 플렉스 박스를 사용하여 요소 배치 */
+    justify-content: center; /* 버튼들을 수평으로 중앙 정렬 */
+    align-items: center; /* 버튼들을 수직으로 중앙 정렬 (필요할 경우) */
+    margin-top: 20px; /* 버튼들 위쪽 여백 추가 */
+}
+/* 기본 페이지 버튼 스타일 */
+.page-button {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+/* 페이지 버튼 호버 효과 */
+.page-button:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.1);
+}
+
+/* 활성화된 페이지 버튼 스타일 */
+.page-button.active {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+/* 활성화된 버튼 호버 시 색상 변화 */
+.page-button.active:hover {
+    background-color: #0056b3;
+}
+/* details-section의 너비 설정 */
+.details-section {
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 1200px;
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+}
+
+/* 이미지 컨테이너 크기 및 배치 */
+#detailedImageContainer {
+    width: 70%;  /* 원하는 너비로 설정 */
+    margin: 0 auto;  /* 가로 중앙 정렬 */
+    display: flex;
+    justify-content: center;  /* 이미지가 가로로 중앙 정렬되게 설정 */
+    align-items: center;  /* 세로로 중앙 정렬 */
+}
+
+/* 이미지 스타일 */
+#detailedImageContainer img {
+    width: 100%; /* 컨테이너의 가로 100% 크기 */
+    height: auto; /* 세로는 자동으로 비율에 맞게 설정 */
+    object-fit: contain;  /* 이미지가 잘리지 않도록 비율을 유지하며 크기 맞춤 */
+    image-rendering: -webkit-optimize-contrast;  /* Chrome과 Safari에서 고해상도 렌더링 */
+    image-rendering: crisp-edges;  /* Edge나 Firefox에서 고해상도 렌더링 */
+}
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+	background-color: #222;
+	color: white;
+	margin: 15% auto;
+	padding: 20px;
+	border-radius: 8px;
+	width: 300px;
+	text-align: center;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content p {
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+.modal-content button {
+	padding: 10px 20px;
+	background-color: #e50914;
+	color: white;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+	border-radius: 5px;
+	transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+	background-color: #c3070a;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.close:hover, .close:focus {
+	color: #fff;
+}
+
 </style>
 </head>
 <body>
 	<jsp:include page="layout/popUpHeader.jsp" />
-
+	<sec:authorize access="isAuthenticated()">
+		<sec:authentication property="principal" var="pinfo" />
+		<input type="hidden" id="userNo" value="${pinfo.member.userNo}">
+	</sec:authorize>
 	<br>
 
 	<div class="container">
 		<div class="image-section">
-			<div id = "likeContainer">
-			<p id = "likeCount"></p>
-			<span class="heart" id = "heartIcon" onclick="toggleHeart(this)">&#9825;</span>		
+			
+			<div id="likeContainer">
+				<p id="likeCount"></p>
+				<span class="heart" id="heartIcon" onclick="toggleHeart(this)">&#9825;</span>
 			</div>
 		</div>
 		<div class="info-section">
-			<input type=hidden id="exhNo" value = "${exhibition.exhNo}">
-			
+			<input type=hidden id="exhNo" value="${exhibition.exhNo}">
+
 			<table>
 				<tr>
 					<th>이름</th>
@@ -356,7 +506,7 @@ ul {
 				</tr>
 				<tr>
 					<th>전시 기간</th>
-					<td>${exhibition.exhStartDate} ~ ${exhibition.exhEndDate}</td>
+					<td>${exhibition.exhStartDate}~${exhibition.exhEndDate}</td>
 				</tr>
 				<tr>
 					<th>관람 시간</th>
@@ -394,36 +544,50 @@ ul {
 	</div>
 
 	<div class="details-section" id="detailsSection">
-		상세정보
-		<div id="detailedImageContainer"></div>
+		<div id="detailedImageContainer">
+			
+		</div>
 	</div>
 
 	<div class="reply-section" id="replySection">
 		<div id="replyContainer">
 			<form id="reviewForm" method="post">
 				<div class="starRating" id="newReviewStars">
-  			  		<span data-value="1" >★</span>
-   			 		<span data-value="2" >★</span>
-   			 		<span data-value="3" >★</span>
-  			  		<span data-value="4" >★</span>
-  			  		<span data-value="5" >★</span>
+					<span data-value="1">★</span> <span data-value="2">★</span> <span
+						data-value="3">★</span> <span data-value="4">★</span> <span
+						data-value="5">★</span>
 				</div>
-				<p id="selectedRating">선택한 별점: <span></span></p>
-			
+				<p id="selectedRating">
+					선택한 별점: <span></span>
+				</p>
+
 				<textarea id="reviewText" name="reviewText"
 					placeholder="후기를 작성해주세요..." rows="5" cols="50"></textarea>
 				<input type="hidden" id="rating" name="rating" value="0"> <input
 					type="button" id="addReply" value="등록하기">
 			</form>
-			
+
 			<div>
 				<h2>후기 목록</h2>
-				<br><hr><br>
-				<ul id = "reviewsList">
-				
+				<div style="display: flex; align-items: center;">
+					<p style="margin: 0;">평균별점 : <span id="averageRatingValue"></span></p>
+					<div class="averageStarRating" id="averageStarRating"
+						style="display: flex; margin-left: 10px;">
+						<c:forEach var="i" begin="1" end="5">
+							<span class="${avgRating >= i ? 'filled' : 'empty'}">★</span>
+						</c:forEach>
+					</div>
+
+				</div>
+
+				<br>
+				<hr>
+				<br>
+				<ul id="reviewsList">
+
 				</ul>
 			</div>
-			<div class="pagination"></div>
+			<div id="paginationControls"></div>
 
 		</div>
 	</div>
@@ -432,25 +596,35 @@ ul {
 		<a href="${pageContext.request.contextPath}/exhibition/exhibitionMain"
 			class="btn">뒤로 가기</a>
 	</div>
+	
+	<!-- 모달 창 HTML -->
+	<div id="loginModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<p>로그인이 필요한 기능입니다.</p>
+			<button id="goToLogin">로그인하러 가기</button>
+		</div>
+	</div>
 
 	<br>
 	<hr>
 	<br>
-	
+
 	<jsp:include page="layout/popUpFooter.jsp" />
 	<script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
 	<script type="text/javascript"
 		src="/resources/exhibitionJs/exhibitionDetail.js"></script>
 
 	<script type="text/javascript">
-		// JSP에서 exhibitionInfo 값을 JavaScript 변수로 가져오기
-		var exhibitionInfo = "${exhibition.exhInfo}";
+    // exhibitionInfo 값을 HTML로 안전하게 출력
+    var exhibitionInfo = "${fn:escapeXml(exhibition.exhInfo)}";
 
-		// 줄바꿈을 <br> 태그로 변환
-		exhibitionInfo = exhibitionInfo.replace(/\n/g, "<br/>");
+    // 줄바꿈을 <br> 태그로 변환
+    exhibitionInfo = exhibitionInfo.replace(/\n/g, "<br/>");
 
-		// 변환된 정보를 HTML에 삽입
-		document.getElementById("exhibitionInfo").innerHTML = exhibitionInfo;
+    // 변환된 정보를 HTML에 삽입
+    document.getElementById("exhibitionInfo").innerHTML = exhibitionInfo;
 	</script>
+
 </body>
 </html>

@@ -96,7 +96,7 @@ public class NoticeServiceImpl implements NoticeService{
 		
 		return supportmapper.getTotalInquiryCount(userNo);
 	}
-   //ì¶”ê°€
+   //Ãß°¡
    @Override
    public List<qnaVO> getUserInquiriesWithPaging(int userNo, int pageNum, int amount) {
       int startRow = (pageNum - 1) * amount;

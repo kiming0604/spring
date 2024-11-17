@@ -30,9 +30,9 @@ import lombok.extern.log4j.Log4j;
 @ServerEndpoint("/chatserver.do")
 public class ChatServer {
 
-    // bnoë³„ë¡œ ì„¸ì…˜ì„ ê´€ë¦¬í•˜ëŠ” ë§µ
+    // bnoº°·Î ¼¼¼ÇÀ» °ü¸®ÇÏ´Â ¸Ê
     private static Map<String, List<Session>> bnoSessionMap = new ConcurrentHashMap<>();
-    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1); // Pingì„ ìœ„í•œ ìŠ¤ì¼€ì¤„ëŸ¬
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1); // PingÀ» À§ÇÑ ½ºÄÉÁÙ·¯
 
     @Autowired
     private PartyService service;
@@ -46,10 +46,10 @@ public class ChatServer {
             service = context.getBean(PartyService.class);
         }
 
-        // í´ë¼ì´ì–¸íŠ¸ê°€ ì ‘ì†í•  ë•Œ bnoë¥¼ ìš”ì²­ íŒŒë¼ë¯¸í„°ë¡œ ì „ë‹¬ë°›ìŒ
+        // Å¬¶óÀÌ¾ğÆ®°¡ Á¢¼ÓÇÒ ¶§ bno¸¦ ¿äÃ» ÆÄ¶ó¹ÌÅÍ·Î Àü´Ş¹ŞÀ½
         String bno = session.getRequestParameterMap().get("bno").get(0);
 
-        // bnoì— í•´ë‹¹í•˜ëŠ” ì„¸ì…˜ ë¦¬ìŠ¤íŠ¸ê°€ ì—†ìœ¼ë©´ ìƒì„±í•˜ê³ , ì„¸ì…˜ ì¶”ê°€
+        // bno¿¡ ÇØ´çÇÏ´Â ¼¼¼Ç ¸®½ºÆ®°¡ ¾øÀ¸¸é »ı¼ºÇÏ°í, ¼¼¼Ç Ãß°¡
         bnoSessionMap.putIfAbsent(bno, new ArrayList<>());
         bnoSessionMap.get(bno).add(session);
 
@@ -62,7 +62,7 @@ public class ChatServer {
     private void sendPing(Session session) {
         if (session.isOpen()) {
             try {
-                session.getBasicRemote().sendPing(null); // Ping ë©”ì‹œì§€ ì „ì†¡
+                session.getBasicRemote().sendPing(null); // Ping ¸Ş½ÃÁö Àü¼Û
                 log.info("Ping message sent to session: " + session.getId());
             } catch (IOException e) {
                 log.error("Error sending Ping message", e);
@@ -74,14 +74,14 @@ public class ChatServer {
     public void handleMessage(String msg, Session session) {
         try {
             ChatContentVO message = gson.fromJson(msg, ChatContentVO.class);
-            String bno = message.getBno(); // ë©”ì‹œì§€ì—ì„œ bno ì¶”ì¶œ
+            String bno = message.getBno(); // ¸Ş½ÃÁö¿¡¼­ bno ÃßÃâ
 
-            if (message.getCode().equals("3")) { // ë©”ì‹œì§€ ì „ì†¡
+            if (message.getCode().equals("3")) { // ¸Ş½ÃÁö Àü¼Û
                 log.info("Message received for bno " + bno + ": " + message);
-                service.insertChatContent(message); // DBì— ë©”ì‹œì§€ ì €ì¥
+                service.insertChatContent(message); // DB¿¡ ¸Ş½ÃÁö ÀúÀå
             }
 
-            // bnoì— í•´ë‹¹í•˜ëŠ” ì„¸ì…˜ì—ë§Œ ë©”ì‹œì§€ ì „ì†¡
+            // bno¿¡ ÇØ´çÇÏ´Â ¼¼¼Ç¿¡¸¸ ¸Ş½ÃÁö Àü¼Û
             List<Session> sessions = bnoSessionMap.get(bno);
             if (sessions != null) {
                 for (Session s : sessions) {
@@ -98,7 +98,7 @@ public class ChatServer {
 
     @OnClose
     public void handleClose(Session session) {
-        // ëª¨ë“  bno ëª©ë¡ì—ì„œ í•´ë‹¹ ì„¸ì…˜ì„ ì œê±°
+        // ¸ğµç bno ¸ñ·Ï¿¡¼­ ÇØ´ç ¼¼¼ÇÀ» Á¦°Å
         for (String bno : bnoSessionMap.keySet()) {
             bnoSessionMap.get(bno).remove(session);
         }

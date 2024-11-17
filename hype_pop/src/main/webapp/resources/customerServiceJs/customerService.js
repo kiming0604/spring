@@ -2,7 +2,11 @@ let currentPage = 1;
 let totalPages = 0; 
 let inquiryList = document.querySelector('.inquiry-list');
 let createInquiryBtn = document.querySelector('.createInquiryBtn');
-const userNo = localStorage.getItem("userNo");
+let userNoElement = document.getElementById("userNo");
+let userNo = userNoElement ? userNoElement.value : null;
+console.log(userNo);
+var isLoggedIn = (userNo !== null && userNo !== undefined && userNo !== '');
+
 if (userNo) {
     console.log("현재 사용자 번호:", userNo);
 } else {
@@ -117,13 +121,14 @@ function switchTab(id) {
             break;
         case 'inquiry':
             if (!userNo) {
-                if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-                   location.href = "/member/login";  // 로그인 페이지로 이동
+                if (!isLoggedIn) {
+                    showLoginModal(); // 로그인 모달 표시
                 }
             } else {
                 handleReplyStatusChange(); // 로그인된 경우 1:1 문의 로드
             }
             break;
+
     }
 }
 
@@ -270,6 +275,34 @@ window.onload = function() {
     // 페이지 로드 시 전체 목록 가져오기
     handleReplyStatusChange(); 
 };
+
+//모달 닫기 버튼 클릭 시
+document.querySelector(".close").onclick = function() {
+    document.getElementById("loginModal").style.display = "none";
+};
+
+//로그인 모달을 표시하는 함수
+function showLoginModal() {
+    var modal = document.getElementById("loginModal");
+    modal.style.display = "block";
+
+    // 로그인 페이지로 이동하는 버튼 클릭 시
+    document.getElementById("goToLogin").onclick = function() {      
+            location.href = "/member/login"; 
+    }
+
+    // 모달 닫기 버튼 클릭 시 모달 숨기기
+    document.querySelector(".close").onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // 모달 외부 클릭 시 모달 숨기기
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+}
 
 
 

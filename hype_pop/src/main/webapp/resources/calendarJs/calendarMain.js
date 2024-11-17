@@ -2,9 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentMonth = new Date().getMonth(); 
     let currentYear = new Date().getFullYear(); 
     const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-    const userNo = localStorage.getItem("userNo");
+    let userNoElement = document.getElementById("userNo");
+    let userNo = userNoElement ? userNoElement.value : null;
+    console.log(userNo);
     const interestCheckbox = document.getElementById('myInterest');
     const likeCheckbox = document.getElementById('myLike');
+    var isLoggedIn = (userNo !== null && userNo !== undefined && userNo !== '');
     
  // 달력 업데이트 함수
     function updateCalendar() {
@@ -52,22 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // 유저 넘버가 없을 때 체크박스 비활성화 및 클릭 시 로그인 확인
-        if (!userNo) {
+        if (!isLoggedIn) {
         	interestCheckbox.classList.add('checkbox-disabled');
             likeCheckbox.classList.add('checkbox-disabled');
         	
             interestCheckbox.addEventListener('click', (event) => {
                 event.preventDefault(); // 체크박스 선택 방지
-                if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-                    location.href = '/member/login'; // 로그인 페이지로 이동
-                }
+                showLoginModal();
             });
 
             likeCheckbox.addEventListener('click', (event) => {
                 event.preventDefault(); // 체크박스 선택 방지
-                if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-                    location.href = '/member/login'; // 로그인 페이지로 이동
-                }
+                showLoginModal();
             });
         } else {
             // userNo가 있을 때 체크박스 이벤트 설정
@@ -178,13 +177,32 @@ document.addEventListener('DOMContentLoaded', function() {
                         const popUpItem = document.createElement('div');
                         popUpItem.classList.add('popUpItem');
                         popUpItem.innerHTML = 
-                            `<div class="psImage"></div>
-                            <div>
-                                <span>${item.psName}</span>
-                                <span>${item.psAddress}</span>
-                                <span>${new Date(item.psStartDate).toLocaleDateString()} ~ ${new Date(item.psEndDate).toLocaleDateString()}</span>
+                            `<div class="psImage">
+                            	
+                            </div>
+                            <div class="itemInfo">
+                                <ul>
+                        			<li><strong>이름:</strong> ${item.psName}</li>
+                        			<li><strong>주소:</strong> ${item.psAddress}</li>
+                        			<li><strong>기간:</strong> ${new Date(item.psStartDate).toLocaleDateString()} ~ ${new Date(item.psEndDate).toLocaleDateString()}</li>
+                        		</ul>
                             </div>`;
 
+                        // exhNo를 사용해 이미지 정보를 가져오는 요청
+                        fetch(`/hypePop/getPopUpImage?psNo=${item.psNo}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // data가 배열인지 객체인지 확인 후 처리
+                            const { uuid, fileName } = Array.isArray(data) ? data[0] : data;
+                            if (uuid && fileName) {
+                                const imageUrl = `/hypePop/popUpStoreImages/${uuid}_${fileName}`;
+                                popUpItem.querySelector('.psImage').innerHTML = `<img src="${imageUrl}" alt="${item.psName} 이미지" />`;
+                            } else {
+                                console.error('이미지 데이터가 없습니다.');
+                            }
+                        })
+                        .catch(error => console.error('이미지 정보 로드 오류:', error));
+                   
                         // 팝업스토어 클릭 시 상세 페이지로 이동
                         popUpItem.addEventListener('click', function() {
                             location.href = `/hypePop/popUpDetails?storeName=${item.psName}`;
@@ -325,3 +343,26 @@ document.addEventListener('DOMContentLoaded', function() {
     loadCheckboxState(); // 체크박스 상태 복원 및 초기화
     updateCalendar();
 });
+
+// 로그인 모달을 표시하는 함수
+function showLoginModal() {
+    var modal = document.getElementById("loginModal");
+    modal.style.display = "block";
+
+    // 로그인 페이지로 이동하는 버튼 클릭 시
+    document.getElementById("goToLogin").onclick = function() {      
+            location.href = "/member/login"; 
+    }
+
+    // 모달 닫기 버튼 클릭 시 모달 숨기기
+    document.querySelector(".close").onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // 모달 외부 클릭 시 모달 숨기기
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+}

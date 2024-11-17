@@ -1,13 +1,17 @@
-insertBoard.js
 document.addEventListener("DOMContentLoaded", () => {
+	let userNoElement = document.getElementById("userNo");
+	let userNo = userNoElement ? parseInt(userNoElement.value) : null;
+	
     const categorySelect = document.getElementById("categorySelect");
     const searchInput = document.getElementById("searchInput");
+    const searchLabel = document.querySelector("label[for='searchInput']");
     const searchResults = document.getElementById("searchResults");
     const selectedResultGroup = document.querySelector(".selectedResultGroup");
     const titleInputGroup = document.querySelector(".titleInputGroup");
     const setUserCountGroup = document.querySelector(".setUserCountGroup");
 
     searchInput.style.display = "none";
+    searchLabel.style.display = "none";
     searchResults.style.display = "none";
     selectedResultGroup.style.display = "none";
     titleInputGroup.style.display = "none";
@@ -16,12 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
     categorySelect.addEventListener("change", () => {
         if (categorySelect.value !== "default") {
             searchInput.style.display = "block";
+            searchLabel.style.display = "block";
             searchResults.style.display = "none";
             selectedResultGroup.style.display = "none";
             titleInputGroup.style.display = "none";
             setUserCountGroup.style.display = "none";
         } else {
             searchInput.style.display = "none";
+            searchLabel.style.display = "none";
             searchResults.style.display = "none";
         }
     });
@@ -100,6 +106,7 @@ document.getElementById("searchInput").addEventListener('keyup', () => {
 
 document.getElementById("resetBtn").addEventListener('click', () => {
     const searchInput = document.getElementById("searchInput");
+    const searchLabel = document.querySelector("label[for='searchInput']");
     const category = document.getElementById("categorySelect");
     const resultsDiv = document.getElementById("searchResults");
     const selectedDiv = document.getElementById("selectedResult");
@@ -111,6 +118,7 @@ document.getElementById("resetBtn").addEventListener('click', () => {
 
     // 요소 존재 여부 확인 후 초기화
     if (searchInput) searchInput.style.display = "none";
+    if (searchLabel) searchLabel.style.display = "none"; // 검색 label 숨김
     if (resultsDiv) resultsDiv.style.display = "none";
     if (selectedResultGroup) selectedResultGroup.style.display = "none";
     if (titleInputGroup) titleInputGroup.style.display = "none";
@@ -124,11 +132,12 @@ document.getElementById("resetBtn").addEventListener('click', () => {
     if (userMax) userMax.value = "default";
 });
 
+
 document.getElementById("goBack").addEventListener('click', () => {
 	location.href = "/party/partyBoard";
 });
 
-const userNo = 1;
+
 document.getElementById("submitBtn").addEventListener('click', (e) => {
 	
     const categorySelect = document.getElementById("categorySelect");
@@ -159,7 +168,6 @@ document.getElementById("submitBtn").addEventListener('click', (e) => {
 		return;
 	}
 
-    // userNo 값을 가진 hidden input 추가
     let userNoInput = document.createElement("input");
     userNoInput.type = "hidden";
     userNoInput.name = "userNo";

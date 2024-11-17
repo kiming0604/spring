@@ -1,4 +1,3 @@
-goodsSearch.js
 let currentPage = 1;
 const itemsPerPage = 10;
 let displayedItems = 0;

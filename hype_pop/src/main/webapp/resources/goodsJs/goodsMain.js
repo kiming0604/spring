@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
 	localStorage.setItem('searchText', ""); // 검색어 저장
-  
-	function setBackgroundImage(item) {
+	
+	let userNoElement = document.getElementById("userNo");
+	let userNo = userNoElement ? userNoElement.value : null;
+	console.log(userNo);
+	
+	
+    function setBackgroundImage(item) {
         const fileName = item.querySelector("#fileName").value;
 
         fetch(`/goodsStore/goodsBannerImages/${encodeURIComponent(fileName)}`)

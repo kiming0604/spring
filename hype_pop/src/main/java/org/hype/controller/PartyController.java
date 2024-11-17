@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.hype.domain.ChatContentVO;
 import org.hype.domain.ChatRoomVO;
 import org.hype.domain.PartyBoardVO;
+import org.hype.domain.exhVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.signInVO;
 import org.hype.service.PartyService;
@@ -65,7 +66,7 @@ public class PartyController {
 	@PostMapping(value = "/insertBoard")
 	public String insertBoard(PartyBoardVO vo) {
 		int result = service.insertParty(vo);
-		log.warn("result ëŠ” : " + result);
+		log.warn("result ´Â : " + result);
 		return "redirect:/party/partyBoard";
 	}
 	
@@ -80,16 +81,16 @@ public class PartyController {
 	@GetMapping(value = "/chkJoined/{bno}/{userNo}", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String chkJoined(@PathVariable("bno") int bno, @PathVariable("userNo") int userNo) {
-		log.warn("bnoëŠ” " + bno);
-		log.warn("userNoëŠ” " + userNo);
+		log.warn("bno´Â " + bno);
+		log.warn("userNo´Â " + userNo);
 	    int result = service.chkJoined(bno, userNo);
 	    log.warn(result);
 	    if (result == 0) {
 	    	int resultInsert = service.joinParty(bno, userNo);
-	        return "ì±„íŒ…ë°©ì— ì§„ì…í–ˆìŠµë‹ˆë‹¤.";
+	        return "Ã¤ÆÃ¹æ¿¡ ÁøÀÔÇß½À´Ï´Ù.";
 	    } else {
 	    	int resultUpdate = service.updateJoinTime(bno, userNo);
-	        return "ì±„íŒ…ë°©ì— ì´ë¯¸ ìˆëŠ” ìœ ì €ì…ë‹ˆë‹¤.";
+	        return "Ã¤ÆÃ¹æ¿¡ ÀÌ¹Ì ÀÖ´Â À¯ÀúÀÔ´Ï´Ù.";
 	    }
 	}
 	
@@ -121,14 +122,14 @@ public class PartyController {
 	@GetMapping(value = "/updateLeftTime/{bno}/{userNo}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public int updateLeftTime(@PathVariable("bno") int bno, @PathVariable("userNo") int userNo) {
-		log.warn("updateLeftTimeì—ì„œ" + bno + userNo);
+		log.warn("updateLeftTime¿¡¼­" + bno + userNo);
 		int result = service.updateLeftTime(bno, userNo);
 		return result;
 	}
 	
 	@GetMapping(value="/leaveParty")
 	public String leaveParty(@RequestParam("bno") int bno, @RequestParam("userNo") int userNo, @RequestParam("isMaster") int isMaster) {
-		log.warn("ì´ê±° íƒ€ëŠ”ê±°ì—ì—¬?"+bno+userNo+isMaster);
+		log.warn("ÀÌ°Å Å¸´Â°Å¿¡¿©?"+bno+userNo+isMaster);
 		if(isMaster == 0) {
 			int result1 = service.updateLeaveMember(bno, userNo);
 			return "redirect:/party/partyBoard";
@@ -156,5 +157,11 @@ public class PartyController {
 	public String chkMaster(@PathVariable("bno") int bno, @PathVariable("userNo") int userNo) {
 		int result = service.chkMaster(bno, userNo);
 		return Integer.toString(result);
+	}
+	
+	@GetMapping(value="/findExhNo/{psExhName}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public exhVO findExhNo(@PathVariable("psExhName") String psExhName) {
+		return service.findExhNo(psExhName);
 	}
 }

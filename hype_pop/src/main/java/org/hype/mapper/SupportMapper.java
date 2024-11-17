@@ -31,7 +31,7 @@ public interface SupportMapper {
 
    public int getTotalInquiryCount(@Param("userNo")int userNo);
    
-   //ì¶”ê°€
+   //Ãß°¡
    public List<qnaVO> getUserInquiriesWithPaging(@Param("userNo") int userNo, @Param("startRow") int startRow, @Param("endRow") int endRow);
 
    public int getTotalInquiryCountByUser(@Param("userNo") int userNo);
