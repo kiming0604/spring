@@ -32,55 +32,55 @@ import lombok.extern.log4j.Log4j;
 @RestController
 @RequestMapping("/goodsStore")
 public class GoodsRestController {
-	
+   
     @Autowired
     private GoodsService gService;
     
     @GetMapping(value = "/chkLike/{gno}/{userNo}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> chkLike(@PathVariable("gno") int gno, @PathVariable("userNo") int userNo){
-    	int result = gService.getLikeChk(userNo, gno);
-    	return new ResponseEntity<>(result, HttpStatus.OK);
+       int result = gService.getLikeChk(userNo, gno);
+       return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     @GetMapping(value = "/changeLike/{gno}/{userNo}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> changeLike(@PathVariable("gno") int gno, @PathVariable("userNo") int userNo){
-    	int result = gService.updateLike(userNo, gno);
-    	return new ResponseEntity<>(result, HttpStatus.OK);
+       int result = gService.updateLike(userNo, gno);
+       return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     @GetMapping(value = "/getLikeCount/{gno}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> getLikeCount(@PathVariable("gno") int gno){
-    	int result = gService.getLikeCount(gno);
-    	return new ResponseEntity<>(result, HttpStatus.OK);
+       int result = gService.getLikeCount(gno);
+       return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     @PostMapping(value = "/getAllGoodsList", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<goodsVO>> getAllGoodsList(){
-    	List<goodsVO> result = gService.getAllGoodsList();
+       List<goodsVO> result = gService.getAllGoodsList();
         for (goodsVO vo : result) {
             gCatVO voCat = gService.getCategory(vo.getGno());
             vo.setGcat(voCat);
             List<gImgVO> imgVo = new ArrayList<gImgVO>();
             gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
             imgVo.add(imgVo1);  
-        	vo.setAttachList(imgVo);
+           vo.setAttachList(imgVo);
         }
-    	return new ResponseEntity<>(result, HttpStatus.OK);
+       return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     @GetMapping("/goodsBannerImages/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveBannerImage(@PathVariable String fileName) throws MalformedURLException {
-        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\±ÂÁî ¹è³Ê »çÁø";
+        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\êµ¿ì¦ˆ ë°°ë„ˆ ì‚¬ì§„";
         String imagePath = uploadFolder + File.separator + fileName;
         Path path = Paths.get(imagePath);
         
         if (!Files.exists(path)) {
-            throw new RuntimeException("ÆÄÀÏÀÌ ¾ø¾î¿©: " + fileName);
+            throw new RuntimeException("íŒŒì¼ì´ ì—†ì–´ì—¬: " + fileName);
         }
         
         if (!Files.isReadable(path)) {
-            throw new RuntimeException("ÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø¾î¿ä: " + fileName);
+            throw new RuntimeException("íŒŒì¼ì„ ì½ì„ ìˆ˜ ì—†ì–´ìš”: " + fileName);
         }
         
         Resource file = new FileSystemResource(path.toFile());
@@ -92,16 +92,16 @@ public class GoodsRestController {
     @GetMapping("/goodsDetailImages/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveDetailImage(@PathVariable String fileName) throws MalformedURLException {
-        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\±ÂÁî »ó¼¼ »çÁø";
+        String uploadFolder = "\\\\192.168.0.129\\storeGoodsImg\\êµ¿ì¦ˆ ìƒì„¸ ì‚¬ì§„";
         String imagePath = uploadFolder + File.separator + fileName;
         Path path = Paths.get(imagePath);
         
         if (!Files.exists(path)) {
-            throw new RuntimeException("ÆÄÀÏÀÌ ¾ø¾î¿©: " + fileName);
+            throw new RuntimeException("íŒŒì¼ì´ ì—†ì–´ì—¬: " + fileName);
         }
         
         if (!Files.isReadable(path)) {
-            throw new RuntimeException("ÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø¾î¿ä: " + fileName);
+            throw new RuntimeException("íŒŒì¼ì„ ì½ì„ ìˆ˜ ì—†ì–´ìš”: " + fileName);
         }
         
         Resource file = new FileSystemResource(path.toFile());

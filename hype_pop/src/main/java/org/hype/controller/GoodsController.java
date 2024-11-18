@@ -60,7 +60,7 @@ public class GoodsController {
  
 	@GetMapping("/goodsMain")
 	public String goodsMain(@RequestParam(value = "userNo", required = false) Integer userNo, Model model, HttpServletRequest request) {
-		log.warn("À¯Àú¹øÈ£" + userNo);
+		log.warn("ì‚¬ìš©ì ë²ˆí˜¸: " + userNo);
 	    List<goodsVO> vo1 = gService.getListByLikeCount();
 	    for (goodsVO vo : vo1) {
 	        List<gImgVO> imgVo = new ArrayList<>();
@@ -73,7 +73,7 @@ public class GoodsController {
 	    HttpSession session = request.getSession();
 	    session.setAttribute("open", "null");
 
-	    if (userNo == null) { // ºñ·Î±×ÀÎ »óÅÂ
+	    if (userNo == null) { // ë¹„íšŒì›ì¼ ê²½ìš°
 	        Map<String, Object> result1 = gService.getListByInterestOneNotLogin();
 	        String category1 = (String) result1.get("category");
 	        List<goodsVO> interestOneNotLogin = (List<goodsVO>) result1.get("goodsList");
@@ -110,17 +110,17 @@ public class GoodsController {
 	        model.addAttribute("interestOneNotLogin", interestOneNotLogin);
 	        model.addAttribute("interestTwoNotLogin", interestTwoNotLogin);
 	        model.addAttribute("interestThreeNotLogin", interestThreeNotLogin);
-	    } else { // ·Î±×ÀÎ »óÅÂ
+	    } else { // íšŒì›ì¼ ê²½ìš°
 	        List<String> mcat = gService.getUserInfo(userNo);
 	        
 	        
-	        log.info("°ü½É Ä«Å×°í¸®: " + mcat);
-	        log.info("°ü½É Ä«Å×°í¸® 1: " + mcat.get(0));
-	        log.info("°ü½É Ä«Å×°í¸® 2: " + mcat.get(1));
-	        log.info("°ü½É Ä«Å×°í¸® 3: " + mcat.get(2));
+	        log.info("íšŒì› ì¹´í…Œê³ ë¦¬: " + mcat);
+	        log.info("íšŒì› ì¹´í…Œê³ ë¦¬ 1: " + mcat.get(0));
+	        log.info("íšŒì› ì¹´í…Œê³ ë¦¬ 2: " + mcat.get(1));
+	        log.info("íšŒì› ì¹´í…Œê³ ë¦¬ 3: " + mcat.get(2));
 	        List<goodsVO> interestOneLogined = gService.getListByInterestOneLogined(mcat.get(0));
 	        for (goodsVO vo : interestOneLogined) {
-	            log.info("InterestOneLogined »óÇ°: " + vo.getGno() + ", " + vo.getGname());
+	            log.info("InterestOneLogined ìƒí’ˆ: " + vo.getGno() + ", " + vo.getGname());
 	            List<gImgVO> imgVo = new ArrayList<>();
 	            gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
 	            imgVo.add(imgVo1);
@@ -129,7 +129,7 @@ public class GoodsController {
 
 	        List<goodsVO> interestTwoLogined = gService.getListByInterestOneLogined(mcat.get(1));
 	        for (goodsVO vo : interestTwoLogined) {
-	            log.info("InterestTwoLogined »óÇ°: " + vo.getGno() + ", " + vo.getGname());
+	            log.info("InterestTwoLogined ìƒí’ˆ: " + vo.getGno() + ", " + vo.getGname());
 	            List<gImgVO> imgVo = new ArrayList<>();
 	            gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
 	            imgVo.add(imgVo1);
@@ -138,7 +138,7 @@ public class GoodsController {
 
 	        List<goodsVO> interestThreeLogined = gService.getListByInterestOneLogined(mcat.get(2));
 	        for (goodsVO vo : interestThreeLogined) {
-	            log.info("InterestThreeLogined »óÇ°: " + vo.getGno() + ", " + vo.getGname());
+	            log.info("InterestThreeLogined ìƒí’ˆ: " + vo.getGno() + ", " + vo.getGname());
 	            List<gImgVO> imgVo = new ArrayList<>();
 	            gImgVO imgVo1 = gService.getImgByGno(vo.getGno());
 	            imgVo.add(imgVo1);

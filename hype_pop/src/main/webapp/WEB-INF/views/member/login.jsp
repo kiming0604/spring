@@ -107,10 +107,10 @@
     <div class="header">
         <a href="/">홈</a> <!-- 홈으로 가는 링크 추가 -->
     </div>
-
     <div class="container">
         <h1>로그인</h1>
-        <form action="login" method="post">
+        <form action="/member/login" method="post">
+           <input type="hidden" id="redirect" name="redirect">   
             <label for="username">아이디</label>
             <input type="text" id="userId" name="userId" required placeholder="아이디를 입력하세요.">
 
@@ -118,7 +118,7 @@
             <input type="password" id="userPw" name="userPw" required placeholder="비밀번호를 입력하세요.">
 
             <div class="checkbox-group">
-                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <input type="checkbox" id="rememberMe" name="remember-me">
                 <label for="rememberMe">로그인 상태 유지</label>
             </div>
 
