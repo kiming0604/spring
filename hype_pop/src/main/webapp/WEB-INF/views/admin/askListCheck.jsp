@@ -118,7 +118,8 @@ th {
             <option value="답변 미완료">답변 미완료</option>
         </select>
         <!-- 메인 페이지 이동 버튼 -->
-        <button type="button" id="backToMainPage" onclick="backToMainPage();">메인 페이지</button>
+        <button type="button" id="backToMainPage" onclick="backToMainPage();">관리자 메인 페이지</button>
+
     </form>
 
     <table id="qnaListCat">

@@ -10,21 +10,11 @@ window.onload = function() {
     }
 
     // 'beforeFileName2' input 요소가 존재하는 경우에만 파일명을 가져오고 이미지 불러오기
-//    const fileName2Element = document.querySelector('input[name="beforeFileName2"]');
-//    if (fileName2Element) {
-//        const fileName2 = fileName2Element.value;
-//        fetchImage(category2, fileName2, "beforeImg2");
-//    }
-//    
-//    // 서버에서 파일명을 가져옴 (popStore 객체에서 가져오는 방식)
-//    const fileName1 = document.querySelector('input[name="beforeFileName1"]').value;
-//    const fileName2 = document.querySelector('input[name="beforeFileName2"]').value;
-//    
-//    // fetchImage 함수 호출하여 두 이미지를 각각 불러오기
-//    fetchImage(category1, fileName1, "beforeImg1");
-//    fetchImage(category2, fileName2, "beforeImg2");
-//    console.log(fileName1, fileName2);
-    
+    const fileName2Element = document.querySelector('input[name="beforeFileName2"]');
+    if (fileName2Element) {
+        const fileName2 = fileName2Element.value;
+        fetchImage(category2, fileName2, "beforeImg2");
+    }    
 };
 
 function fetchImage(category, fileName, imgElementId) {

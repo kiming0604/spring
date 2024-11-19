@@ -15,24 +15,6 @@
 	box-sizing: border-box;
 }
 
-/* 상단 헤더 */
-.header {
-	text-align: center;
-	background-color: #ffffff;
-	padding: 15px 0;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 1000;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.header .home-link {
-	text-decoration: none;
-	font-size: 22px;
-	color: #007bff;
-	font-weight: bold;
-}
 
 /* 왼쪽 메뉴 스타일 */
 .left-menu {

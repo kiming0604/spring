@@ -57,9 +57,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     ]]>
 </select>
 
+<select id="getAllReviews" parameterType="map" resultType="org.hype.domain.psReplyVO">
+    <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM rnum, a.* FROM (
+                SELECT * FROM pop_reply_tbl 
+                WHERE psNo = #{psNo}
+                ORDER BY psRegDate DESC
+            ) a
+            WHERE ROWNUM <= #{pageNum} * #{amount}
+        )
+        WHERE rnum > (#{pageNum} - 1) * #{amount}
+    ]]>
+</select>
+
+
 <select id="getTotalReviews" parameterType="map" resultType="int">
     SELECT COUNT(*) FROM pop_reply_tbl 
     WHERE psNo = #{psNo} AND userNo != #{userNo}
+</select>
+<select id="getAllReviewcount" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM pop_reply_tbl 
+    WHERE psNo = #{psNo}
 </select>
 
     <!--윤씨 취합 부분! -->

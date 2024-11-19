@@ -194,18 +194,20 @@ function createGoodsElement(item) {
     const goodsResult = document.createElement('div');
     goodsResult.classList.add('goodsResult');
 
+    const formattedSellDate = displayTime(item.sellDate); // sellDate를 displayTime 함수로 변환
+
     goodsResult.innerHTML = `
         <div class="goodsImg"></div>
         <div class="goodsInfo">
             <input type="hidden" value="${item.gno}">
             <input type="hidden" class="goodsReply" value="${item.replycnt}">
             <input type="hidden" value="${item.attachList[0].uuid}_${item.attachList[0].fileName}" id="fileName">
-            <div class="goodsLike">좋아요: ${item.likeCount}</div>
+            <div class="goodsLike">❤️ ${item.likeCount}</div>
             <div class="goodsName">상품명: ${item.gname}</div>
             <div class="goodsPrice">가격: ${item.gprice} 원</div>
             <div class="goodsExp">설명: ${item.gexp}</div>
-            <div class="goodsSellDate">판매종료일 : ${item.sellDate}</div>
-            <div class="goodsCategory">굿즈 관심사:
+            <div class="goodsSellDate">판매종료일 : ${formattedSellDate}</div>
+            <div class="goodsCategory">
                 <span class="categories">
                     ${item.gcat.healthBeauty ? '건강 & 뷰티' : ''}
                     ${item.gcat.game ? '게임' : ''}
@@ -301,4 +303,11 @@ function setLink() {
             location.href = `/goodsStore/goodsDetails?gno=${gno}`;
         });
     });
+}
+function displayTime(unixTimeStamp) {
+    const myDate = new Date(unixTimeStamp);
+    const y = myDate.getFullYear();
+    const m = String(myDate.getMonth() + 1).padStart(2, '0');
+    const d = String(myDate.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
 }

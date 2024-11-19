@@ -18,6 +18,7 @@ import org.hype.domain.pCatVO;
 import org.hype.domain.pImgVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
+import org.hype.security.domain.CustomUser;
 import org.hype.service.PopUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -25,6 +26,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,47 +50,52 @@ public class PopUpController {
 	
 	@RequestMapping(value = "/popUpMain", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-	    int userno = 5; // ������ �ъ�⑹�� 踰��� (��: 濡�洹몄�명�� �ъ�⑹���� 踰���)
+	    // 현재 인증된 사용자 정보 가져오기
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    int userNo = 0;
 
-	    // �멸린 ���� �ㅽ���� 議고��
-	    List<popStoreVO> popularPopUps = service.getPopularPopUps(); 
-
-	    // 媛� �ㅽ���댁�� �대�몄� �곗�댄�� 異�媛�
+	    // 인기 팝업 스토어 목록 가져오기
+	    List<popStoreVO> popularPopUps = service.getPopularPopUps();
+	   
+	    // 팝업 스토어 이미지 처리
 	    for (popStoreVO popUp : popularPopUps) {
-	        pImgVO imgVo = service.getImageByStoreId(popUp.getPsNo());
-	        if (imgVo != null) {
-	            popUp.setPsImg(imgVo); // pImgVO瑜� 諛�濡� �ㅼ��
-	        }
+	    	pImgVO imgVo = service.getImageByStoreId(popUp.getPsNo());
+	    	if (imgVo != null) {
+	    		popUp.setPsImg(imgVo); // 이미지 설정
+	    	}
 	    }
-	    model.addAttribute("popularPopUps", popularPopUps); // 紐⑤�몄�� �멸린 ���� 異�媛�
-
-	    // �ъ�⑹�� 愿��ъ�ъ�� �곕Ⅸ ���� �ㅽ���� 議고��
-	    Map<String, List<popStoreVO>> topStoresByInterest = service.getTopStoresByInterests(userno);
-
-	    // 媛� 愿��ъ�щ� ���� �ㅽ���댁�� �대�몄� �곗�댄�� 異�媛�
-	    for (List<popStoreVO> storeList : topStoresByInterest.values()) {
-	        for (popStoreVO popUp2 : storeList) {
-	            pImgVO imgVo = service.getImageByStoreId(popUp2.getPsNo());
-	            if (imgVo != null) {
-	                popUp2.setPsImg(imgVo); // pImgVO瑜� 諛�濡� �ㅼ��
-	            }
+	    model.addAttribute("popularPopUps", popularPopUps); // 인기 팝업 스토어 리스트 모델에 추가
+	
+	    if (authentication != null && authentication.getPrincipal() instanceof CustomUser) {
+	        CustomUser userDetails = (CustomUser) authentication.getPrincipal();
+	        userNo = userDetails.getUserNo(); // userNo 가져오기
+	        Map<String, List<popStoreVO>> topStoresByInterest = service.getTopStoresByInterests(userNo);
+	        System.out.println("유저 넘버 제발 제대로 좀 주세요 .... : " + userNo);
+	        for (List<popStoreVO> storeList : topStoresByInterest.values()) {
+	        	for (popStoreVO popUp2 : storeList) {
+	        		pImgVO imgVo = service.getImageByStoreId(popUp2.getPsNo());
+	        		if (imgVo != null) {
+	        			popUp2.setPsImg(imgVo); // 이미지 설정
+	        		}
+	        	}
 	        }
+	        model.addAttribute("topStoresByInterestMap", topStoresByInterest); // 관심사 기반 팝업 스토어 리스트 모델에 추가
 	    }
-	    model.addAttribute("topStoresByInterestMap", topStoresByInterest); // 紐⑤�몄�� 愿��ъ�щ� ���� �ㅽ���� 異�媛�
+	    
 
-	    // 鍮�濡�洹몄�� �ъ�⑹��瑜� ���� �멸린 愿��ъ�� ���� 3媛� �ㅽ���� 議고��
+	    // 좋아요 수로 분류한 상위 카테고리 팝업 스토어
 	    Map<String, List<popStoreVO>> topCategoriesByLikes = service.getTopCategoriesByLikes();
 	    for (List<popStoreVO> storeList : topCategoriesByLikes.values()) {
 	        for (popStoreVO popUp3 : storeList) {
 	            pImgVO imgVo = service.getImageByStoreId(popUp3.getPsNo());
 	            if (imgVo != null) {
-	                popUp3.setPsImg(imgVo); // pImgVO瑜� 諛�濡� �ㅼ��
+	                popUp3.setPsImg(imgVo); // 이미지 설정
 	            }
 	        }
 	    }
-	    model.addAttribute("topCategoriesByLikesMap", topCategoriesByLikes); // 紐⑤�몄�� �멸린 愿��ъ�щ� ���� �ㅽ���� 異�媛�
+	    model.addAttribute("topCategoriesByLikesMap", topCategoriesByLikes); // 카테고리 기반 팝업 스토어 리스트 모델에 추가
 
-	    return "popUp/popUpMainPage"; // JSP ���댁� �대� 諛���
+	    return "popUp/popUpMainPage"; // JSP 페이지 반환
 	}
 
 
@@ -95,7 +103,7 @@ public class PopUpController {
 	@GetMapping("/search") // URL 留ㅽ���� �대�뱁���� 硫�����
 	public String search(@RequestParam("searchData") String searchData, Model model) {
 	    // searchData瑜� 諛��� 寃��� 寃곌낵瑜� 泥�由�
-	    System.out.println("寃��� �곗�댄��: " + searchData);
+
 	    
 	    // DB���� 寃��� 寃곌낵瑜� 媛��몄�ㅻ�� 濡�吏� ����
 	    List<popStoreVO> vo = service.popUpSearchByData(searchData);
@@ -121,8 +129,8 @@ public class PopUpController {
 	        double averageRating = service.calculateAverageRating(store.getPsNo());
 	        store.setAvgRating(averageRating); // ��洹� ���� �ㅼ��
 
-	        System.out.println("愿��ъ��: " + store.getInterest());
-	        System.out.println("------------------------------");
+	   
+
 	    }
 	    
 	    // searchData瑜� JSP�� ����
@@ -137,13 +145,7 @@ public class PopUpController {
     	 List<popStoreVO> vo = service.getAllPopUpData();
     	
     	  for (popStoreVO store : vo) {
-  	        System.out.println("�ㅽ���� 踰���: " + store.getPsNo());
-  	        System.out.println("�ㅽ���� �대�: " + store.getPsName());
-  	        System.out.println("二쇱��: " + store.getPsAddress());
-  	        System.out.println("�ㅻ�: " + store.getPsExp());
-  	        System.out.println("醫����� ��: " + store.getLikeCount());
-  	        System.out.println("��洹� 蹂���: " + store.getAvgRating());
-  	        
+
   	        // 媛� �ㅽ���댁�� 愿��ъ�� 議고��
   	        List<Map<String, Object>> interestsList = service.getInterestsByPsNo(store.getPsNo());
 
@@ -163,8 +165,6 @@ public class PopUpController {
   	        double averageRating = service.calculateAverageRating(store.getPsNo());
   	        store.setAvgRating(averageRating); // ��洹� ���� �ㅼ��
 
-  	        System.out.println("愿��ъ��: " + store.getInterest());
-  	        System.out.println("------------------------------");
   	    }
   	    
   	    // searchData瑜� JSP�� ����
@@ -177,7 +177,6 @@ public class PopUpController {
     @GetMapping("/popUpDetails")
     public String popUpDetails(@RequestParam("storeName") String storeName, Model model) {
         // storeName�� 諛��� ���� ��蹂대�� 泥�由�
-        System.out.println("�ㅽ���� �대�: " + storeName);
         
         // DB���� ���� ��蹂대�� 媛��몄�ㅻ�� 濡�吏� ����
         popStoreVO vo = service.getStoreInfoByName(storeName);
@@ -189,10 +188,7 @@ public class PopUpController {
         
         List<goodsVO> gvo = service.getGoodsInfoByName(storeName);
         
-        for (goodsVO goods : gvo) {
-            System.out.println("����紐�: " + goods.getGname() + ", 媛�寃�: " + goods.getGprice() + "��" +
-        "���� 踰���" + goods.getGno());
-        }
+     
         
         // ��洹� 蹂��� 怨���
         double avgRating = service.getAvgRating(vo.getPsNo());
@@ -218,7 +214,6 @@ public class PopUpController {
         int psNo = likeVO.getPsNo();
         int userNo = likeVO.getUserNo();
 
-        System.out.println("Received psNo: " + psNo + ", userNo: " + userNo);
         
         // ��鍮��� �몄����� 醫����� ���� ���곗�댄��
         likeVO result = service.likeCount(psNo, userNo);
@@ -247,7 +242,6 @@ public class PopUpController {
     public ResponseEntity<Map<String, Object>> updateLikeCount(@RequestBody likeVO likeVO) {
         int psNo = likeVO.getPsNo();
 
-        System.out.println("Received psNo: " + psNo);
 
         // ��鍮��� �몄����� 醫����� �� 媛��몄�ㅺ린
         Integer likeCount = service.getLikeCount(psNo);
@@ -315,16 +309,12 @@ public class PopUpController {
     @GetMapping("/myDetail")
     public String myDetail(@RequestParam("storeName") String storeName, Model model) {
         // storeName�� 諛��� ���� ��蹂대�� 泥�由�
-        System.out.println("�ㅽ���� �대�: " + storeName);
         
         // DB���� ���� ��蹂대�� 媛��몄�ㅻ�� 濡�吏� ����
         popStoreVO vo = service.getStoreInfoByName(storeName);
        
          List<goodsVO> gvo = service.getGoodsInfoByName(storeName);
-         
-         for (goodsVO goods : gvo) {
-        	    System.out.println("����紐�: " + goods.getGname() + ", 媛�寃�: " + goods.getGprice() + "��");
-        	}
+        
         
     
         // storeName�� JSP�� ����
@@ -357,8 +347,6 @@ public class PopUpController {
 	    String imagePath = uploadFolder + File.separator + uuid + "_" + originalFileName;
 	    Path path = Paths.get(imagePath);
 
-	    // 경로 로그로 출력 (디버깅용)
-	    System.out.println("이미지 경로: " + path.toString());
 
 	    // 파일이 존재하지 않으면 예외 처리
 	    if (!Files.exists(path)) {

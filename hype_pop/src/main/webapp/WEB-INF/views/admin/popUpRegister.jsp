@@ -158,7 +158,8 @@ button:hover {
 	    </div>	 
 	    
         <button type="button" id="psRegisterBtn" onclick="popStoreRegister();">등록하기</button>
-        <button type="button" id="backToMainPage" onclick="backToMainPage();">메인 페이지</button>
+        <button type="button" id="backToMainPage" onclick="backToMainPage();">관리자 메인 페이지</button>
+
         
 	</form>	
 	

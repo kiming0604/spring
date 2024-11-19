@@ -107,7 +107,8 @@ button:hover {
 	
     <button type="button" id="mCancel" onclick="backtoMList()">취소 및 리스트로 돌아가기</button>	
     <button type="button" id="mUpdate" onclick="updateMemberList()">수정완료</button>
-	<button type="button" id="backToMainPage" onclick="backToMainPage();">메인 페이지</button>
+	<button type="button" id="backToMainPage" onclick="backToMainPage();">관리자 메인 페이지</button>
+
 	
 	<div id="pagination"></div>
 

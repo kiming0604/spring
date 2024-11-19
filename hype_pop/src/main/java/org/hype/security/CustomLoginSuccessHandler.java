@@ -19,27 +19,31 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
-	
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
-        String redirectUrl = request.getParameter("redirect");
-        List<String> roleNames = new ArrayList<>();
-        authentication.getAuthorities().forEach(auth -> roleNames.add(auth.getAuthority()));
-        log.warn("ROLE NAME : " + roleNames);
+   
+   @Override
+   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                       Authentication authentication) throws IOException, ServletException {
+       String redirectUrl = request.getParameter("redirect");
+       List<String> roleNames = new ArrayList<>();
+       authentication.getAuthorities().forEach(auth -> roleNames.add(auth.getAuthority()));
+       log.warn("ROLE NAME : " + roleNames);
 
-        CustomUser customUser = (CustomUser) authentication.getPrincipal();
-        Integer userNo = customUser.getMember().getUserNo();
+       CustomUser customUser = (CustomUser) authentication.getPrincipal();
+       Integer userNo = customUser.getMember().getUserNo();
 
-        if (roleNames.contains("ROLE_ADMIN")) {
-            response.sendRedirect("/admin/adminPage");
-        } else if (roleNames.contains("ROLE_USER")) {
-            if (redirectUrl != null && userNo != null) {
-                redirectUrl = redirectUrl.contains("?") ? 
-                              redirectUrl + "&userNo=" + userNo : 
-                              redirectUrl + "?userNo=" + userNo;
-            }
-            response.sendRedirect(redirectUrl);
-        }
-    }
+       if (roleNames.contains("ROLE_ADMIN")) {
+           response.sendRedirect("/admin/adminPage");
+       } else if (roleNames.contains("ROLE_USER")) {
+           if (redirectUrl != null) {
+               if ("/goodsStore/goodsMain".equals(redirectUrl) && userNo != null) {
+                   redirectUrl += "?userNo=" + userNo;
+               } else if ("/member/login".equals(redirectUrl) || "http://localhost:9010/member/join".equals(redirectUrl)) {
+                   redirectUrl = "/";
+               }
+           } else {
+               redirectUrl = "/";
+           }
+           response.sendRedirect(redirectUrl);
+       }
+   }
 }

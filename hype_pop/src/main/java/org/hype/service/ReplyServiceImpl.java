@@ -79,6 +79,18 @@ public class ReplyServiceImpl implements ReplyService{
 	    List<psReplyVO> result = mapper.getOtherReviews(params);
 	    return result;
 	}
+	
+	@Override
+	public List<psReplyVO> getAllReviews(Integer psNo, Criteria cri) {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("psNo", psNo);
+	    params.put("pageNum", cri.getPageNum());  // 현재 페이지 번호 추가
+	    params.put("amount", cri.getAmount()); 
+		
+		// Mapper 호출 시 params 맵을 사용
+		return mapper.getAllReviews(params);
+	}
+	
 	@Override
 	public int getTotalReviews(Integer psNo, Integer userNo) {
 	    Map<String, Integer> params = new HashMap<>();
@@ -88,6 +100,16 @@ public class ReplyServiceImpl implements ReplyService{
 	    // Mapper 호출 시 params 맵을 사용
 	    return mapper.getTotalReviews(params);
 	}
+	
+	@Override
+	public int getAllReviewcount(Integer psNo) {
+		Map<String, Integer> params = new HashMap<>();
+	    params.put("psNo", psNo);
+
+	    // Mapper 호출 시 params 맵을 사용
+	    return mapper.getAllReviewcount(params);
+	}
+	
 	//새로 추가(김윤)
 		@Override
 		@Transactional

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const userIdElement = document.getElementById("userId");
 	const userNo = userNoElement ? userNoElement.value : null;
 	const userId = userIdElement ? userIdElement.value : null;
-	
+	console.log(userNo);
 	document.getElementById("goodsLogo").addEventListener('click', function() {
 	    if (userNo) {
 	        location.href = `/goodsStore/goodsMain?userNo=${userNo}`;

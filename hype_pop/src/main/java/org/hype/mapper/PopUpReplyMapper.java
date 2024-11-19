@@ -17,11 +17,13 @@ public interface PopUpReplyMapper {
 	public int deleteReviewById(int reviewId);
 
 	public Integer updateReply(psReplyVO vo);
+	public List<psReplyVO> getAllReviews(Map<String, Integer> params);
 
 	public List<psReplyVO> getOtherReviews(Map<String, Integer> params);
 
 	public int getTotalReviews(Map<String, Integer> params);
 	
+	public int getAllReviewcount(Map<String, Integer> params);
 	
 	// 윤씨 추가 된 부분
 	
@@ -31,4 +33,6 @@ public interface PopUpReplyMapper {
 		
 	// psNo로 psName을 가져오는 메서드
 	public String getPsName(int psNo);
+
+
 }

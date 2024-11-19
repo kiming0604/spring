@@ -13,10 +13,13 @@ public interface ReplyService {
 	public boolean deleteReview(int reviewId);
 	public Integer updateReply(psReplyVO vo);
 	public List<psReplyVO> getOtherReviews(Integer psNo, Integer userNo, Criteria cri);
+	public List<psReplyVO> getAllReviews(Integer psNo, Criteria cri);
 	public int getTotalReviews(Integer psNo, Integer userNo);
+	public int getAllReviewcount(Integer psNo);
 
 
 	// 윤씨 추가 부분
     public Map<String, Object> getMyPopupReviews(int userNo);
+
 
 }

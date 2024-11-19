@@ -216,12 +216,20 @@ document.querySelectorAll('#newReviewStars span').forEach(star => {
     });
 });
 
-// 리뷰 작성 데이터 전송 함수
+//리뷰 작성 데이터 전송 함수
 function send(form) {
     const reviewText = document.getElementById('reviewText').value;
     const selectedRating = document.querySelector('#newReviewStars span.selected'); // 선택된 별점
     const psScore = window.selectedRating;
-console.log(psScore);
+
+    console.log(psScore);
+
+    // userNo가 없으면 로그인 모달을 띄우고 함수 종료
+    if (!userNo) {
+        openLoginModal(); // 로그인 모달 열기
+        return; // 나머지 코드 실행 중지
+    }
+
     if (reviewText.trim() === '' || psScore === '0') {
         alert('별점과 리뷰 내용을 입력해주세요.'); // 경고 메시지 표시
         return;
@@ -257,6 +265,8 @@ console.log(psScore);
         alert('리뷰 작성 중 문제가 발생했습니다. 다시 시도해 주세요.');
     });
 }
+
+
 
 // 리뷰 목록 가져오는 함수
 function fetchUserReviews(psNo, userNo) {
@@ -371,11 +381,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 //좋아요 버튼 클릭 이벤트 핸들러
+//좋아요 버튼 클릭 이벤트 핸들러
 document.querySelectorAll('#likeCount').forEach(button => {
     button.addEventListener('click', (event) => {
         event.preventDefault();
         let psNo = document.getElementById('psNo').value;
         let userNo = document.getElementById('userNo').value;
+
+        // userNo가 없을 경우 로그인 모달을 띄움
+        if (!userNo) {
+            openLoginModal(); // 로그인 모달 함수 호출
+            return; // 나머지 코드 실행을 막음
+        }
 
         fetch('/hypePop/likeCount', {
             method: 'POST',
@@ -386,13 +403,13 @@ document.querySelectorAll('#likeCount').forEach(button => {
         })
         .then(response => {
             if (response.ok) {
-            	console.log("체크하는 곳에 보낸 userNo는? : " + userNo);
-            	console.log("체크하는 곳에 보낸 psNo? : " + psNo);
+                console.log("체크하는 곳에 보낸 는? : " + userNo);
+                console.log("체크하는 곳에 보낸 psNo? : " + psNo);
                 checkUserLiked(psNo, userNo); // 좋아요 상태 확인 및 이미지 변경
                 updateLikeCount(psNo)
             } else {
-            	checkUserLiked(psNo, userNo);  // 이미 눌렀을 때 알림
-            	 updateLikeCount(psNo)
+                checkUserLiked(psNo, userNo);  // 이미 눌렀을 때 알림
+                updateLikeCount(psNo)
             }
         })
         .catch(err => console.error('Error:', err));
@@ -511,7 +528,6 @@ document.querySelector('form').addEventListener('submit', function(event) {
     }
 });
 
-
 function fetchOtherReviews(psNo, userNo, page = 1) {
     console.log("유저의 리뷰를 가져오는 중");
 
@@ -522,12 +538,18 @@ function fetchOtherReviews(psNo, userNo, page = 1) {
     loadingMessage.innerHTML = '<td colspan="4" class="loadingMessage">로딩 중...</td>';
     reviewsList.appendChild(loadingMessage); // 로딩 메시지 추가
 
-    fetch('/reply/getOtherReviews', {
+    // userNo가 없으면 모든 리뷰를 가져오고, 있으면 해당 유저의 리뷰만 가져옴
+    const url = userNo ? '/reply/getOtherReviews' : '/reply/getAllReviews';
+    const bodyData = userNo 
+        ? JSON.stringify({ psNo: psNo, userNo: userNo, pageNum: page, amount: amount }) 
+        : JSON.stringify({ psNo: psNo, pageNum: page, amount: amount }); // userNo가 없으면 이 값만 보냄
+
+    fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ psNo: psNo, userNo: userNo, pageNum: page, amount: amount }) // 여기서 amount를 사용
+        body: bodyData
     })
     .then(response => response.json())
     .then(data => {
@@ -538,7 +560,7 @@ function fetchOtherReviews(psNo, userNo, page = 1) {
 
         if (data.reviews && Array.isArray(data.reviews)) {
             if (data.reviews.length === 0) {
-                reviewsList.innerHTML = '<tr><td colspan="4" class="noReviewsMessage">다른 유저의 댓글이 없습니다</td></tr>';
+                reviewsList.innerHTML = '<tr><td colspan="4" class="noReviewsMessage">댓글이 없습니다.</td></tr>';
             } else {
                 data.reviews.forEach(review => {
                     const reviewRow = `
@@ -575,23 +597,47 @@ function fetchOtherReviews(psNo, userNo, page = 1) {
     });
 }
 
+
 function changePage(page) {
-    if (page < 1) return; // 첫 페이지를 넘지 않도록
+    if (page < 1 || page > totalPages) return; // 첫 페이지나 마지막 페이지를 넘지 않도록
     currentPage = page; // 현재 페이지 업데이트
     fetchOtherReviews(psNo, userNo, currentPage); // 새로운 페이지의 리뷰 가져오기
+    updatePagination(totalReviews); // 페이지네이션 업데이트
 }
 
 function updatePagination(totalReviews) {
     const totalPages = Math.ceil(totalReviews / amount); // 전체 페이지 수 계산
+    const paginationContainer = document.getElementById('pagination');
+    const prevButton = document.getElementById('prevPage');
+    const nextButton = document.getElementById('nextPage');
     const pageNumbers = document.getElementById('pageNumbers');
-    pageNumbers.innerHTML = ''; // 기존 페이지 번호 초기화
 
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.innerText = i;
-        pageButton.onclick = () => changePage(i); // 버튼 클릭 시 페이지 변경
-        pageNumbers.appendChild(pageButton);
+    // 리뷰가 없을 때 페이지네이션 숨기기
+    if (totalReviews === 0) {
+        paginationContainer.style.display = 'none'; // 페이지네이션 숨기기
+        return;
+    } else {
+        paginationContainer.style.display = 'block'; // 페이지네이션 보이기
     }
+
+    // 기존 페이지 번호 초기화
+    pageNumbers.innerHTML = '';
+
+    // 전체 페이지 수가 1보다 크면 페이지 버튼 생성
+    if (totalPages > 1) {
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.innerText = i;
+            pageButton.onclick = () => changePage(i); // 버튼 클릭 시 페이지 변경
+            pageNumbers.appendChild(pageButton);
+        }
+    }
+
+    // 첫 페이지일 때 "이전" 버튼 숨기기
+    prevButton.style.display = (currentPage === 1) ? 'none' : 'inline-block';
+
+    // 마지막 페이지일 때 "다음" 버튼 숨기기
+    nextButton.style.display = (currentPage === totalPages) ? 'none' : 'inline-block';
 }
 
 document.querySelectorAll('.hitGoods span').forEach(item => {
@@ -639,4 +685,27 @@ function checkUserLiked(psNo, userNo) {
     .catch(err => {
         console.error('좋아요 상태 확인 중 오류 발생:', err);
     });
+}
+
+//모달 요소
+var modal = document.getElementById("loginModal");
+
+// 모달 닫기 버튼
+var span = document.getElementsByClassName("close")[0];
+
+// 모달 열기
+function openLoginModal() {
+    modal.style.display = "flex"; // 모달을 보이게 설정
+}
+
+// 모달 닫기
+span.onclick = function() {
+    modal.style.display = "none"; // 모달을 숨김
+}
+
+// 모달 외부를 클릭했을 때도 모달 닫기
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }

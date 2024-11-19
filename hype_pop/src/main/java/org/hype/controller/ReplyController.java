@@ -197,6 +197,48 @@ public class ReplyController {
                .contentType(MediaType.APPLICATION_JSON)
                .body(response);
    }
+   
+   
+   @PostMapping("/getAllReviews")
+   public ResponseEntity<Map<String, Object>> getAllReviews(@RequestBody Map<String, Object> request) {
+       // 요청 본문에서 psNo와 userNo 추출
+       Integer psNo = Integer.parseInt(String.valueOf(request.get("psNo"))); // String에서 Integer로 변환
+       Integer pageNum = Integer.parseInt(String.valueOf(request.get("pageNum"))); // 페이지 번호
+       Integer amount = Integer.parseInt(String.valueOf(request.get("amount"))); // 항목 수
+       
+       System.out.println("댓글 불러오기용 스토어 넘버는 ? : " + psNo);
+       System.out.println("Received request: " + request);
+
+       // Criteria 객체 생성 및 설정
+       Criteria cri = new Criteria();
+       if (pageNum <= 0) {
+           cri.setPageNum(1); // 기본 페이지 번호 설정
+       } else {
+           cri.setPageNum(pageNum);
+       }
+
+       if (amount <= 0) {
+           cri.setAmount(10); // 기본 항목 수 설정
+       } else {
+           cri.setAmount(amount);
+       }
+
+       // 리뷰 가져오기
+       List<psReplyVO> reviews = service.getAllReviews(psNo, cri);
+       
+
+
+       // 응답 맵 구성
+       Map<String, Object> response = new HashMap<>();
+       response.put("status", "success");
+       response.put("message", reviews.isEmpty() ? "리뷰가 없습니다." : "리뷰를 불러왔습니다.");
+       response.put("reviews", reviews);
+       response.put("totalReviews", service.getAllReviewcount(psNo)); // 전체 리뷰 수 추가
+
+       return ResponseEntity.ok()
+               .contentType(MediaType.APPLICATION_JSON)
+               .body(response);
+   }
    //추가(김윤)
    @GetMapping(value = "/getMyPopupReply", produces = MediaType.APPLICATION_JSON_VALUE)
    @ResponseBody // JSON으로 응답하기 위해 추가

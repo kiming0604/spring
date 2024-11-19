@@ -297,7 +297,7 @@ public class MemberRestController {
       }
    }
    
-   //로그인(userNo 스토리지 저장)
+//   로그인(userNo 스토리지 저장)
 //   @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
 //   @ResponseBody
 //   public ResponseEntity<Map<String, Object>> login(@RequestBody signInVO svo) {
@@ -314,8 +314,8 @@ public class MemberRestController {
 //           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 //       }
 //   }
-
-   
+//
+//   
    	//좋아요한 굿즈 이미지 가져오기
     @GetMapping("/goodsBannerImages/{fileName:.+}")
     @ResponseBody

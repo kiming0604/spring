@@ -167,7 +167,8 @@ button:hover {
 	<button type="button" id="exhCancel" onclick="backtoExhList();">취소 및 리스트로 돌아가기</button>	
     <button type="button" id="exhDelete" onclick="exhDelete();">삭제</button>
     <button type="button" id="exhUpdate" onclick="exhUpdate();">수정완료</button>
-    <button type="button" id="backToMainPage" onclick="backToMainPage();">메인 페이지</button>
+    <button type="button" id="backToMainPage" onclick="backToMainPage();">관리자 메인 페이지</button>
+
     
     <div id="pagination"></div>
 	

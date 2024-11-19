@@ -74,7 +74,8 @@
         <textarea id="reviewText" name="reviewText" placeholder="후기를 작성해주세요!" rows="5"></textarea>
         <input type="hidden" id="rating" name="rating" value="0">
         <input type="hidden" id="psNo" name="psNo" value="${storeInfo.psNo}">
-        <input type="hidden" id="userNo" name="userNo" value="2">
+        <input type="hidden" id="userNo"  name="userNo" value="${pinfo.member.userNo}">
+   	
         <input type="button" value="등록하기" onclick="send(this.form)">
     </form>
 
@@ -153,3 +154,10 @@
         <td><span id="popUpGoodsInfo3">${goodsInfo[2].gname} - ${goodsInfo[2].gprice}원</span></td>
     </tr>
 </table>
+<div id="loginModal" class="modal">
+   <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>로그인이 필요한 기능입니다.</p>
+      <button id="goToLogin" onclick="location.href='/member/login'">로그인하러 가기</button>
+   </div>
+</div>

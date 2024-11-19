@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v3s0wu5ddz"></script>
 <div class="popUpRecommend"> 
     <h1>현재 인기있는 팝업스토어</h1>
@@ -20,6 +22,7 @@
 
     <br>
     <h1>핫한 관심사로 추천!</h1>
+      <sec:authorize access="isAuthenticated()">
     <c:forEach var="entry" items="${topStoresByInterestMap}" varStatus="status">
         <h2>${entry.key}</h2>
         <div class="slider-container">
@@ -38,7 +41,12 @@
         </div>
         <br>
     </c:forEach>
+   
+   </sec:authorize>
 
+
+
+   <sec:authorize access="!isAuthenticated()">
     <c:forEach var="category" items="${topCategoriesByLikesMap}" varStatus="status">
         <h2>${category.key}</h2>
         <div class="slider-container">
@@ -57,6 +65,8 @@
         </div>
         <br>
     </c:forEach>
+    
+    </sec:authorize>
 </div>
 
 <div id="map" style="width: 800px; height: 400px; margin: 30px auto; display: flex; justify-content: center;" ></div>

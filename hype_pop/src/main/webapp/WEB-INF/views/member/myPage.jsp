@@ -11,61 +11,36 @@
 <style>
 html {
 	height: 100%;
-	overflow-y: auto; /* 세로 스크롤 활성화 */
+	overflow-y: auto; /* 스크롤바를 HTML에만 표시 */
+    margin: 0;
 }
 
 body {
 	font-family: Arial, sans-serif;
 	margin: 0;
 	padding: 0;
-	overflow-y: auto;
+	 display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+	
 }
 
 .container {
-	max-width: 90%;
-	width: 800px; /* 컨테이너 가로 길이 확장 */
-	margin: 50px auto;
-	background-color: rgba(255, 255, 255, 0.8);
-	border-radius: 8px;
-	max-height: 80vh; /* 화면의 높이를 넘지 않도록 설정 */
-	padding: 10px; /* 상단, 하단 여백을 넉넉하게 설정 */
-	box-sizing: border-box; /* padding이 요소 크기에 포함되도록 설정 */
-	padding-top: 40px;
-	padding-bottom: 80px;
-	min-height: 1400px; /* 최소 세로 길이 지정 */
-	overflow: auto; /* 스크롤바가 필요할 때 자동으로 생성되도록 설정 */
-	margin-bottom: 30px; /* 여백 추가 */
-	overflow: hidden;
-}
-
-/* Header */
-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 10px 20px;
-	background-color: #eee;
-	border-bottom: 2px solid #ccc;
-}
-
-header .home-btn, header .search-btn {
-	background-color: #f5a9bc;
-	border: none;
-	padding: 10px;
-	cursor: pointer;
-}
-
-header .search-bar {
-	flex-grow: 1;
-	margin: 0 20px;
-}
-
-header .search-bar input {
-	width: 100%;
-	padding: 10px;
-	border: none;
-	border-bottom: 2px solid #ccc;
-	outline: none;
+    max-width: 90%;
+    width: 800px; /* 컨테이너 가로 길이 확장 */
+    margin: 50px auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    max-height: 100vh; /* 화면의 높이를 넘지 않도록 설정 */
+    padding: 10px; /* 상단, 하단 여백을 넉넉하게 설정 */
+    box-sizing: border-box; /* padding이 요소 크기에 포함되도록 설정 */
+    padding-top: 40px;
+    padding-bottom: 80px;
+    min-height: 1600px; /* 최소 세로 길이 지정 */
+    margin-bottom: 30px; /* 여백 추가 */
+  
+   
 }
 
 /* Form Layout */
@@ -73,6 +48,10 @@ header .search-bar input {
 	width: 60%;
 	margin: 20px auto;
 	font-size: 14px;
+	overflow: visible; /* 콘텐츠가 잘리지 않도록 설정 */
+    height: auto;
+	
+	
 }
 
 .form-section h2 {
@@ -121,7 +100,7 @@ header .search-bar input {
 .image-grid {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	gap: 10px;
+	gap: 17px;
 	margin: 20px 0;
 	 overflow: hidden; /* 슬라이더의 콘텐츠가 넘치지 않도록 설정 */
     width: 100%; /* 부모의 너비를 가득 채움 */
@@ -166,34 +145,31 @@ header .search-bar input {
 	align-items: center; /* 수직 중앙 정렬 */
 	margin: 0 10px;
 	margin-bottom: 200px;
-	position: relative;
+	position: fixed;
 	flex-wrap: wrap;
 	bottom: 50px; /* 화면 하단에서 20px 떨어진 위치 */
-	z-index: 1000;
 	margin-top: 80px;
 	padding-bottom: 30px;
 }
 
-/* Footer */
-footer {
-	text-align: center;
-	margin: 40px 0;
-}
 
 /* Navigation Bar */
 nav {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	background-color: #ccc;
-	text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ccc;
+    text-align: center;
+    z-index: 1000; /* 버튼 섹션보다 위에 위치하도록 */
+    padding: 10px 0; /* 수직 여백 추가 */
 }
 
 nav a {
 	margin: 10px;
 	text-decoration: none;
 	color: black;
+	
 }
 
 #foundUserPwModal, #changeUserEmailModal, #changePhoneNumberModal {
@@ -295,6 +271,8 @@ nav a {
 	align-items: center;
 	position: relative;
 	max-height: 300px;
+	padding: 0 10px;
+	
 }
 
 .image-grid {
@@ -307,6 +285,20 @@ nav a {
 	flex: 0 0 25%; /* 한 번에 4개 보이도록 설정 */
 	box-sizing: border-box;
 	padding: 10px;
+  text-align: center;  /* 이미지와 이름을 중앙 정렬 */
+  position: relative;
+}
+.image-item img {
+  width: 100%;  /* 이미지가 컨테이너 너비에 맞게 조정됨 */
+  height: auto;
+}
+.store-name {
+  margin-top: 10px;  /* 이미지와 이름 사이의 여백 */
+  font-size: 14px;  /* 글씨 크기 조정 */
+  color: #333;  /* 글씨 색상 */
+  white-space: normal;  /* 텍스트가 줄 바꿈 되도록 설정 */
+  word-wrap: break-word;  /* 단어가 길어지면 자동으로 줄 바꿈 */
+  overflow-wrap: break-word;  /* 단어가 길어지면 자동으로 줄 바꿈 */
 }
 
 .arrow {
@@ -316,8 +308,8 @@ nav a {
 	cursor: pointer;
 	z-index: 1; /* 버튼이 이미지 위에 오도록 설정 */
 	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
+	top: 40%;
+	transform: translateY(-70%);
 }
 
 .left {
@@ -571,6 +563,14 @@ nav a {
   position: relative; /* 버튼을 위해서 부모 요소에 position을 상대적으로 설정 */
   margin-bottom: 50px; /* 이미지 아래에 여백 추가 */
 }
+.button-container {
+    display: flex;
+    flex-direction: row; /* 세로로 버튼 배치 */
+    justify-content: center; /* 세로로 중앙 정렬 */
+    align-items: center; /* 가로로 중앙 정렬 */
+    margin-top: 30px; /* 위쪽에 여백 추가 */
+    gap: 15px; /* 버튼 사이 간격 */
+}
 </style>
 
 </head>
@@ -581,7 +581,8 @@ nav a {
 	</header>
 
 	<div class="container">
-
+	<input type="hidden" value="2" name="userNo" id="userNo">
+	
 
 		<div class="form-section">
 			<h2>마이페이지</h2>
@@ -780,8 +781,7 @@ nav a {
 				<button type="button" id="userReplyBtn" onclick="goToMyReply()">내가
 					쓴 글 보기</button>
 			</div>
-			<!-- 		<button type="button" class="btn btn-sec" id="goCartBtn" onclick="goToMyCart">장바구니</button>
- -->
+
 
 		</div>
 
@@ -789,20 +789,21 @@ nav a {
 		<div class="form-section">
 			<h3>좋아요한 팝업스토어</h3>
 			<div class="slider-container">
-				<input type="hidden" value="2" name="userNo" id="userNo">
 				<button class="arrow left" onclick="slideLeft('popupStoreSlider')">❮</button>
 				<div class="image-grid" id="popupStoreSlider">
 					<c:forEach var="popup" items="${pLikeList}">
 						<div class="image-popupItem" id="popup-${popup.psNo}"
 							data-file-name="${popup.uuid}_${popup.fileName}">
 							<c:if test="${not empty popup.psName}">
-								<img alt="${popup.psName}" id="popupStoreImg" />
+								<img alt="${popup.psName}" id="popupStoreImg"
+								onclick="window.location.href=`/hypePop/popUpDetails?storeName=${popup.psName}`"  />
+								<div class="store-name">${popup.psName}</div> 
 							</c:if>
 							<button class="removePopupBtn" onclick="removePopup(${popup.psNo})">X</button>
 						</div>
 					</c:forEach>
-					<button class="arrow right" onclick="slideRight('popupStoreSlider')">❯</button>
 				</div>
+					<button class="arrow right" onclick="slideRight('popupStoreSlider')">❯</button>
 				</div>
 				<h3>좋아요한 굿즈</h3>
 				<div class="slider-container">
@@ -814,14 +815,15 @@ nav a {
  							<div class="image-goodsItem" id="goods-${goods.gno}"
 								data-file-name="${goods.uuid}_${goods.fileName}">
 								<c:if test="${not empty goods.gname}">
-									<img alt="${goods.gname}" id="goodsBannerImg1" />
+									<img alt="${goods.gname}" id="goodsBannerImg1"
+									 onclick="window.location.href=`/goodsStore/goodsDetails?gno=${goods.gno}`" />
+									<div class="store-name">${goods.gname}</div> 
 								</c:if>
 								<button class="removeGoodsBtn" onclick="removeGoods(${goods.gno})">X</button>
 							</div>
 						</c:forEach>
-						<button class="arrow right" onclick="slideRight('goodsSlider')">❯</button>
-
 					</div>
+						<button class="arrow right" onclick="slideRight('goodsSlider')">❯</button>
 				</div>
 				<h3>좋아요한 전시</h3>
 				<div class="slider-container">
@@ -833,33 +835,32 @@ nav a {
  							<div class="image-exhItem" id="exh-${exh.exhNo}"
 								data-file-name="${exh.uuid}_${exh.fileName}">
 								<c:if test="${not empty exh.exhName}">
-									<img alt="${exh.exhName}" id="exhImg" />
+									<img alt="${exh.exhName}" id="exhImg" 
+									 onclick="window.location.href=`/exhibition/exhibitionDetail?exhNo=${exh.exhNo}`" />
+									<div class="store-name">${exh.exhName}</div> 
 								</c:if>
 								<button class="removeExhBtn" onclick="removeExh(${exh.exhNo})">X</button>
 							</div>
 						</c:forEach>
-						<button class="arrow right" onclick="slideRight('exhibitionSlider')">❯</button>
-
 					</div>
+						<button class="arrow right" onclick="slideRight('exhibitionSlider')">❯</button>
 				</div>
 
-				<div class="btn-section">
-					<button type="button" class="btn btn-sec" id="goCartBtn"
-						onclick="goToMyCart()">장바구니</button>
-					<input type="hidden" value="2" name="userNo" id="userNo">
-					<button type="button" class="btn btn-sec" id="paymentListBtn"
-						onclick="getPayList(userNo)">내결제 목록</button>
-					<button type="button" class="btn btn-sec" id="deleteIdBtn"
-						style="background-color: red; color: white;">회원 탈퇴</button>
-				</div>
+					<div class="button-container">
+    <button type="button" class="btn btn-sec" id="goCartBtn" onclick="goToMyCart()">장바구니</button>
+    <input type="hidden" value="2" name="userNo" id="userNo">
+    <button type="button" class="btn btn-sec" id="paymentListBtn" onclick="getPayList(userNo)">내결제 목록</button>
+	<button type="button" class="btn btn-sec" id="deleteUserData" onclick="deleteUserData(userNo)"style="background-color: red; color: white;">회원 탈퇴</button>
+</div>
+
+				
 			</div>
 		</div>
 
+		<jsp:include page="layout/popUpNavBar.jsp" />
 
 
 		<!-- 푸터 포함 -->
-		<jsp:include page="layout/popUpFooter.jsp" />
-		<jsp:include page="layout/popUpNavBar.jsp" />
 
 
 
