@@ -91,6 +91,8 @@ public class AlarmController extends TextWebSocketHandler {
         // 사용자 ID로 알림 목록 조회
         List<NotificationVO> notifications = service.getAlarmsForUser(userNo);
         
+        System.out.println("여기까지 오기는 오냐? : " + notifications);
+        
         if (notifications == null) {
             notifications = new ArrayList<>(); // 기본값으로 빈 리스트 초기화
         }

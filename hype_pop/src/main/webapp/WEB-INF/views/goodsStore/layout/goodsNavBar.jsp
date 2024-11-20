@@ -34,7 +34,7 @@ body {
 <body>
     <div class="navBar">
 	    <a href="/hypePop/search/noData">팝업스토어 전체 보기</a>
-	    <a href="/goodsStore/goodsSearch" id="searchReset">굿즈 전체 보기</a>
+	          <a href="javascript:resetSearch();">굿즈 전체 보기</a>
 	    <a href="/exhibition/exhibitionMain">전시회 메인 페이지</a>
 	    <a href="/hypePop/calendar">캘린더</a>
 	    <a href="/party/partyBoard">파티구하기</a>
@@ -48,5 +48,5 @@ body {
 	    <a href="/hypePop/customerMain">고객센터</a>
     </div>
 </body>
-<script type="text/javascript" src="/resources/partyJs/partyNav.js"></script>
+<script type="text/javascript" src="/resources/goodsJs/goodsNav.js"></script>
 </html>

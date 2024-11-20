@@ -205,12 +205,14 @@ public List<popStoreVO> findNearbyStores(double lat, double lng, double radius) 
 
 	        if (interests != null && !interests.isEmpty()) {
 	            for (String interest : interests) {
+	            	  System.out.println("받아온 관심사 : " + interest);
 	                List<popStoreVO> topStores = mapper.getTopStoresByInterest(interest);
 	                results.put(interest, topStores); // 愿��ъ�ъ�� 愿��⑤�� ���� �ㅽ���� 紐⑸��� Map�� 異�媛�
 	            }
 	        }
 	        return results;
 	}
+	
 	@Override
 	public pImgVO getImageByStoreId(int psNo) {
 		  return mapper.getImageByStoreId(psNo);

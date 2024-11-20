@@ -137,15 +137,13 @@ a:hover {
     background-color: #66ccff; /* 선택된 페이지 하늘색 */
     color: white;
 }
-
-.answerStatus {
-    margin-left: 10px; /* 여백 추가 */
-    color: green; /* 기본 색상 */
+.toggle-answer{
+	height : 50px;
 }
-
 .answer {
     display: none;
     margin-left: 20px; /* 답변을 약간 들여쓰기 해서 구분 */
+    height : 50px;
 }
 
 .modal {
@@ -285,7 +283,7 @@ a:hover {
             <li>Q: 고객센터 운영 시간은 언제인가요? <a href="#" class="toggle-answer">▼</a></li>
             <li class="answer">A: 몰라용</li>
 
-            <li>Q: 개꿀팀 있을까요? <a href="#" class="toggle-answer">▼</a></li>
+            <li>Q: 개꿀팁 있을까요? <a href="#" class="toggle-answer">▼</a></li>
             <li class="answer">A: 몰라용</li>
 
             <li>Q: 회원 탈퇴는 어떻게 하나요? <a href="#" class="toggle-answer">▼</a></li>

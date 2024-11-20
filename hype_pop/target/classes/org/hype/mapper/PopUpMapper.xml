@@ -229,58 +229,127 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from like_list_tbl where userNo = #{userNo}
 	</select>
 
+<!-- 관심사별 좋아요 수가 많은 상위 3개 관심사 조회 -->
+<select id="getTopInterestsByLikes" resultType="java.lang.String">
+    <![CDATA[
+        SELECT interest
+        FROM (
+            SELECT 'HEALTHBEAUTY' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.HEALTHBEAUTY = 1
+            GROUP BY pc.HEALTHBEAUTY
+            
+            UNION ALL
+            
+            SELECT 'GAME' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.GAME = 1
+            GROUP BY pc.GAME
+            
+            UNION ALL
+            
+            SELECT 'CULTURE' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.CULTURE = 1
+            GROUP BY pc.CULTURE
 
-    <!-- 관심사별 좋아요 수가 많은 상위 3개 관심사 조회 -->
-    <select id="getTopInterestsByLikes" resultType="java.lang.String">
-        <![CDATA[
-            SELECT interest
-            FROM (
-                SELECT 
-                    CASE 
-                        WHEN pc.HEALTHBEAUTY = 1 THEN 'HEALTHBEAUTY'
-                        WHEN pc.GAME = 1 THEN 'GAME'
-                        WHEN pc.CULTURE = 1 THEN 'CULTURE'
-                        WHEN pc.SHOPPING = 1 THEN 'SHOPPING'
-                        WHEN pc.SUPPLY = 1 THEN 'SUPPLY'
-                        WHEN pc.KIDS = 1 THEN 'KIDS'
-                        WHEN pc.DESIGN = 1 THEN 'DESIGN'
-                        WHEN pc.FOODS = 1 THEN 'FOODS'
-                        WHEN pc.INTERIOR = 1 THEN 'INTERIOR'
-                        WHEN pc.POLICY = 1 THEN 'POLICY'
-                        WHEN pc.CHARACTER = 1 THEN 'CHARACTER'
-                        WHEN pc.EXPERIENCE = 1 THEN 'EXPERIENCE'
-                        WHEN pc.COLLABORATION = 1 THEN 'COLLABORATION'
-                        WHEN pc.ENTERTAINMENT = 1 THEN 'ENTERTAINMENT'
-                    END AS interest,
-                    COUNT(*) AS like_count
-                FROM like_list_tbl ll
-                JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
-                WHERE pc.HEALTHBEAUTY = 1 OR pc.GAME = 1 OR pc.CULTURE = 1 OR pc.SHOPPING = 1
-                      OR pc.SUPPLY = 1 OR pc.KIDS = 1 OR pc.DESIGN = 1 OR pc.FOODS = 1
-                      OR pc.INTERIOR = 1 OR pc.POLICY = 1 OR pc.CHARACTER = 1
-                      OR pc.EXPERIENCE = 1 OR pc.COLLABORATION = 1 OR pc.ENTERTAINMENT = 1
-                GROUP BY 
-                    CASE 
-                        WHEN pc.HEALTHBEAUTY = 1 THEN 'HEALTHBEAUTY'
-                        WHEN pc.GAME = 1 THEN 'GAME'
-                        WHEN pc.CULTURE = 1 THEN 'CULTURE'
-                        WHEN pc.SHOPPING = 1 THEN 'SHOPPING'
-                        WHEN pc.SUPPLY = 1 THEN 'SUPPLY'
-                        WHEN pc.KIDS = 1 THEN 'KIDS'
-                        WHEN pc.DESIGN = 1 THEN 'DESIGN'
-                        WHEN pc.FOODS = 1 THEN 'FOODS'
-                        WHEN pc.INTERIOR = 1 THEN 'INTERIOR'
-                        WHEN pc.POLICY = 1 THEN 'POLICY'
-                        WHEN pc.CHARACTER = 1 THEN 'CHARACTER'
-                        WHEN pc.EXPERIENCE = 1 THEN 'EXPERIENCE'
-                        WHEN pc.COLLABORATION = 1 THEN 'COLLABORATION'
-                        WHEN pc.ENTERTAINMENT = 1 THEN 'ENTERTAINMENT'
-                    END
-                ORDER BY like_count DESC
-            )
-            WHERE ROWNUM <= 3
-        ]]>
-    </select>
+            UNION ALL
+            
+            SELECT 'SHOPPING' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.SHOPPING = 1
+            GROUP BY pc.SHOPPING
+            
+            UNION ALL
+            
+            SELECT 'SUPPLY' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.SUPPLY = 1
+            GROUP BY pc.SUPPLY
+
+            UNION ALL
+            
+            SELECT 'KIDS' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.KIDS = 1
+            GROUP BY pc.KIDS
+
+            UNION ALL
+            
+            SELECT 'DESIGN' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.DESIGN = 1
+            GROUP BY pc.DESIGN
+
+            UNION ALL
+            
+            SELECT 'FOODS' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.FOODS = 1
+            GROUP BY pc.FOODS
+
+            UNION ALL
+            
+            SELECT 'INTERIOR' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.INTERIOR = 1
+            GROUP BY pc.INTERIOR
+
+            UNION ALL
+            
+            SELECT 'POLICY' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.POLICY = 1
+            GROUP BY pc.POLICY
+
+            UNION ALL
+            
+            SELECT 'CHARACTER' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.CHARACTER = 1
+            GROUP BY pc.CHARACTER
+
+            UNION ALL
+            
+            SELECT 'EXPERIENCE' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.EXPERIENCE = 1
+            GROUP BY pc.EXPERIENCE
+
+            UNION ALL
+            
+            SELECT 'COLLABORATION' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.COLLABORATION = 1
+            GROUP BY pc.COLLABORATION
+
+            UNION ALL
+            
+            SELECT 'ENTERTAINMENT' AS interest, COUNT(*) AS like_count
+            FROM like_list_tbl ll
+            JOIN pop_cat_tbl pc ON ll.PSNO = pc.PSNO
+            WHERE pc.ENTERTAINMENT = 1
+            GROUP BY pc.ENTERTAINMENT
+        )
+        WHERE ROWNUM <= 3
+        ORDER BY like_count DESC
+    ]]>
+</select>
+
+
 <select id="getAvgRating" parameterType="int" resultType="double">
     SELECT NVL(AVG(psScore), 0)
     FROM pop_reply_tbl

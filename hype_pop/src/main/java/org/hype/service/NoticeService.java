@@ -35,7 +35,7 @@ public interface NoticeService {
    public int deleteInquiry(int qnaNo);
    
    
-   //�߰�
+   // ߰ 
    public List<qnaVO> getUserInquiriesWithPaging(int userNo, int pageNum, int amount);
    
    public int getTotalInquiryCountByUser(@Param("userNo") int userNo);
@@ -46,7 +46,7 @@ public interface NoticeService {
 
    public Map<String, Integer> getInquiryCounts(int userNo);
  
-public int getNoticeNo(String title);
+   public Integer getNoticeNo(String title);
 
    
 }

@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const userNo = userNoElement ? userNoElement.value : null;
 	const userId = userIdElement ? userIdElement.value : null;
 	console.log(userNo);
+	
 	document.getElementById("goodsLogo").addEventListener('click', function() {
 	    if (userNo) {
 	        location.href = `/goodsStore/goodsMain?userNo=${userNo}`;
@@ -25,8 +26,12 @@ const socket = new SockJS('http://localhost:9010/alarm');
 
 socket.onopen = function(event) {
     console.log('WebSocket 연결이 성공적으로 이루어졌습니다.');
+	const userNoElement = document.getElementById("userNo");
+	const userIdElement = document.getElementById("userId");
+	const userNo = userNoElement ? userNoElement.value : null;
+	const userId = userIdElement ? userIdElement.value : null;
+	console.log(userNo);
 
-    const userNo = 1; // 실제 사용자 ID로 변경
     socket.send(JSON.stringify({ action: 'checkNotifications', userNo: userNo }));
 };
 
@@ -52,7 +57,6 @@ socket.onmessage = function(event) {
 
 // 알림 UI 업데이트 함수
 let existingNotifications = new Set(); // 기존 알림 ID를 저장하는 Set
-
 function updateNotificationUI(notifications) {
     const alarmContent = document.getElementById('notificationList');
     const notificationDot = document.getElementById('notificationDot');
@@ -62,10 +66,9 @@ function updateNotificationUI(notifications) {
 
     if (!notifications || notifications.length === 0) {
         notificationDot.style.display = 'none';
-        alarmContent.innerHTML = '<div>알림이 없습니다.</div>';
+        alarmContent.innerHTML = '<div style="color: black;">알림이 없습니다.</div>'; // 색상 검정으로 설정
         return;
     }
-
     let hasUnreadNotifications = false; // 읽지 않은 알림 여부를 추적하기 위한 변수
 
     notifications.forEach(notification => {
@@ -116,16 +119,18 @@ function updateNotificationUI(notifications) {
 
         // 메시지 요소
         const messageElement = document.createElement('span');
-        messageElement.innerHTML = message; 
+        messageElement.innerHTML = message;
+        const messageId = `message-${notification.notificationNo}`; // 고유 id 생성
+        messageElement.setAttribute('id', messageId); // id를 메시지에 추가
+
+        // 스타일 적용 (글씨 색 검정으로 설정)
+        messageElement.style.color = 'black';
 
         // 읽음 여부 표시 요소
         const readStatus = document.createElement('span');
         readStatus.textContent = notification.isRead === 1 ? '읽음' : '읽지 않음';
         readStatus.style.marginLeft = '10px'; 
-
-        if (notification.isRead === 0) { // 0일 경우 읽지 않은 알림
-            hasUnreadNotifications = true;
-        }
+        readStatus.style.color = 'black';  // 읽음 상태 글씨 색 검정으로 설정
 
         // 삭제 버튼 요소
         const deleteButton = document.createElement('button');
@@ -146,6 +151,8 @@ function updateNotificationUI(notifications) {
     // 레드닷 표시 여부 설정
     notificationDot.style.display = hasUnreadNotifications ? 'block' : 'none';
 }
+
+
 
 // 알림 삭제 함수에서 userNo를 사용하도록 수정
 function handleDeleteNotification(notificationId) {
@@ -177,7 +184,11 @@ function handleAlarmClick() {
 
     // 알림창을 열었을 때만 읽지 않은 알림을 읽음으로 표시
     if (alarmContent.style.display === 'block') {
-        const userNo = 1; // 실제 사용자 ID로 변경
+    	const userNoElement = document.getElementById("userNo");
+    	const userIdElement = document.getElementById("userId");
+    	const userNo = userNoElement ? userNoElement.value : null;
+    	const userId = userIdElement ? userIdElement.value : null;
+    	console.log(userNo);
         
         // 서버에 읽음 상태 업데이트 요청 전송
         socket.send(JSON.stringify({ action: 'markNotificationsAsRead', userNo: userNo }));
@@ -219,4 +230,18 @@ document.getElementById("searchBTN").addEventListener('click', () => {
         alert("검색어를 입력하세요.");
     }
 });
+window.showLogos = function() {
+    const logoContainer = document.getElementById("logoContainer");
+    const overlay = document.getElementById("overlay");
+
+    // 슬라이드 메뉴 및 오버레이 표시
+    logoContainer.classList.toggle("show");
+    overlay.classList.toggle("show");
+
+    // 오버레이 클릭 시 메뉴 숨기기
+    overlay.onclick = function() {
+        logoContainer.classList.remove("show");
+        overlay.classList.remove("show");
+    }
+};
 

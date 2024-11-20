@@ -24,6 +24,7 @@ function submitResponse() {
         qnaAnswer: qnaAnswer
     };
     
+    // 답변을 서버로 보내고, WebSocket을 통해 알림을 전송
     fetch("/support/updateAnswer", {
         method: "POST",
         headers: {
@@ -40,6 +41,19 @@ function submitResponse() {
     .then(result => {
         alert("답변이 성공적으로 업데이트되었습니다.");
         closeModal(); 
+
+        // WebSocket을 통해 알림 전송
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({
+                action: 'sendInqueryNotification', // 알림 전송 동작
+                qnaNo: qnaNo  // qnaNo를 서버로 전송
+            }));
+            console.log("WebSocket message sent for qnaNo:", qnaNo);
+        } else {
+            console.error("WebSocket is not open.");
+        }
+
+        // 페이지 리로드
         location.reload(); 
     })
     .catch(error => {
@@ -62,4 +76,4 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("deleteForm").submit();
         }
     };
-}); 
+});

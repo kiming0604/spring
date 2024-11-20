@@ -193,6 +193,23 @@ body {
 .delete-button:hover {
     color: #ff0000; /* 호버 시 색상 변경 */
 }
+#searchBTN {
+    background-color: #00aff0; /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색상 */
+    padding: 12px 20px; /* 검색창과 동일한 패딩 */
+    border: none; /* 테두리 제거 */
+    border-radius: 25px; /* 검색창과 동일한 둥근 모서리 */
+    font-size: 16px; /* 텍스트 크기 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    cursor: pointer; /* 클릭 가능한 포인터 커서 */
+    display: inline-block; /* 검색창과 같은 블록 형태 */
+    transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+    margin-left: 10px; /* 검색창과 버튼 사이 간격 */
+}
+
+#searchBTN:hover {
+    background-color: #007acc; /* 호버 시 색상 변경 */
+}
 </style>
 </head>
 <body>

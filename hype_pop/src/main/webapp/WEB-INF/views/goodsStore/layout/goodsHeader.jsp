@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -21,7 +21,7 @@ body {
 }
 
 /* 헤더 스타일 */
-.popUpHeader {
+.header {
     width: 100%;
     display: flex;
     align-items: center;
@@ -65,7 +65,7 @@ body {
 }
 
 /* 검색 및 알림 스타일 */
-#goodsSearchBoxDiv {
+.searchBox {
     display: flex;
     align-items: center; /* 버튼과 검색창 수직 정렬 */
     justify-content: center; /* 중앙 정렬 추가 */
@@ -73,7 +73,7 @@ body {
     margin: 0 20px; /* 좌우 간격 추가 */
 }
 
-#goodsSearchBox {
+.searchInput {
     padding: 12px 20px; /* 패딩을 약간 증가시켜 높이 조정 */
     width: 600px; /* 크기 두 배 증가 */
     border: 1px solid #ccc;
@@ -84,12 +84,12 @@ body {
     margin-right: 10px; /* 검색 버튼과의 간격 */
 }
 
-#searchBtn, #noticeDiv {
+#searchBtn, #notificationDiv {
     cursor: pointer;
 }
 
 /* 알림 버튼 */
-#alarmDiv {
+#notificationDiv {
     display: inline-block; /* 버튼이 세로로 쌓이지 않게 */
     margin-left: 20px; /* 검색창과 알림 버튼 사이의 간격 */
     position: relative; /* 절대 위치를 기준으로 하기 위해 relative로 설정 */
@@ -185,8 +185,8 @@ body {
 
 .notification-dot {
     position: absolute; /* 아이콘에 겹치게 하기 위해 절대 위치 설정 */
-    bottom: 8px; /* 알림 버튼 아래 위치 */
-    right: 28px; /* 알림 버튼 오른쪽 위치 */
+    bottom: 30px; /* 알림 버튼 아래 위치 */
+    right: 45px; /* 알림 버튼 오른쪽 위치 */
     width: 10px; /* 점의 너비 */
     height: 10px; /* 점의 높이 */
     background-color: red; /* 빨간색 */
@@ -206,31 +206,33 @@ body {
 .delete-button:hover {
     color: #ff0000; /* 호버 시 색상 변경 */
 }
- </style>
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script type="text/javascript" src="/resources/goodsJs/goodsHeader.js"></script>
 </head>
 <body>
     <!-- 오버레이 -->
     <div class="overlay" id="overlay"></div>
-	<sec:authorize access="isAuthenticated()">
-		<sec:authentication property="principal" var="pinfo"/>
-   		<input type="hidden" id="userNo" value="${pinfo.member.userNo}">
-   		<input type="hidden" id="userId" value="${pinfo.member.userId}">
-	</sec:authorize>
-	<div class="popUpHeader">
+    <sec:authorize access="isAuthenticated()">
+        <sec:authentication property="principal" var="pinfo"/>
+        <input type="hidden" id="userNo" value="${pinfo.member.userNo}">
+        <input type="hidden" id="userId" value="${pinfo.member.userId}">
+    </sec:authorize>
+    <div class="header">
         <button id="mainLogoButton" onclick="showLogos()" class="noOverlay">
             <img src="/resources/images/mainLogo.png" alt="메인 로고" id="mainLogo">
         </button>
-		<div id="goodsSearchBoxDiv">
-			<input type="text" id="goodsSearchBox" placeholder="검색어 입력"> <span id="searchBtn">검색</span>
-		</div>
-        <div id="alarmDiv">
+        <div class="searchBox">
+            <input type="text" class="searchInput" id="goodsSearchBox" placeholder="검색어 입력">
+            <span id="searchBtn">검색</span>
+        </div>
+        <div class="notificationDiv">
             <img src="/resources/images/alarm.png" alt="알림" id="alarmImage" style="cursor: pointer; max-height: 35px; width: auto;" onclick="handleAlarmClick()">
-            <span id="notificationDot"  class="notification-dot"></span> <!-- 빨간 점 추가 -->
+            <span id="notificationDot" class="notification-dot"></span> <!-- 빨간 점 추가 -->
         </div>
         <div id="notificationList"></div> <!-- 알림 목록 추가 -->
-	</div>    <!-- 슬라이드 메뉴 -->
+    </div>
+    <!-- 슬라이드 메뉴 -->
     <div id="logoContainer" class="noOverlay">
         <div onclick="location.href='/hypePop/popUpMain'">
             <img src="/resources/images/popUpLogo.png" alt="팝업 스토어 로고">
@@ -238,7 +240,12 @@ body {
         <div id="goodsLogo">
             <img src="/resources/images/goodsLogo.png" alt="굿즈 스토어 로고">
         </div>
-        <div onclick="location.href='/exhibition/exhibitionMain'">
+          <div onclick="location.href='/exhibition/exhibitionMain'">
             <img src="/resources/images/exhibition.png" alt="전시관 로고">
         </div>
     </div>
+    <script>
+        // JavaScript 추가 코드
+    </script>
+</body>
+</html>

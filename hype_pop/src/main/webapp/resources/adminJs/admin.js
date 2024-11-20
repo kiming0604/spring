@@ -433,7 +433,7 @@ function loadExhibitions(page = 1) {
 	                ExhibitionLists(data.list);
 
 	                totalCountForExh = data.total; // 전체 아이템 수 저장
-	                totalPagesForExh = Math.ceil(totalPagesForExh / amount); // 총 페이지 수 계산
+	                totalPagesForExh = Math.ceil(totalCountForExh / amount); // 총 페이지 수 계산
 	                createPagination(totalPagesForExh, totalCountForExh); // 페이지네이션 생성
 
 	            } else {

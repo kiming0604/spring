@@ -1,4 +1,4 @@
-document.getElementById("searchReset").addEventListener('click', ()=>{
-   location.href="/goodsStore/goodsSearch";
-   localStorage.setItem('searchText', "");
-})
+function resetSearch() {
+    localStorage.setItem('searchText', "");
+    location.href = "/goodsStore/goodsSearch";
+}
