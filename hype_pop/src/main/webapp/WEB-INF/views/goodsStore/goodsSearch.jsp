@@ -145,6 +145,7 @@ body {
 }
 
 /* 검색 결과 리스트 컨테이너 */
+
 .goodsContainer {
     width: 50%; /* 화면 크기에 따라 반응하는 너비 설정 */
     max-width: 1200px; /* 최대 너비 제한 */
@@ -153,6 +154,7 @@ body {
     background-color: #fee7ed;
     overflow: visible;
     font-size: 1rem; /* 기본 폰트 크기 */
+    min-height:500px;
 }
 
 /* 검색 결과 카드 */

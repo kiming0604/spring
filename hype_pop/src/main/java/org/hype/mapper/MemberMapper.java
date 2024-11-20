@@ -63,6 +63,47 @@ public interface MemberMapper {
 	public int selectId(String userId);
 	
 	public int checkEmailPw(signInVO svo);
-		
+	
+	// ȸ�� ���� ���̺��� ����
+    public int deleteSignInInfo(int userNo);
+
+    // ȸ�� ���� ī�װ� ���̺��� ����
+    public int deleteMemberCategory(int userNo);
+
+    // �˾������ ��� ���̺��� ����
+    public int deletePopReply(int userNo);
+
+    // �˾������ ���ƿ� ���̺��� ����
+    public int deleteLikeList(int userNo);
+
+    // ���� ���� ��� ���̺��� ����
+    public int deleteGoodsReply(int userNo);
+
+    // ���� ���ƿ� ����Ʈ ���̺��� ����
+    public int deleteGoodsLikeList(int userNo);
+
+    // ��ٱ��� ���̺��� ����
+    public int deleteCart(int userNo);
+
+    // ���� ���� ���̺��� ����
+    public int deletePayment(int userNo);
+
+    // Q&A ���̺��� ����
+    public int deleteQna(int userNo);
+
+    // ��Ƽ ���� ���̺��� ����
+    public int deletePartyInfo(int userNo);
+
+    // ä�� ���� ���̺��� ����
+    public int deleteChat(int userNo);
+
+    // ä�� ���� ���̺��� ����
+    public int deleteChatContent(int userNo);
+
+    // ���� ��� ���̺��� ����
+    public int deleteExhReply(int userNo);
+
+    // ���� ���ƿ� ����Ʈ ���̺��� ����
+    public int deleteExhLikeList(int userNo);
 
 }

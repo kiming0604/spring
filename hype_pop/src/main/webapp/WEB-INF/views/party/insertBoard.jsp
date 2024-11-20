@@ -16,9 +16,10 @@ body {
 }
 
 .container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
+   max-width: 1200px;
+   margin: 0 auto;
+   padding: 20px;
+   min-height: 600px;
 }
 
 /* 헤더와 메인 배너 */

@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.hype.domain.cartVO;
+import org.hype.domain.gImgVO;
+import org.hype.domain.payVO;
 import org.hype.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,57 +81,123 @@ public class PurchaseRestController {
 	}
 
 	@PostMapping("/addToPayList")
-	public ResponseEntity<String> addToPayList(@RequestBody cartVO cvo) {
-		log.info("addToPayList.. " + cvo);
+	public ResponseEntity<String> addToPayList(@RequestBody List<payVO> pvoList) {
+	    log.info("addToPayList.. " + pvoList);
 
-		try {
-			// 데이터 처리 로직
-			purchaseService.addToPayList(cvo);
+	    try {
+	        // orderId를 무작위로 생성 (UUID 사용)
+	        String orderId = UUID.randomUUID().toString();  // UUID로 고유한 orderId 생성
+	        for (payVO pvo : pvoList) {
+	            pvo.setOrderId(orderId);  // 동일한 orderId 설정
+	        }
 
-			// 성공적으로 처리된 후 응답할 JSON 데이터를 생성 (여기서 response는 JSON 형식으로 반환)
-			String response = "{\"status\":\"success\", \"message\":\"결제 목록에 추가되었습니다.\"}";
+	        // 데이터 처리 로직
+	        purchaseService.addToPayList(pvoList);
 
-			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON) // JSON 타입으로 응답 설정
-					.body(response); // 실제 응답 내용 (JSON 문자열)
+	        // 성공적으로 처리된 후 응답할 JSON 데이터를 생성 (여기서 response는 JSON 형식으로 반환)
+	        String response = "{\"status\":\"success\", \"message\":\"결제 목록에 추가되었습니다.\"}";
+	        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 
-		} catch (Exception e) {
-			log.error("에러 발생:", e);
-			// 서버 오류 발생 시 JSON 형태로 응답
-			String errorResponse = "{\"status\":\"error\", \"message\":\"서버 오류 발생\"}";
-
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON) // JSON
-																													// 타입으로
-																													// 응답
-																													// 설정
-					.body(errorResponse); // 오류 메시지 반환
-		}
+	    } catch (Exception e) {
+	        log.error("에러 발생:", e);
+	        // 서버 오류 발생 시 JSON 형태로 응답
+	        String errorResponse = "{\"status\":\"error\", \"message\":\"서버 오류 발생\"}";
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+	    }
 	}
-
+	
+	
 	// 장바구니 데이터 반환 (Spring Controller)
 	@GetMapping("/getCartItems")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> getCartItems(@RequestParam int userNo) {
-		// userNo로 장바구니 데이터를 가져오는 로직
-		List<cartVO> cartItems = purchaseService.getCartInfo(userNo);
-		log.info("Get cart info: " + cartItems);
+	    try {
+	        // userNo로 장바구니 데이터를 가져오는 로직
+	        List<cartVO> cartItems = purchaseService.getCartInfo(userNo);
+	        log.info("Get cart info: " + cartItems);
 
-		// cartItems 리스트를 Map 형태로 변환
-		List<Map<String, Object>> cartItemsList = new ArrayList<>();
-		for (cartVO item : cartItems) {
-			Map<String, Object> itemMap = new HashMap<>();
-			itemMap.put("gno", item.getGno());
-			itemMap.put("userNo", item.getUserNo());
-			itemMap.put("camount", item.getCamount());
-			cartItemsList.add(itemMap);
-		}
+	        // JSON 형태로 반환 (cartVO 객체가 Jackson에 의해 자동 직렬화됨)
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("cartItems", cartItems);
 
-		// JSON 형태로 반환 (명시적으로 JSON으로 설정)
-		Map<String, Object> response = new HashMap<>();
-		response.put("cartItems", cartItemsList);
+	        // ResponseEntity로 응답 반환
+	        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+	                .body(response);
+	    } catch (Exception e) {
+	        log.error("장바구니 데이터 가져오기 실패", e);
+	        Map<String, Object> errorResponse = new HashMap<>();
+	        errorResponse.put("status", "error");
+	        errorResponse.put("message", "장바구니 데이터 가져오기 실패");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .body(errorResponse);
+	    }
+	}
+	
+	@PostMapping("/updateCartAmount")
+	public ResponseEntity<String> updateCartAmount(@RequestBody List<cartVO> cartVOList) {
+	    try {
+	        // 각 cartVO 객체에 대해 업데이트 실행
+	        for (cartVO cvo : cartVOList) {
+	            // 수량 업데이트 서비스 호출
+	            purchaseService.updateCartAmount(cvo);
+	            log.info("cvo:" + cvo);
+	        }
 
-		// ResponseEntity로 응답 반환 (JSON Content-Type 명시)
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON) // JSON 타입으로 응답 설정
-				.body(response);
+	        // 성공 시 200 OK와 함께 메시지 반환
+	        return ResponseEntity.status(HttpStatus.OK).body("수량이 성공적으로 업데이트되었습니다.");
+	    } catch (Exception e) {
+	        // 실패 시 400 Bad Request와 함께 오류 메시지 반환
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수량 업데이트 실패: " + e.getMessage());
+	    }
+	}
+	
+	@GetMapping("/loadMoreItems")
+	public ResponseEntity<List<payVO>> loadMoreItems(@RequestParam("userNo") int userNo, @RequestParam("page") int page) {
+	    log.info("loadMoreItems...: " + userNo);
+	    
+	    int pageSize = 5; // 한 번에 불러올 항목 수
+	    int offset = (page - 1) * pageSize; // 페이지 시작 위치
+
+	    // 페이지네이션을 위한 데이터 가져오기
+	    List<payVO> getPayList = purchaseService.getPayList(userNo, offset, pageSize);
+	    
+	    for (payVO pay : getPayList) {
+	        int gno = pay.getGno();
+	        log.info("gnognogno..." + gno);    
+	        List<gImgVO> imgList = purchaseService.getPayListImg(gno);
+	        log.info("imgList..." + imgList);
+	        pay.setGimg(imgList);
+	    }
+
+	    return ResponseEntity.ok()
+	            .contentType(MediaType.APPLICATION_JSON)
+	            .body(getPayList);  // getPayList를 JSON으로 반환
 	}
 
+	
+	@PostMapping(value = "/deleteCartItems", produces = "application/json")
+	public ResponseEntity<?> deleteCartItems(@RequestBody Map<String, Object> params) {
+	    try {
+	        int userNo = (int) params.get("userNo");
+	        List<Integer> gnoList = (List<Integer>) params.get("gnoList");
+	        log.info("userNo: " + userNo);
+	        log.info("gnoList: " + gnoList);
+
+
+	        // 장바구니 삭제 서비스 호출
+	        int deletedCount = purchaseService.deleteCartItems(gnoList, userNo);
+
+	        // 삭제된 항목 수에 따른 응답 처리
+	        if (deletedCount > 0) {
+	            return ResponseEntity.ok(Map.of("status", "success", "message", "총 " + deletedCount + "개의 항목이 삭제되었습니다."));
+	        } else {
+	            return ResponseEntity.ok(Map.of("status", "fail", "message", "삭제할 항목이 없습니다."));
+	        }
+	    } catch (Exception e) {
+	        log.error("장바구니 삭제 중 오류 발생", e); // 오류 로그 추가
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body(Map.of("status", "error", "message", "장바구니 삭제 중 오류 발생."));
+	    }
+	}
 }

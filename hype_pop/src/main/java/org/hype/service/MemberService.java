@@ -65,6 +65,7 @@ public interface MemberService {
 	
 	public boolean checkEmailPw(signInVO svo);
 
+	public boolean deleteUserData(int userNo);
 
 
 	

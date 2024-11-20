@@ -229,8 +229,7 @@ button:hover {
 
 	<div class="container">
 		<h1>로그인</h1>
-		<form action="/member/login" method="post">
-		<input type="hidden" id="redirect" name="redirect">  
+		<form action="login" method="post">
 			<label for="username">아이디</label> <input type="text" id="userId"
 				name="userId" required placeholder="아이디를 입력하세요."> <label
 				for="password">비밀번호</label> <input type="password" id="userPw"
@@ -251,45 +250,7 @@ button:hover {
 		<div id="customAlert">인증코드를 전송 중입니다.</div>
 
 
-		<div class="social-login">
-			<h3>소셜 로그인</h3>
-			<button
-				onclick="location.href='https://nid.naver.com/oauth2.0/authorize'">N</button>
-			<!-- 네이버 -->
-			<!-- <button
-				onclick="location.href='https://accounts.google.com/o/oauth2/v2/auth'">G</button> -->
-		<div id="g_id_onload"
-     data-client_id="YOUR_CLIENT_ID"
-     data-login_uri="270957138016-nqv7qnmhlv16ftd5vu60engrt1f11cab.apps.googleusercontent.com"
-     data-auto_prompt="true">
-</div>
-<div class="g_id_signin"
-     data-type="icon"
-     data-size="large"
-     data-theme="outline"
-     data-text="sign_in_with"
-     data-shape="rectangular"
-     data-logo_alignment="left">
-</div>
-<div id="buttonDiv"></div>
-<div style="background-color:#15a181; width: 100%; height: 50px;text-align: center; color: white; "><h3>SIST Login</h3></div>
-<br>
-<!-- 구글 로그인 화면으로 이동 시키는 URL -->
-<!-- 구글 로그인 화면에서 ID, PW를 올바르게 입력하면 oauth2callback 메소드 실행 요청-->
-<div id="google_id_login" style="text-align:center"><a href="${google_url}"><img width="230" src="${pageContext.request.contextPath}/resources/img/btn_google_signin_dark_normal_web@2x.png"/></a></div>
-
-
-
-
-			<!-- 구글 -->
-			<button
-				onclick="location.href='https://kauth.kakao.com/oauth/authorize'">K</button>
-			<!-- 카카오 -->
-			<button
-				onclick="location.href='https://www.instagram.com/accounts/login/'">I</button>
-			<!-- 인스타그램 -->
-		</div>
-	</div>
+		
 
 	<!-- 아이디 찾기 모달 -->
 	<div id="searchIdModal" style="display: none;">

@@ -21,17 +21,36 @@
     </div>
 
     <br>
+   
     <h1>핫한 관심사로 추천!</h1>
-      <sec:authorize access="isAuthenticated()">
+    <sec:authorize access="isAuthenticated()">
     <c:forEach var="entry" items="${topStoresByInterestMap}" varStatus="status">
-        <h2>${entry.key}</h2>
+        <h2>
+            <c:choose>
+                <c:when test="${entry.key.equalsIgnoreCase('healthBeauty')}">건강 & 뷰티</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('game')}">게임</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('culture')}">문화</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('shopping')}">쇼핑</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('supply')}">문구</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('kids')}">키즈</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('design')}">디자인</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('foods')}">식품</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('interior')}">인테리어</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('policy')}">정책</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('character')}">캐릭터</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('experience')}">체험</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('collaboration')}">콜라보</c:when>
+                <c:when test="${entry.key.equalsIgnoreCase('entertainment')}">방송</c:when>
+                <c:otherwise>기타</c:otherwise>
+            </c:choose>
+        </h2>
         <div class="slider-container">
             <button class="arrow leftArrow">&#9664;</button>
             <div class="slider" id="hotCatSlider${status.index + 1}">
                 <c:forEach var="store" items="${entry.value}">
                     <div class="popUpItem">
                         <input type="hidden" class="fileData" value="${store.psImg.uuid}_${store.psImg.fileName}">
-                     <div class="popUpLikeCount">❤️ ${store.likeCount}</div>
+                        <div class="popUpLikeCount">❤️ ${store.likeCount}</div>
                         <img class="popUpImage" alt="${store.psName}">
                         <div class="popUpText">${store.psName}</div>
                     </div>
@@ -41,20 +60,38 @@
         </div>
         <br>
     </c:forEach>
-   
-   </sec:authorize>
+</sec:authorize>
+
 
 
 
    <sec:authorize access="!isAuthenticated()">
     <c:forEach var="category" items="${topCategoriesByLikesMap}" varStatus="status">
-        <h2>${category.key}</h2>
+        <h2>
+            <c:choose>
+                <c:when test="${category.key.equalsIgnoreCase('healthBeauty')}">건강 & 뷰티</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('game')}">게임</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('culture')}">문화</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('shopping')}">쇼핑</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('supply')}">문구</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('kids')}">키즈</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('design')}">디자인</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('foods')}">식품</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('interior')}">인테리어</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('policy')}">정책</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('character')}">캐릭터</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('experience')}">체험</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('collaboration')}">콜라보</c:when>
+                <c:when test="${category.key.equalsIgnoreCase('entertainment')}">방송</c:when>
+                <c:otherwise>기타</c:otherwise>
+            </c:choose>
+        </h2>
         <div class="slider-container">
             <button class="arrow leftArrow">&#9664;</button>
             <div class="slider" id="catSlider${status.index + 1}">
                 <c:forEach var="store" items="${category.value}">
                     <div class="popUpItem">
-                    <div class="popUpLikeCount">❤️ ${store.likeCount}</div>
+                        <div class="popUpLikeCount">❤️ ${store.likeCount}</div>
                         <input type="hidden" class="fileData" value="${store.psImg.uuid}_${store.psImg.fileName}">
                         <img class="popUpImage" alt="${store.psName}">
                         <div class="popUpText">${store.psName}</div>
@@ -65,8 +102,8 @@
         </div>
         <br>
     </c:forEach>
-    
-    </sec:authorize>
+</sec:authorize>
+
 </div>
 
 <div id="map" style="width: 800px; height: 400px; margin: 30px auto; display: flex; justify-content: center;" ></div>

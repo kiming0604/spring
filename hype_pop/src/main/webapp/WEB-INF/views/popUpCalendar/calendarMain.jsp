@@ -368,7 +368,7 @@ thead th {
 </style>
 </head>
 <body>
-	<jsp:include page="layout/popUpHeader.jsp" />
+	<jsp:include page="../popUp/layout/popUpHeader.jsp" />
 	<sec:authorize access="isAuthenticated()">
 		<sec:authentication property="principal" var="pinfo" />
 		<input type="hidden" id="userNo" value="${pinfo.member.userNo}">
@@ -454,8 +454,8 @@ thead th {
 		</div>
 	</div>
 
-	<jsp:include page="layout/popUpFooter.jsp" />
-	<script type="text/javascript" src="/resources/popUpJs/popUpMain.js"></script>
+	<jsp:include page="../popUp/layout/popUpFooter.jsp" />
+	<script type="text/javascript" src="/resources/popUpJs/popUpHeader.js"></script>
 	<script type="text/javascript"
 		src="/resources/calendarJs/calendarMain.js"></script>
 </body>

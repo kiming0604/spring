@@ -1,6 +1,7 @@
 package org.hype.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.cartVO;
@@ -32,10 +33,10 @@ public interface PurchaseService {
    public int getPrice(@Param("userNo") int userNo);
       
    //援щℓ�븳 �긽�뭹�뱾 pay_list_tbl�뿉 �꽔湲�
-   public int addToPayList(cartVO cvo);
+   public int addToPayList(List<payVO> pvoList);
    
    //援щℓ 紐⑸줉 遺덈윭�삤湲� 
-   public List<payVO> getPayList(@Param("userNo") int userNo);
+   public List<payVO> getPayList(int userNo, int offset, int pageSize);
    
    //援щℓ �씠誘몄� 紐⑸줉 遺덈윭�삤湲�
    public List<gImgVO> getPayListImg(int gno);
@@ -44,6 +45,10 @@ public interface PurchaseService {
    public int oneDayGbuyDate();
 
    public int threeDayGbuyDate(); 
-
    
+   public int updateCartAmount(cartVO cvo);
+   
+   public int getTotalPages(int userNo, int pageSize);
+
+   public int deleteCartItems(List<Integer> gnoList, int userNo);
 }

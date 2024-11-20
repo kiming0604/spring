@@ -24,7 +24,7 @@ body {
 
 /* 헤더 스타일 */
 header {
-	background-color: #4CAF50;
+	background-color: #2196F3;
 	color: white;
 	padding: 5px;
 	text-align: center;
@@ -85,7 +85,7 @@ header {
 }
 
 #interestBtn, #joinBtn, #duplicateCheckButton {
-	background-color: #4CAF50;
+	background-color: #2196F3;
 	color: white;
 	border: none;
 	padding: 10px 15px;
@@ -131,12 +131,12 @@ header {
 }
 
 .selectedBox {
-	background-color: #4CAF50;
+	background-color: #0056b3;
 	color: white;
 }
 
 .confirm-button, .close-button {
-	background-color: #4CAF50;
+	background-color: #2196F3;
 	color: white;
 	border: none;
 	padding: 10px 20px;
@@ -208,7 +208,7 @@ header {
 }
 
 input:checked+.slider {
-	background-color: #4CAF50;
+	background-color: #0056b3;
 }
 
 input:checked+.slider:before {

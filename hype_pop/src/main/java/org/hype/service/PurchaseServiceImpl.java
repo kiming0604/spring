@@ -87,10 +87,15 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 
 	@Override
-	public int addToPayList(cartVO cvo) {
-		System.out.println("cartVO: " + cvo);
+	public int addToPayList(List<payVO> pvoList) {
+		System.out.println("payVO: " + pvoList);
 
-		return pmapper.addToPayList(cvo);
+		int result = 0;
+		for (int i = 0; i < pvoList.size(); i++) {
+			result += pmapper.addToPayList(pvoList.get(i));
+		}
+
+		return result;
 	}
 
 	@Override
@@ -116,11 +121,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 
 	@Override
-	public List<payVO> getPayList(@Param("userNo") int userNo) {
-		System.out.println("userNo: " + userNo);
-
-		return pmapper.getPayList(userNo);
-
+	public List<payVO> getPayList(int userNo, int offset, int pageSize) {
+		return pmapper.getPayList(userNo, offset, pageSize);
 	}
 
 	@Override
@@ -131,7 +133,26 @@ public class PurchaseServiceImpl implements PurchaseService {
 		return pmapper.getPayListImg(gno);
 	}
 
+	@Override
+	public int updateCartAmount(cartVO cvo) {
+
+		System.out.println("updateCartAmount : " + cvo);
+
+		return pmapper.updateCartAmount(cvo);
+	}
 	
-	
-	
+	// 총 페이지 수 계산
+	@Override
+    public int getTotalPages(int userNo, int pageSize) {
+        int totalItems = pmapper.getTotalItems(userNo);
+        return (int) Math.ceil((double) totalItems / pageSize);
+    }
+    
+	@Override
+    public int deleteCartItems(List<Integer> gnoList, int userNo) {
+        return pmapper.deleteCartItems(gnoList, userNo);
+    }
+    
+    
+
 }

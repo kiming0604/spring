@@ -161,3 +161,8 @@
       <button id="goToLogin" onclick="location.href='/member/login'">로그인하러 가기</button>
    </div>
 </div>
+<div class="scroll-btn">
+    <button id="scrollUp" aria-label="위로 이동"></button>
+    <button id="scrollDown" aria-label="아래로 이동"></button>
+</div>
+

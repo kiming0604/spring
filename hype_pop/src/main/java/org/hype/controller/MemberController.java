@@ -45,16 +45,11 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mservice;
-	
-    @Autowired
-    private PasswordEncoder pwencoder;
-	
+
 //	@Autowired
 //	private GoogleConnectionFactory googleConnectionFactory;
 //	@Autowired
 //	private OAuth2Parameters googleOAuth2Parameters;
-
-
 
 	// 로그인페이지로 이동
 	@GetMapping("/login")
@@ -63,13 +58,43 @@ public class MemberController {
 		return "member/login";
 	}
 
+	// 로그인 처리
+	@PostMapping("/login")
+	public String login(signInVO svo, Model model) {
+
+		signInVO member = mservice.loginMember(svo);
+
+		if (member != null) {
+			return "popUp/popUpMain";
+		} else {
+			model.addAttribute("error", "로그인을 오류입니다.");
+			return "member/login";
+		}
+	}
+
+	// 로그인 첫 화면 요청 메소드
+//	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
+//	public String login(Model model, HttpSession session) {
+//
+//		/* 구글code 발행 */
+//		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
+//		String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, googleOAuth2Parameters);
+//
+//		System.out.println("구글:" + url);
+//
+//		model.addAttribute("google_url", url);
+//
+//		/* 생성한 인증 URL을 View로 전달 */
+//		return "login";
+//	}
+//	
 //	@RequestMapping("/googleLogin")
 //	public String googleLogin() {
 //	    OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
 //	    String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, googleOAuth2Parameters);
 //	    return "redirect:" + url;
 //	}
-	
+
 	// 회원가입
 	@GetMapping("/join")
 	public String joinPage() {
@@ -81,7 +106,6 @@ public class MemberController {
 	@PostMapping("/join")
 	public String join(@ModelAttribute signInVO svo, Model model)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		svo.setUserPw(pwencoder.encode(svo.getUserPw()));
 		log.warn("join!!!!!!!!!!!!!!!");
 
 		// bean 내부의 필드 값 확인 코드
@@ -112,10 +136,9 @@ public class MemberController {
 		// 회원 가입
 		mservice.joinMember(svo);
 
-		return "member/login";
+		return "member/joinSuccess";
 
 	}
-
 
 	@GetMapping("/myPage")
 	public String myPage(Model model, @RequestParam("userNo") int userNo) {
@@ -222,57 +245,60 @@ public class MemberController {
 		return "/purchase/paymentList";
 
 	}
-	
-	
-	//비밀번호 찾기 후 비밀번호 변경으로 이동
+
+	// 비밀번호 찾기 후 비밀번호 변경으로 이동
 	@GetMapping("goPwChange")
 	public String goPwChange() {
 		return "/member/searchPw";
 	}
-	
+
 	// 비밀번호 변경
 	@PostMapping("/pwChange")
-	public String pwChange(@RequestParam(value = "userNo") int userNo, 
-	                       @RequestParam("oldPw") String oldPw,
-	                       @RequestParam("newPw") String newPw, 
-	                       Model model) {
-	    log.info("비밀번호 변경: userNo=" + userNo);
+	public String pwChange(@RequestParam(value = "userNo") int userNo, @RequestParam("oldPw") String oldPw,
+			@RequestParam("newPw") String newPw, Model model) {
+		log.info("비밀번호 변경: userNo=" + userNo);
 
-	    if (mservice.selectOldPw(userNo, oldPw) > 0) {
-	        mservice.updateNewPw(oldPw, newPw, userNo);
-	        model.addAttribute("msg", "비밀번호가 변경되었습니다.");
-	        return "member/login"; // 로그인 페이지로 이동
-	    }
-	    
-	    // 실패 시 메시지 추가
-	    model.addAttribute("msg", "비밀번호 변경에 실패했습니다.");
-	    return "member/searchPw"; // 비밀번호 찾기 페이지로 이동
+		if (mservice.selectOldPw(userNo, oldPw) > 0) {
+			mservice.updateNewPw(oldPw, newPw, userNo);
+			model.addAttribute("msg", "비밀번호가 변경되었습니다.");
+			return "member/searchPwSuccess"; // 로그인 페이지로 이동
+		}
+
+		// 실패 시 메시지 추가
+		model.addAttribute("msg", "비밀번호 변경에 실패했습니다.");
+		return "member/searchPw"; // 비밀번호 찾기 페이지로 이동
 	}
 
-	//아이디 찾기 후 아이디 보여주는 화면 이동
+	// 아이디 찾기 후 아이디 보여주는 화면 이동
 	@GetMapping("/checkMyId")
-	public String checkMyId(@RequestParam("userName") String userName, 
-	                        @RequestParam("userEmail") String userEmail, 
-	                        Model model) {
-	    log.info("Searching for userName: " + userName + " and userEmail: " + userEmail);
+	public String checkMyId(@RequestParam("userName") String userName, @RequestParam("userEmail") String userEmail,
+			Model model) {
+		log.info("Searching for userName: " + userName + " and userEmail: " + userEmail);
 
-	    // 서비스에서 userName과 userEmail로 아이디를 조회
-	    String userId = mservice.checkMyId(userName, userEmail);
+		// 서비스에서 userName과 userEmail로 아이디를 조회
+		String userId = mservice.checkMyId(userName, userEmail);
 
-	    // userId를 모델에 담아 JSP로 전달
-	    model.addAttribute("userId", userId);
+		// userId를 모델에 담아 JSP로 전달
+		model.addAttribute("userId", userId);
 
-	    // 결과를 보여줄 JSP로 이동
-	    return "member/searchId";
+		// 결과를 보여줄 JSP로 이동
+		return "member/searchId";
+	}
+
+	@PostMapping("/deleteUserData")
+	public boolean deleteUserData(int userNo) {
+		try {
+			mservice.deleteUserData(userNo);
+			return true; // 탈퇴 성공
+		} catch (Exception e) {
+			log.error("회원 탈퇴 중 오류 발생 - userNo: " + userNo, e);
+			return false; // 탈퇴 실패
+		}
 	}
 	
-	
+	@GetMapping("/goodBye")
+	public String goodBye() {
 
-	
-
-
-	
-}
-
-    
-    
+		return "member/goodBye";
+		}
+	}

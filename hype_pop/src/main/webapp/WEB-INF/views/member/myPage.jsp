@@ -10,9 +10,8 @@
 <title>마이페이지</title>
 <style>
 html {
-	height: 100%;
-	overflow-y: auto; /* 스크롤바를 HTML에만 표시 */
-    margin: 0;
+	height: 80%;
+	overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 
 body {
@@ -23,7 +22,7 @@ body {
     flex-direction: column;
     align-items: center;
     margin: 0;
-	
+	overflow-y: auto; 
 }
 
 .container {
@@ -32,15 +31,14 @@ body {
     margin: 50px auto;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
-    max-height: 100vh; /* 화면의 높이를 넘지 않도록 설정 */
+    max-height: 80vh; /* 화면의 높이를 넘지 않도록 설정 */
     padding: 10px; /* 상단, 하단 여백을 넉넉하게 설정 */
     box-sizing: border-box; /* padding이 요소 크기에 포함되도록 설정 */
     padding-top: 40px;
     padding-bottom: 80px;
-    min-height: 1600px; /* 최소 세로 길이 지정 */
+    min-height: 1200px; /* 최소 세로 길이 지정 */
     margin-bottom: 30px; /* 여백 추가 */
-  
-   
+    overflow-y: auto; /* 내부에서 세로 스크롤 활성화 */
 }
 
 /* Form Layout */
@@ -48,8 +46,6 @@ body {
 	width: 60%;
 	margin: 20px auto;
 	font-size: 14px;
-	overflow: visible; /* 콘텐츠가 잘리지 않도록 설정 */
-    height: auto;
 	
 	
 }
@@ -100,7 +96,7 @@ body {
 .image-grid {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	gap: 17px;
+	gap: 10px;
 	margin: 20px 0;
 	 overflow: hidden; /* 슬라이더의 콘텐츠가 넘치지 않도록 설정 */
     width: 100%; /* 부모의 너비를 가득 채움 */
@@ -272,7 +268,6 @@ nav a {
 	position: relative;
 	max-height: 300px;
 	padding: 0 10px;
-	
 }
 
 .image-grid {
@@ -308,8 +303,8 @@ nav a {
 	cursor: pointer;
 	z-index: 1; /* 버튼이 이미지 위에 오도록 설정 */
 	position: absolute;
-	top: 40%;
-	transform: translateY(-70%);
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .left {
@@ -581,8 +576,7 @@ nav a {
 	</header>
 
 	<div class="container">
-	<input type="hidden" value="2" name="userNo" id="userNo">
-	
+
 
 		<div class="form-section">
 			<h2>마이페이지</h2>
@@ -781,7 +775,8 @@ nav a {
 				<button type="button" id="userReplyBtn" onclick="goToMyReply()">내가
 					쓴 글 보기</button>
 			</div>
-
+			<!-- 		<button type="button" class="btn btn-sec" id="goCartBtn" onclick="goToMyCart">장바구니</button>
+ -->
 
 		</div>
 
@@ -789,6 +784,7 @@ nav a {
 		<div class="form-section">
 			<h3>좋아요한 팝업스토어</h3>
 			<div class="slider-container">
+				<input type="hidden" value="2" name="userNo" id="userNo">
 				<button class="arrow left" onclick="slideLeft('popupStoreSlider')">❮</button>
 				<div class="image-grid" id="popupStoreSlider">
 					<c:forEach var="popup" items="${pLikeList}">
@@ -796,14 +792,14 @@ nav a {
 							data-file-name="${popup.uuid}_${popup.fileName}">
 							<c:if test="${not empty popup.psName}">
 								<img alt="${popup.psName}" id="popupStoreImg"
-								onclick="window.location.href=`/hypePop/popUpDetails?storeName=${popup.psName}`"  />
+								onclick="window.location.href='hypepop/popUpDetails/${popup.psName}'"  />
 								<div class="store-name">${popup.psName}</div> 
 							</c:if>
 							<button class="removePopupBtn" onclick="removePopup(${popup.psNo})">X</button>
 						</div>
 					</c:forEach>
-				</div>
 					<button class="arrow right" onclick="slideRight('popupStoreSlider')">❯</button>
+				</div>
 				</div>
 				<h3>좋아요한 굿즈</h3>
 				<div class="slider-container">
@@ -816,14 +812,15 @@ nav a {
 								data-file-name="${goods.uuid}_${goods.fileName}">
 								<c:if test="${not empty goods.gname}">
 									<img alt="${goods.gname}" id="goodsBannerImg1"
-									 onclick="window.location.href=`/goodsStore/goodsDetails?gno=${goods.gno}`" />
+									 onclick="window.location.href='/goodsStore/goodsDetails/${goods.gno}'" />
 									<div class="store-name">${goods.gname}</div> 
 								</c:if>
 								<button class="removeGoodsBtn" onclick="removeGoods(${goods.gno})">X</button>
 							</div>
 						</c:forEach>
-					</div>
 						<button class="arrow right" onclick="slideRight('goodsSlider')">❯</button>
+
+					</div>
 				</div>
 				<h3>좋아요한 전시</h3>
 				<div class="slider-container">
@@ -836,14 +833,15 @@ nav a {
 								data-file-name="${exh.uuid}_${exh.fileName}">
 								<c:if test="${not empty exh.exhName}">
 									<img alt="${exh.exhName}" id="exhImg" 
-									 onclick="window.location.href=`/exhibition/exhibitionDetail?exhNo=${exh.exhNo}`" />
+									 onclick="window.location.href='/exhibition/exhibitionDetail/${exh.exhNo}'" />
 									<div class="store-name">${exh.exhName}</div> 
 								</c:if>
 								<button class="removeExhBtn" onclick="removeExh(${exh.exhNo})">X</button>
 							</div>
 						</c:forEach>
-					</div>
 						<button class="arrow right" onclick="slideRight('exhibitionSlider')">❯</button>
+
+					</div>
 				</div>
 
 					<div class="button-container">

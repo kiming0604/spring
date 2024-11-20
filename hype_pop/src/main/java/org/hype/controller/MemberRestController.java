@@ -297,7 +297,7 @@ public class MemberRestController {
       }
    }
    
-//   로그인(userNo 스토리지 저장)
+   //로그인(userNo 스토리지 저장)
 //   @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
 //   @ResponseBody
 //   public ResponseEntity<Map<String, Object>> login(@RequestBody signInVO svo) {
@@ -314,8 +314,8 @@ public class MemberRestController {
 //           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 //       }
 //   }
-//
-//   
+
+   
    	//좋아요한 굿즈 이미지 가져오기
     @GetMapping("/goodsBannerImages/{fileName:.+}")
     @ResponseBody
@@ -363,7 +363,6 @@ public class MemberRestController {
     
     
     //좋아요 한 전시회 이미지 가져오기
-
     @GetMapping("/exhImges/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveExhImage(@PathVariable String fileName) throws MalformedURLException {
@@ -384,4 +383,24 @@ public class MemberRestController {
             .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
             .body(file);
     }
+    
+    //회원 탈퇴
+    @PostMapping(value = "/deleteUserData/{userNo}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> deleteUserData(@PathVariable int userNo) {
+        Map<String, Object> response = new HashMap<>();
+        boolean success = memberService.deleteUserData(userNo);
+        
+        if (success) {
+            response.put("message", "회원 탈퇴가 완료되었습니다.");
+            response.put("success", true);
+        } else {
+            response.put("message", "회원 탈퇴 중 오류가 발생했습니다.");
+            response.put("success", false);
+        }
+        
+        return response;
+    }
+
+    
 }

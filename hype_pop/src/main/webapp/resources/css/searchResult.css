@@ -146,6 +146,7 @@ span {
     padding: 20px;
     background-color: #fee7ed; /* 주요 색상 */
     overflow: visible; /* 부모 요소의 오버플로우 설정 */
+    min-height: 530px;
 }
 
 /* 각 팝업스토어 카드 */

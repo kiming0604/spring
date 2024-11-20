@@ -102,31 +102,35 @@ public class PurchaseController {
     
     // �궡媛� 寃곗젣�븳 �긽�뭹 紐⑸줉 媛�湲�
     @GetMapping("/getPayList")
-    public String getPaymentList(@RequestParam("userNo") int userNo, Model model) {
+    public String getPaymentList(@RequestParam("userNo") int userNo, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
         log.info("getPaymentList...: " + userNo); 
         
         pservice.oneDayGbuyDate();
-        
         pservice.threeDayGbuyDate();
         
-        // �궗�슜�옄 踰덊샇濡� 寃곗젣 紐⑸줉 媛��졇�삤湲�
-        List<payVO> getPayList = pservice.getPayList(userNo);
+        int pageSize = 5; // 한 번에 불러올 항목 수
+        int offset = (page - 1) * pageSize; // 페이지 시작 위치
         
+        // 페이지네이션을 위한 데이터 가져오기
+        List<payVO> getPayList = pservice.getPayList(userNo, offset, pageSize);
         
-        
-        for(payVO pay:  getPayList) {
-           int gno = pay.getGno();
-           log.info("gnognogno..." + gno);    
-           List<gImgVO> imgList = pservice.getPayListImg(gno);
-           log.info("imgList..." + imgList);
-           pay.setGimg(imgList);
+        for(payVO pay : getPayList) {
+            int gno = pay.getGno();
+            log.info("gnognogno..." + gno);    
+            List<gImgVO> imgList = pservice.getPayListImg(gno);
+            log.info("imgList..." + imgList);
+            pay.setGimg(imgList);
+            String orderId = pay.getOrderId();
+            log.info(orderId);
         }
-        
-      
-         model.addAttribute("getPayList", getPayList);
+
+        model.addAttribute("getPayList", getPayList);
+        model.addAttribute("currentPage", page); // 현재 페이지 정보
+        model.addAttribute("totalPages", pservice.getTotalPages(userNo, pageSize)); // 전체 페이지 수 계산
 
         return "/purchase/paymentList"; 
     }
+
     
     
     //寃곗젣 �꽦怨� 異뺥븯 吏앹쭩吏�

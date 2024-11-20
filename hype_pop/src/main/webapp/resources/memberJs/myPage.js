@@ -579,5 +579,27 @@ function updateInterestDisplay(updatedInterests) {
 	}
 
 
+//회원 탈퇴
 
-
+function deleteUserData(userNo) {
+    fetch(`/member/api/deleteUserData/${userNo}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert('회원 탈퇴가 완료되었습니다.');
+            // 리다이렉트하거나 다른 화면으로 이동
+            window.location.href = '/member/goodBye';
+        } else {
+            alert('회원 탈퇴 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    })
+    .catch(error => {
+        alert('회원 탈퇴 처리 중 문제가 발생했습니다.');
+        console.error('Error:', error);
+    });
+}

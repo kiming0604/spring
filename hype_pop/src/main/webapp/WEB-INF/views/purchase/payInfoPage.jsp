@@ -151,14 +151,56 @@
 .payment-method-btn#kakaopay span {
     vertical-align: middle; /* 텍스트를 가운데 정렬 */
 }
+.navbar {
+	background-color: #ff66b2; /* 진한 핑크 */
+	color: white;
+	padding: 10px;
+}
 
+.navbar ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.navbar li {
+	display: inline;
+	margin-right: 15px;
+}
+
+.navbar a {
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.navbar a:hover {
+	color: #ffe6f0; /* 연한 핑크로 변경 */
+}
+
+.footer {
+	text-align: center;
+	padding: 20px;
+	background-color: #ff66b2; /* 핑크 배경 */
+	color: white;
+	position: relative;
+	bottom: 0;
+	width: 100%;
+}
 </style>
 </head>
 <body>
+			<nav class="navbar">
+			<ul>
+			    <li><a href="/hypePop/popUpMain">홈으로</a></li>
+				<li><a href="/goodsStore/goodsSearch">굿즈스토어</a></li>
+				<li><a href="/member/myPage?userNo=2">마이페이지</a></li>
+			
+			</ul>
+		</nav>
+	
 	<input type="hidden" id="userNo" value="2">
 
 	<!-- 헤더 -->
-	<jsp:include page="layout/popUpHeader.jsp" />
 
 	<header class="bg-light py-3">
 		<div class="container">
@@ -282,9 +324,10 @@
 
 	</div>
 
-	<!-- 푸터 포함 -->
-	<jsp:include page="layout/popUpFooter.jsp" />
-	<jsp:include page="layout/goodsNavBar.jsp" />
+ 	<footer class="footer">
+        <p>© 2024 hypePop.</p>
+    </footer>
+
 
 	<!-- JS 라이브러리 -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
