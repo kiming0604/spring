@@ -39,13 +39,13 @@ function updateMemberList() {
     })
     .then(response => {
         if (!response.ok) {
-        	console.log("서버오류입니다!");
+           console.log("서버오류입니다!");
             throw new Error('서버 오류: ' + response.statusText);
         }
         return response.json();
     })
     .then(data => {
-    	console.log("성공햇나요?!");
+       console.log("성공햇나요?!");
         if (data.status === "success") {
             alert("멤버 정보가 성공적으로 업데이트되었습니다!");
              window.location.href = "/admin/adminPage";  // 수정 완료 후 이동
@@ -61,5 +61,6 @@ function updateMemberList() {
 
 // 취소 및 리스트로 돌아가기 버튼
 function backtoMList() {
-	window.location.href = "/admin/adminPage"; 
+//   window.location.href = "/admin/adminPage"; 
+   loadMembersStores(currentPageForMembers);
 }

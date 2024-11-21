@@ -1,6 +1,6 @@
 // 이전 이미지 가져오기
 window.onload = function() {
-	const category = "popup";  // 예시로 'popup' 카테고리 지정
+   const category = "popup";  // 예시로 'popup' 카테고리 지정
     const fileNameElement = document.querySelector('input[name="beforeFileName"]');
     
     if (fileNameElement) {
@@ -50,7 +50,7 @@ document.querySelector('#imageFile').addEventListener('input', function(event) {
         // 파일 업로드 함수 호출
 //        uploadFiles(formData); // 선택된 파일들 업로드 함수 호출
     } else {
-    	console.error('파일이 선택되지 않았습니다.');
+       console.error('파일이 선택되지 않았습니다.');
     }
 });
 
@@ -73,25 +73,25 @@ function checkFile(fileName, fileSize) {
  
 // 팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
 document.querySelector('#popUpimg').addEventListener('click', function() {
-	document.querySelector('#imageFile').click(); // 클릭 시 파일 선택 창 열기
+   document.querySelector('#imageFile').click(); // 클릭 시 파일 선택 창 열기
 });
 
 // 팝업 스토어 등록 버튼 클릭 이벤트
 function popStoreRegister(e){
-	const form = document.forms[0];
-	
-	const formData = new FormData(form);
-	const fileInput = formData.get('imageFile');
-	
-	// 파일 존재 등을 판단하는 방법
-	console.log(form.imageFile.files);
-	console.log(formData.has('imageFile'));
-	console.log(fileInput);
-	console.log(fileInput.size);
-	
-	// 예외처리
-	// 체크박스
-	const checkboxes = form.querySelectorAll('input[type="checkbox"][name^="psCat"]');
+   const form = document.forms[0];
+   
+   const formData = new FormData(form);
+   const fileInput = formData.get('imageFile');
+   
+   // 파일 존재 등을 판단하는 방법
+   console.log(form.imageFile.files);
+   console.log(formData.has('imageFile'));
+   console.log(fileInput);
+   console.log(fileInput.size);
+   
+   // 예외처리
+   // 체크박스
+   const checkboxes = form.querySelectorAll('input[type="checkbox"][name^="psCat"]');
     const selectedCategories = Array.from(checkboxes).filter(checkbox => checkbox.checked);
     if (selectedCategories.length === 0) {
         alert('최소 한 개의 카테고리를 선택해야 합니다.');
@@ -101,56 +101,56 @@ function popStoreRegister(e){
         alert('최대 세 개의 카테고리만 선택할 수 있습니다.');
         return;
     }
-	if(fileInput.size === 0){
-		alert('대표 이미지를 선택하십시오.');
-		return;
-	}
-	if (!form.latitude.value) {
-	    alert('위도를 입력해주세요');
-	    return; 
-	}
-	if (!form.longitude.value) {
-	    alert('경도를 입력해주세요');
-	    return; 
-	}
-	if (!form.psName.value) {
-	    alert('팝업스토어 이름을 입력해주세요');
-	    return; 
-	}
-	if (!form.psStartDate.value) {
-	    alert('시작일을 입력해주세요');
-	    return; 
-	}
-	if (!form.psEndDate.value) {
-	    alert('종료일을 입력해주세요');
-	     return; 
-	}
-	if (!form.psAddress.value) {
-	    alert('주소를 입력해주세요');
-	    return; 
-	}
-	if (!form.snsAd.value) {
-	    alert('SNS주소를 입력해주세요');
-	    return; 
-	}
-	if (!form.comInfo.value) {
-	    alert('주최사 정보를 입력해주세요');
-	    return; 
-	}
-	if (!form.transInfo.value) {
-	    alert('교통편을 입력해주세요');
-	    return; 
-	}
-	if (!form.parkingInfo.value) {
-	    alert('주차장정보를 입력해주세요');
-	    return; 
-	}
-	if (!form.psExp.value) {
-	    alert('설명글을 입력해주세요');
-	    return; 
-	}
-	
-	form.submit();
+   if(fileInput.size === 0){
+      alert('대표 이미지를 선택하십시오.');
+      return;
+   }
+   if (!form.latitude.value) {
+       alert('위도를 입력해주세요');
+       return; 
+   }
+   if (!form.longitude.value) {
+       alert('경도를 입력해주세요');
+       return; 
+   }
+   if (!form.psName.value) {
+       alert('팝업스토어 이름을 입력해주세요');
+       return; 
+   }
+   if (!form.psStartDate.value) {
+       alert('시작일을 입력해주세요');
+       return; 
+   }
+   if (!form.psEndDate.value) {
+       alert('종료일을 입력해주세요');
+        return; 
+   }
+   if (!form.psAddress.value) {
+       alert('주소를 입력해주세요');
+       return; 
+   }
+   if (!form.snsAd.value) {
+       alert('SNS주소를 입력해주세요');
+       return; 
+   }
+   if (!form.comInfo.value) {
+       alert('주최사 정보를 입력해주세요');
+       return; 
+   }
+   if (!form.transInfo.value) {
+       alert('교통편을 입력해주세요');
+       return; 
+   }
+   if (!form.parkingInfo.value) {
+       alert('주차장정보를 입력해주세요');
+       return; 
+   }
+   if (!form.psExp.value) {
+       alert('설명글을 입력해주세요');
+       return; 
+   }
+   
+   form.submit();
 
 }
 
@@ -193,15 +193,15 @@ document.getElementById("imageFile").addEventListener("change", function(event) 
 
 // 팝업스토어 수정
 function popStoreUpdate() {
-	const f = document.forms[0];	
-	
-	const formData = new FormData(f);
-	
-	const fileInput = formData.get('imageFile');
-	
-	console.log(fileInput);
-	// 예외처리
-	const checkboxes = f.querySelectorAll('input[type="checkbox"][name^="psCat"]');
+   const f = document.forms[0];   
+   
+   const formData = new FormData(f);
+   
+   const fileInput = formData.get('imageFile');
+   
+   console.log(fileInput);
+   // 예외처리
+   const checkboxes = f.querySelectorAll('input[type="checkbox"][name^="psCat"]');
     const selectedCategories = Array.from(checkboxes).filter(checkbox => checkbox.checked);
     if (selectedCategories.length === 0) {
         alert('최소 한 개의 카테고리를 선택해야 합니다.');
@@ -212,49 +212,49 @@ function popStoreUpdate() {
         return;
     }
     if(fileInput.size === 0){
-		alert('대표 이미지를 선택하십시오.');
-		return;
-	}
-	if(f.psName.value == ''){
-		alert('팝업스토어 이름을 입력해주세요');
-		return;
-	}
-	if(f.psStartDate.value == ''){
-		alert('시작일을 입력해주세요');
-		return;
-	}
-	if(f.psEndDate.value == ''){
-		alert('종료일을 입력해주세요');
-		return;		
-	}
-	if(f.psAddress.value == ''){
-		alert('주소를 입력해주세요');
-		return;
-	}
-	if(f.snsAd.value == ''){
-		alert('SNS주소를 입력해주세요');
-		return;		
-	}
-	if(f.comInfo.value == ''){
-		alert('주최사 정보를 입력해주세요');
-		return;
-	}
-	if(f.transInfo.value == ''){
-		alert('교통편을 입력해주세요');
-		return;		
-	}
-	if(f.psExp.value == ''){
-		alert('설명글을 입력해주세요');
-		return;
-	}
-	
-	document.getElementById("psUpdateDeleteForm").action = "/admin/psUpdate";  // 수정 요청 경로
+      alert('대표 이미지를 선택하십시오.');
+      return;
+   }
+   if(f.psName.value == ''){
+      alert('팝업스토어 이름을 입력해주세요');
+      return;
+   }
+   if(f.psStartDate.value == ''){
+      alert('시작일을 입력해주세요');
+      return;
+   }
+   if(f.psEndDate.value == ''){
+      alert('종료일을 입력해주세요');
+      return;      
+   }
+   if(f.psAddress.value == ''){
+      alert('주소를 입력해주세요');
+      return;
+   }
+   if(f.snsAd.value == ''){
+      alert('SNS주소를 입력해주세요');
+      return;      
+   }
+   if(f.comInfo.value == ''){
+      alert('주최사 정보를 입력해주세요');
+      return;
+   }
+   if(f.transInfo.value == ''){
+      alert('교통편을 입력해주세요');
+      return;      
+   }
+   if(f.psExp.value == ''){
+      alert('설명글을 입력해주세요');
+      return;
+   }
+   
+   document.getElementById("psUpdateDeleteForm").action = "/admin/psUpdate";  // 수정 요청 경로
     document.getElementById("psUpdateDeleteForm").submit();  // 폼 제출
 }
 
 // 팝업스토어 삭제
 function popStoreDelete () {
-	if (confirm("정말 삭제하시겠습니까?")) {
+   if (confirm("정말 삭제하시겠습니까?")) {
         // 삭제 작업을 위한 폼 액션 설정
         document.getElementById("psUpdateDeleteForm").action = "/admin/psDelete";  // 삭제 요청 경로
         document.getElementById("psUpdateDeleteForm").submit();  // 폼 제출
@@ -263,5 +263,6 @@ function popStoreDelete () {
 
 // 취소 및 리스트로 돌아가기 버튼 클릭시 메인페이지로 이동
 function backtoPsList() {
-	window.location.href = "/admin/adminPage";
+//   window.location.href = "/admin/adminPage";
+   loadPopUpStores(currentPageForPopUp);
 }
