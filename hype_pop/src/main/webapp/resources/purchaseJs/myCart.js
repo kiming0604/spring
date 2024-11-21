@@ -118,7 +118,7 @@ function calculateTotal() {
         grandTotal += itemTotal;
     });
     document.getElementById('grandTotal').innerText = grandTotal.toLocaleString(); // 총 가격 표시
-    //document.getElementById('grandTotalInput').innerText = grandTotal;
+    document.getElementById('grandTotalInput').innerText = grandTotal;
 
 }
 
@@ -131,8 +131,6 @@ function changeAmount(gno, change) {
         calculateTotal(); // 수량 변경 시 총 가격 재계산
     }
 }
-
-
 
 
 function deleteItem(gno) {
@@ -181,10 +179,9 @@ function prepareCartData() {
     const cartItems = document.querySelectorAll('.cart-item');
     const cartData = [];
     const grandTotal = document.getElementById('grandTotal').innerText;
+    
+    const userNo = document.getElementById('userNo').value; 
 
-    const userNo = document.getElementById('userNo').value; // 사용자 번호 가져오기
-
-    // 장바구니 데이터를 수집
     cartItems.forEach((item) => {
         const gno = item.id.split('-')[1];
         const gname = item.querySelector('h4').innerText.replace('굿즈 이름 : ', '').trim();
@@ -197,38 +194,16 @@ function prepareCartData() {
             gname: gname,
             gprice: parseInt(gprice.replace(',', '')),
             camount: parseInt(camount),
+            
         });
     });
 
-    // 서버에 수량 업데이트 요청
-    fetch('/purchase/api/updateCartAmount', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(cartData), // 수집한 장바구니 데이터를 JSON으로 전달
-    })
-        .then((response) => {
-            if (response.ok) {
-         
+    // 데이터를 hidden 필드에 설정
+    document.getElementById('hiddenGrandTotal').value = grandTotal.replace(',', '').trim();
+    document.getElementById('hiddenCartData').value = JSON.stringify(cartData);
 
-                // 데이터를 hidden 필드에 설정 (결제를 위한 준비)
-                document.getElementById('hiddenGrandTotal').value = grandTotal.replace(',', '').trim();
-                document.getElementById('hiddenCartData').value = JSON.stringify(cartData);
-
-                // 폼 제출 (결제 페이지로 이동)
-                document.getElementById('cartForm').submit();
-            } else {
-                return response.text().then((text) => {
-                    alert('장바구니 업데이트 실패: ' + text);
-                });
-            }
-        })
-        .catch((error) => {
-            console.error('업데이트 중 오류 발생:', error);
-            alert('서버 오류. 나중에 다시 시도해주세요.');
-        });
+    // 폼 제출
+    document.getElementById('cartForm').submit();
 }
-
 
 

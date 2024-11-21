@@ -13,9 +13,8 @@
 /* 기본 스타일 */
 body {
 	font-family: Arial, sans-serif;
-	background-color: #f9f9f9;
+	background-color: #fCE4EC;
 	margin: 0;
-	padding-top: 60px; /* 내비게이션 바 높이에 맞게 여백 추가 */
 	padding-bottom: 100px; /* 하단 여백을 100px로 설정 */
 	overflow-x: hidden; /* 가로 스크롤 방지 */
 	height: 100%;
@@ -350,7 +349,61 @@ input:checked+.slider:before {
 	border-radius: 4px; /* 둥근 테두리 */
 	width: 120px; /* 두 번째 input 너비 */
 }
+/* Navbar styles */
+.navbar {
+	background-color: #ffffff;
+	color: #333;
+	padding: 15px 20px;
+	border-bottom: 1px solid #e5e5e5;
+	display: flex;
+	justify-content: space-between;
+}
+
+.navbar ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+
+.navbar li {
+	margin-right: 15px;
+}
+
+.navbar a {
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.navbar a:hover {
+	color: #0078ff;
+}
+
+/* Header styles */
+.purchase-header {
+	text-align: center;
+	margin: 20px 0;
+	font-size: 24px;
+	font-weight: bold;
+	color: #333;
+}
+
+.navbar ul li a {
+	line-height: 5; /* 텍스트 줄 간격을 늘려서 아래로 내려줌 */
+}
+
+.footer {
+	text-align: center;
+	padding: 20px;
+	font-size: 14px;
+	color: #666;
+	background-color: #ffffff;
+	border-top: 1px solid #e5e5e5;
+}
 </style>
+
 
 
 </head>
@@ -570,58 +623,6 @@ input:checked+.slider:before {
 
 
 
-
-	<!-- 동의 안내(style과 클릭이벤트로 동의 안내문 띄우기) -->
-	<!-- <div class="agreement">
-		    <label>개인정보 처리 방침 동의</label>
-		    <label class="toggle-switch">
-		        <input type="checkbox" id="privacyPolicy" required>
-		        <span class="slider"></span>
-		    </label>
-		    <span class="modal-trigger" onclick="openModal('privacyPolicyModal')"> &gt; </span>
-		</div>
-		<div class="agreement">
-		    <label>위치 정보 사용 동의</label>
-		    <label class="toggle-switch">
-		        <input type="checkbox" id="locationPolicy" required>
-		        <span class="slider"></span>
-		    </label>
-		    <span class="modal-trigger" onclick="openModal('locationPolicyModal')"> &gt; </span>
-		</div>
-		<div class="agreement">
-		    <label>알림 수신 동의</label>
-		    <label class="toggle-switch">
-		        <input type="checkbox" id="notificationPolicy" required>
-		        <span class="slider"></span>
-		    </label>
-		    <span class="modal-trigger" onclick="openModal('notificationPolicyModal')"> &gt; </span>
-		</div>
-		
-		모달창
-		<div id="privacyPolicyModal" class="modal">
-		    <div class="modal-content">
-		        <span class="close" onclick="closeModal('privacyPolicyModal')">&times;</span>
-		        <h2>개인정보 처리 방침</h2>
-		        <p>여기에 개인정보 처리 방침 내용을 입력하세요.</p>
-		    </div>
-		</div>
-		
-		<div id="locationPolicyModal" class="modal">
-		    <div class="modal-content">
-		        <span class="close" onclick="closeModal('locationPolicyModal')">&times;</span>
-		        <h2>위치 정보 사용 방침</h2>
-		        <p>여기에 위치 정보 사용 방침 내용을 입력하세요.</p>
-		    </div>
-		</div>
-		
-		<div id="notificationPolicyModal" class="modal">
-		    <div class="modal-content">
-		        <span class="close" onclick="closeModal('notificationPolicyModal')">&times;</span>
-		        <h2>알림 수신 방침</h2>
-		        <p>여기에 알림 수신 방침 내용을 입력하세요.</p>
-		    </div>
-		</div>
-			 -->
 
 	<script type="text/javascript" src="/resources/memberJs/joinPage.js"></script>
 </body>

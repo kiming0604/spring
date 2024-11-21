@@ -60,32 +60,33 @@ $(document).ready(function() {
                 alert('결제 데이터를 서버로 전송하는 중 오류가 발생했습니다.');
             });
     }
+    //결제 후 장바구니 초기화
     function deleteCartItems(cartItems) {
-    	const gnoList = cartItems.map(item => item.gno); // 결제된 상품들의 GNO 리스트
-    	console.log("gnoList" + gnoList);
-    	
-    	 fetch('/purchase/api/deleteCartItems', {
-    	        method: 'POST',
-    	        headers: {
-    	            'Content-Type': 'application/json'
-    	        },
-    	        body: JSON.stringify({
-    	            userNo: userNo,
-    	            gnoList: gnoList
-    	        })
-    	    })
-    	    .then(response => response.json())
-    	    .then(data => {
-    	        if (data.status === 'success') {
-    	            console.log(data.message);
-    	        } else {
-    	            console.error('장바구니 삭제 실패:', data.message);
-    	        }
-    	    })
-    	    .catch(error => {
-    	        console.error('장바구니 삭제 요청 실패:', error);
-    	    });
-    	}
+        const gnoList = cartItems.map(item => item.gno); // 결제된 상품들의 GNO 리스트
+        console.log("gnoList", gnoList);
+        console.log("userNo", userNo);
+
+
+        gnoList.forEach(gno => {
+            fetch(`/purchase/api/deleteCartItems/${gno}/${userNo}`, { // 각 gno를 개별적으로 DELETE
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log(`상품 ${gno} 삭제 성공`);
+                } else {
+                    console.error(`상품 ${gno} 삭제 실패:`, data.message);
+                }
+            })
+            .catch(error => {
+                console.error(`상품 ${gno} 삭제 요청 실패:`, error);
+            });
+        });
+    }
     // 카카오페이 버튼 클릭 이벤트
     $('#kakaopay').on('click', function () {
         const uniqueMerchantUid = 'ORD' + new Date().getTime();
@@ -103,6 +104,7 @@ $(document).ready(function() {
                 if (r.success) {
                     alert('결제가 완료되었습니다. (카카오페이)');
                     sendOrderData(uniqueMerchantUid, cartItems);
+                    deleteCartItems(cartItems);
                     window.location.href = "/purchase/purchaseComplete"; 
                     
                 } else {
@@ -141,7 +143,7 @@ $(document).ready(function() {
                     } else { // 결제 실패
                         alert('결제가 완료되었습니다. (토스페이)');
                         window.location.href = "/purchase/purchaseComplete"; 
-
+                        
                     }
                 } catch (error) {
                     console.error('결제 응답 처리 중 오류:', error);

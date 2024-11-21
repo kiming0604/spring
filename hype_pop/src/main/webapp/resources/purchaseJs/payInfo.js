@@ -66,22 +66,3 @@ function sample6_execDaumPostcode() {
 
 
 
-////결제하기 버튼 이벤트
-//document.getElementById('kakaopay').addEventListener('click', function() {
-//    fetch("/purchase/api/kakaopay.cls", {
-//        method: 'POST',
-//        headers: {
-//            'Content-Type': 'application/json'
-//        },
-//    })
-//    .then(response => response.json()) // JSON 형식으로 응답 처리
-//    .then(data => {
-//        if(data.status === 'success') { // 응답의 status 확인
-//            console.log("카카오페이 결제 성공");
-//            alert(data.tid); // tid가 포함되어 있어야 함
-//        } else {
-//            console.log("카카오페이 결제 실패");
-//        }
-//    })
-//    .catch(err => console.log(err));
-//});

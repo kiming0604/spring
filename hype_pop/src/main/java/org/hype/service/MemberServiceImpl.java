@@ -160,62 +160,63 @@ public class MemberServiceImpl implements MemberService{
 		}
 		
 		//회원 탈퇴
-		public boolean deleteUserData(int userNo) {
-		    try {
-		        // 회원 탈퇴
-		        membermapper.deleteSignInInfo(userNo);
+				public boolean deleteUserData(int userNo) {
+				    try {
+				        // 회원 탈퇴
+				        membermapper.deleteSignInInfo(userNo);
 
-		        // 회원 관심 카테고리 테이블에서 삭제
-		        membermapper.deleteMemberCategory(userNo);
+				        // 회원 관심 카테고리 테이블에서 삭제
+				        membermapper.deleteMemberCategory(userNo);
 
-		        // 팝업스토어 댓글 테이블에서 삭제
-		        membermapper.deletePopReply(userNo);
+				        // 팝업스토어 댓글 테이블에서 삭제
+				        membermapper.deletePopReply(userNo);
 
-		        // 팝업스토어 좋아요 테이블에서 삭제
-		        membermapper.deleteLikeList(userNo);
+				        // 팝업스토어 좋아요 테이블에서 삭제
+				        membermapper.deleteLikeList(userNo);
 
-		        // 굿즈 정보 댓글 테이블에서 삭제
-		        membermapper.deleteGoodsReply(userNo);
+				        // 굿즈 정보 댓글 테이블에서 삭제
+				        membermapper.deleteGoodsReply(userNo);
 
-		        // 굿즈 좋아요 리스트 테이블에서 삭제
-		        membermapper.deleteGoodsLikeList(userNo);
+				        // 굿즈 좋아요 리스트 테이블에서 삭제
+				        membermapper.deleteGoodsLikeList(userNo);
 
-		        // 장바구니 테이블에서 삭제
-		        membermapper.deleteCart(userNo);
+				        // 장바구니 테이블에서 삭제
+				        membermapper.deleteCart(userNo);
 
-		        // 결제 내역 테이블에서 삭제
-		        membermapper.deletePayment(userNo);
+				        // 결제 내역 테이블에서 삭제
+				        membermapper.deletePayment(userNo);
 
-		        // Q&A 테이블에서 삭제
-		        membermapper.deleteQna(userNo);
+				        // Q&A 테이블에서 삭제
+				        membermapper.deleteQna(userNo);
 
-		        // 파티 정보 테이블에서 삭제
-		        membermapper.deletePartyInfo(userNo);
+				        // 파티 정보 테이블에서 삭제
+				        membermapper.deletePartyInfo(userNo);
 
-		        // 채팅 참여 테이블에서 삭제
-		        membermapper.deleteChat(userNo);
+				        // 채팅 참여 테이블에서 삭제
+				        membermapper.deleteChat(userNo);
 
-		        // 채팅 내용 테이블에서 삭제
-		        membermapper.deleteChatContent(userNo);
+				        // 채팅 내용 테이블에서 삭제
+				        membermapper.deleteChatContent(userNo);
 
-		        // 전시 댓글 테이블에서 삭제
-		        membermapper.deleteExhReply(userNo);
+				        // 전시 댓글 테이블에서 삭제
+				        membermapper.deleteExhReply(userNo);
 
-		        // 전시 좋아요 리스트 테이블에서 삭제
-		        membermapper.deleteExhLikeList(userNo);
+				        // 전시 좋아요 리스트 테이블에서 삭제
+				        membermapper.deleteExhLikeList(userNo);
 
-		        // 모든 작업이 성공적으로 완료되면 true 반환
-		        return true;
-		    } catch (Exception e) {
-		        // 예외 발생 시 롤백을 트랜잭션에서 자동으로 처리
-		        log.error("회원 탈퇴 중 오류 발생 - userNo: " + userNo, e);
-		        return false;  // 하나라도 실패하면 false 반환
-		    }
-		}
+				        // 모든 작업이 성공적으로 완료되면 true 반환
+				        return true;
+				    } catch (Exception e) {
+				        // 예외 발생 시 롤백을 트랜잭션에서 자동으로 처리
+				        log.error("회원 탈퇴 중 오류 발생 - userNo: " + userNo, e);
+				        return false;  // 하나라도 실패하면 false 반환
+				    }
+				}
+				
+				
+
 		
-		
 
-			
 }
 
 

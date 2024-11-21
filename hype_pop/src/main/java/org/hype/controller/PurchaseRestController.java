@@ -176,28 +176,24 @@ public class PurchaseRestController {
 	}
 
 	
-	@PostMapping(value = "/deleteCartItems", produces = "application/json")
-	public ResponseEntity<?> deleteCartItems(@RequestBody Map<String, Object> params) {
-	    try {
-	        int userNo = (int) params.get("userNo");
-	        List<Integer> gnoList = (List<Integer>) params.get("gnoList");
-	        log.info("userNo: " + userNo);
-	        log.info("gnoList: " + gnoList);
-
-
-	        // 장바구니 삭제 서비스 호출
-	        int deletedCount = purchaseService.deleteCartItems(gnoList, userNo);
-
-	        // 삭제된 항목 수에 따른 응답 처리
-	        if (deletedCount > 0) {
-	            return ResponseEntity.ok(Map.of("status", "success", "message", "총 " + deletedCount + "개의 항목이 삭제되었습니다."));
+	@DeleteMapping("/deleteCartItems/{gno}/{userNo}")
+	public ResponseEntity<?> deleteCartItems(@PathVariable int gno, @PathVariable int userNo) {
+	   log.info("deletecartItems...:" + gno + userNo);
+		
+		try {
+	        int result = purchaseService.deleteCartItems(gno, userNo); // gno를 기반으로 삭제
+	        if (result > 0) {
+	            return ResponseEntity.ok().body(Map.of("status", "success", "message", "삭제 완료"));
 	        } else {
-	            return ResponseEntity.ok(Map.of("status", "fail", "message", "삭제할 항목이 없습니다."));
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .body(Map.of("status", "fail", "message", "삭제할 항목 없음"));
 	        }
 	    } catch (Exception e) {
-	        log.error("장바구니 삭제 중 오류 발생", e); // 오류 로그 추가
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                             .body(Map.of("status", "error", "message", "장바구니 삭제 중 오류 발생."));
+	                .body(Map.of("status", "error", "message", e.getMessage()));
 	    }
 	}
+	
+	
+	
 }

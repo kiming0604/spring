@@ -28,278 +28,278 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Service
 public class AdminServiceImpl implements AdminService{
-	
-	@Autowired
-	public AdminMapper mapper;
-		
-	// ÆäÀÌÂ¡ Ã³¸®
-	// ÆË¾÷½ºÅä¾î ¿µ¿ª
-	// ÆË¾÷½ºÅä¾î ¸®½ºÆ® °¡Á®¿À±â
-	@Override
-	public List<popStoreVO> getPList(Criteria cri, String searchPs) {
-		return mapper.getPList(cri, searchPs);
-	}
-	
-	@Override
-	public int getPTotal(String searchPs) {
-		return mapper.getPTotal(searchPs);
-	}	
+   
+   @Autowired
+   public AdminMapper mapper;
+      
+   // í˜ì´ì§• ì²˜ë¦¬
+   // íŒì—…ìŠ¤í† ì–´ ì˜ì—­
+   // íŒì—…ìŠ¤í† ì–´ ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸°
+   @Override
+   public List<popStoreVO> getPList(Criteria cri, String searchPs) {
+      return mapper.getPList(cri, searchPs);
+   }
+   
+   @Override
+   public int getPTotal(String searchPs) {
+      return mapper.getPTotal(searchPs);
+   }   
 
-	// ±ÂÁî(»óÇ°) ¿µ¿ª
-	// ±ÂÁî(»óÇ°) ¸®½ºÆ® °¡Á®¿À±â
-	@Override
-	public List<goodsVO> getGList(Criteria cri, String searchGs) {
-		return mapper.getGList(cri, searchGs);
-	}
+   // êµ¿ì¦ˆ(ìƒí’ˆ) ì˜ì—­
+   // êµ¿ì¦ˆ(ìƒí’ˆ) ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸°
+   @Override
+   public List<goodsVO> getGList(Criteria cri, String searchGs) {
+      return mapper.getGList(cri, searchGs);
+   }
 
-	@Override
-	public int getGTotal(String searchGs) {
-		return mapper.getGTotal(searchGs);
-	}	
-	
-	// Àü½ÃÈ¸ ¿µ¿ª
-	// Àü½ÃÈ¸ ¸®½ºÆ® °¡Á®¿À±â	
-	@Override
-	public List<exhVO> getExhList(Criteria cri, String searchEs) {
-		return mapper.getExhList(cri, searchEs);
-	}
+   @Override
+   public int getGTotal(String searchGs) {
+      return mapper.getGTotal(searchGs);
+   }   
+   
+   // ì „ì‹œíšŒ ì˜ì—­
+   // ì „ì‹œíšŒ ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸°   
+   @Override
+   public List<exhVO> getExhList(Criteria cri, String searchEs) {
+      return mapper.getExhList(cri, searchEs);
+   }
 
-	@Override
-	public int getExhTotal(String searchEs) {
-		return mapper.getExhTotal(searchEs);
-	}
+   @Override
+   public int getExhTotal(String searchEs) {
+      return mapper.getExhTotal(searchEs);
+   }
 
-	// È¸¿ø ¿µ¿ª
-	// È¸¿ø ¸®½ºÆ® °¡Á®¿À±â 
-	@Override
-	public List<signInVO> getMList(Criteria cri, String searchMs) {
-		return mapper.getMList(cri, searchMs);
-	}
-	
-	@Override
-	public int getMTotal(String searchMs) {
-		return mapper.getMTotal(searchMs);
-	}
-	
-	// Æ¯Á¤ ÆË¾÷½ºÅä¾î Á¶È¸
-	@Override
-	public popStoreVO getPopStoreById(int psNo) {
-		return mapper.getPopStoreById(psNo);
-	}
-	
-	// Æ¯Á¤ ±ÂÁî(»óÇ°) Á¶È¸
-	@Override
-	public goodsVO getGoodsById(int gno) {
-		return mapper.getGoodsById(gno);
-	}	
-//	@Override
-//	public goodsVO getGoodsById(int gNo) {
-//		return mapper.getGoodsById(gNo);
-//	}	
-	
-	// Æ¯Á¤ Àü½ÃÈ¸ Á¶È¸
-	@Override
-	public exhVO getExhById(int exhNo) {
-		return mapper.getExhById(exhNo);
-	}
-	
-	// Æ¯Á¤ È¸¿ø Á¶È¸
-	@Override
-	public signInVO getMembersById(String userId) {
-		return mapper.getMembersById(userId);
-	}
-	
-	// ÆË¾÷½ºÅä¾î µî·Ï ÆäÀÌÁö ¿µ¿ª
-	// ÆË¾÷½ºÅä¾î Á¤º¸ µî·Ï
-	@Transactional
-	@Override
-	public int insertPopStore(popStoreVO pvo) {
-		
-		int result1 = mapper.insertPopStore(pvo);
-		pvo.getPsImg().setPsNo(pvo.getPsNo()); // ½ÃÄö½º¸¦ xml¿¡¼­ Ã³¸®ÇÑ °Å¸¦ °®°í¿Â °Í
-		log.warn(pvo.getPsNo());
-		int result2 = mapper.insertPsImage(pvo.getPsImg());	 // vo °¡Á®¿À±â
-		
-		pvo.getPsCat().setPsNo(pvo.getPsNo()); // ½ÃÄö½º¸¦ xml¿¡¼­ Ã³¸®ÇÑ °Å¸¦ °®°í¿Â °Í
-		
-		int result3 = mapper.insertPsCat(pvo.getPsCat());	 // vo °¡Á®¿À±â
+   // íšŒì› ì˜ì—­
+   // íšŒì› ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸° 
+   @Override
+   public List<signInVO> getMList(Criteria cri, String searchMs) {
+      return mapper.getMList(cri, searchMs);
+   }
+   
+   @Override
+   public int getMTotal(String searchMs) {
+      return mapper.getMTotal(searchMs);
+   }
+   
+   // íŠ¹ì • íŒì—…ìŠ¤í† ì–´ ì¡°íšŒ
+   @Override
+   public popStoreVO getPopStoreById(int psNo) {
+      return mapper.getPopStoreById(psNo);
+   }
+   
+   // íŠ¹ì • êµ¿ì¦ˆ(ìƒí’ˆ) ì¡°íšŒ
+   @Override
+   public goodsVO getGoodsById(int gno) {
+      return mapper.getGoodsById(gno);
+   }   
+//   @Override
+//   public goodsVO getGoodsById(int gNo) {
+//      return mapper.getGoodsById(gNo);
+//   }   
+   
+   // íŠ¹ì • ì „ì‹œíšŒ ì¡°íšŒ
+   @Override
+   public exhVO getExhById(int exhNo) {
+      return mapper.getExhById(exhNo);
+   }
+   
+   // íŠ¹ì • íšŒì› ì¡°íšŒ
+   @Override
+   public signInVO getMembersById(String userId) {
+      return mapper.getMembersById(userId);
+   }
+   
+   // íŒì—…ìŠ¤í† ì–´ ë“±ë¡ í˜ì´ì§€ ì˜ì—­
+   // íŒì—…ìŠ¤í† ì–´ ì •ë³´ ë“±ë¡
+   @Transactional
+   @Override
+   public int insertPopStore(popStoreVO pvo) {
+      
+      int result1 = mapper.insertPopStore(pvo);
+      pvo.getPsImg().setPsNo(pvo.getPsNo()); // ì‹œí€€ìŠ¤ë¥¼ xmlì—ì„œ ì²˜ë¦¬í•œ ê±°ë¥¼ ê°–ê³ ì˜¨ ê²ƒ
+      log.warn(pvo.getPsNo());
+      int result2 = mapper.insertPsImage(pvo.getPsImg());    // vo ê°€ì ¸ì˜¤ê¸°
+      
+      pvo.getPsCat().setPsNo(pvo.getPsNo()); // ì‹œí€€ìŠ¤ë¥¼ xmlì—ì„œ ì²˜ë¦¬í•œ ê±°ë¥¼ ê°–ê³ ì˜¨ ê²ƒ
+      
+      int result3 = mapper.insertPsCat(pvo.getPsCat());    // vo ê°€ì ¸ì˜¤ê¸°
 
-		log.warn("result1ÀÇ °ªÀº " + result1);
-		log.warn("result2ÀÇ °ªÀº " + result2);
+      log.warn("result1ì˜ ê°’ì€ " + result1);
+      log.warn("result2ì˜ ê°’ì€ " + result2);
 
-		return result1;		
-	}
-	
-	// ÆË¾÷½ºÅä¾î ¼öÁ¤ ÆäÀÌÁö ¿µ¿ª
-	// ÆË¾÷½ºÅä¾î Á¤º¸ ¼öÁ¤
-	// ÀÌ¹ÌÁö ¹Ş¾Æ¿À±â
-	@Override
-	public pImgVO getPsImg(int psNo) {
-		return mapper.getPsImg(psNo);
-	}
-	
-	// Ä«Å×°í¸® °ª ¹Ş¾Æ¿À±â
-	@Override
-	public pCatVO getPsCat(int psNo) {
-		return mapper.getPsCat(psNo);
-	}
+      return result1;      
+   }
+   
+   // íŒì—…ìŠ¤í† ì–´ ìˆ˜ì • í˜ì´ì§€ ì˜ì—­
+   // íŒì—…ìŠ¤í† ì–´ ì •ë³´ ìˆ˜ì •
+   // ì´ë¯¸ì§€ ë°›ì•„ì˜¤ê¸°
+   @Override
+   public pImgVO getPsImg(int psNo) {
+      return mapper.getPsImg(psNo);
+   }
+   
+   // ì¹´í…Œê³ ë¦¬ ê°’ ë°›ì•„ì˜¤ê¸°
+   @Override
+   public pCatVO getPsCat(int psNo) {
+      return mapper.getPsCat(psNo);
+   }
 
-	// ÆË¾÷½ºÅä¾î Á¤º¸ ¼öÁ¤
-	@Override
-	public int updatePopStore(popStoreVO pvo) {
-		log.info("ÆË¾÷½ºÅä¾î ¼öÁ¤..." + pvo);
-		
-		// 1. ±âº» ÆË¾÷½ºÅä¾î Á¤º¸ ¾÷µ¥ÀÌÆ®
-		int result1 = mapper.updatePopStore(pvo);
-		log.warn("±âº» Á¤º¸ ¾÷µ¥ÀÌÆ® °á°ú: " + result1);
-		
-		// 2. ÀÌ¹ÌÁö Á¤º¸ ¾÷µ¥ÀÌÆ®
-	    if (pvo.getPsImg() != null) {
-	        pvo.getPsImg().setPsNo(pvo.getPsNo());
-	        int result2 = mapper.updatePsImage(pvo.getPsImg());
-	        log.warn("ÀÌ¹ÌÁö Á¤º¸ ¾÷µ¥ÀÌÆ® °á°ú: " + result2);
-	    } else {
-	        log.warn("pvo.getPsImg()°¡ nullÀÔ´Ï´Ù. ÀÌ¹ÌÁö Á¤º¸ ¾÷µ¥ÀÌÆ®¸¦ °Ç³Ê¶İ´Ï´Ù.");
-	    }
-	    		
-		// 3. Ä«Å×°í¸® Á¤º¸ ¾÷µ¥ÀÌÆ®
-	    pvo.getPsCat().setPsNo(pvo.getPsNo());
-	    int result3 = mapper.updatePsCat(pvo.getPsCat());
-	    log.warn("Ä«Å×°í¸® Á¤º¸ ¾÷µ¥ÀÌÆ® °á°ú: " + result3);
-	    
-		return result1;		
-	}
+   // íŒì—…ìŠ¤í† ì–´ ì •ë³´ ìˆ˜ì •
+   @Override
+   public int updatePopStore(popStoreVO pvo) {
+      log.info("íŒì—…ìŠ¤í† ì–´ ìˆ˜ì •..." + pvo);
+      
+      // 1. ê¸°ë³¸ íŒì—…ìŠ¤í† ì–´ ì •ë³´ ì—…ë°ì´íŠ¸
+      int result1 = mapper.updatePopStore(pvo);
+      log.warn("ê¸°ë³¸ ì •ë³´ ì—…ë°ì´íŠ¸ ê²°ê³¼: " + result1);
+      
+      // 2. ì´ë¯¸ì§€ ì •ë³´ ì—…ë°ì´íŠ¸
+       if (pvo.getPsImg() != null) {
+           pvo.getPsImg().setPsNo(pvo.getPsNo());
+           int result2 = mapper.updatePsImage(pvo.getPsImg());
+           log.warn("ì´ë¯¸ì§€ ì •ë³´ ì—…ë°ì´íŠ¸ ê²°ê³¼: " + result2);
+       } else {
+           log.warn("pvo.getPsImg()ê°€ nullì…ë‹ˆë‹¤. ì´ë¯¸ì§€ ì •ë³´ ì—…ë°ì´íŠ¸ë¥¼ ê±´ë„ˆëœë‹ˆë‹¤.");
+       }
+             
+      // 3. ì¹´í…Œê³ ë¦¬ ì •ë³´ ì—…ë°ì´íŠ¸
+       pvo.getPsCat().setPsNo(pvo.getPsNo());
+       int result3 = mapper.updatePsCat(pvo.getPsCat());
+       log.warn("ì¹´í…Œê³ ë¦¬ ì •ë³´ ì—…ë°ì´íŠ¸ ê²°ê³¼: " + result3);
+       
+      return result1;      
+   }
 
-	// ÆË¾÷½ºÅä¾î »èÁ¦ ÆäÀÌÁö ¿µ¿ª
-	// ÆË¾÷½ºÅä¾î Á¤º¸ »èÁ¦	
-	@Override
-	@Transactional
-	public int deletePopStore(int psNo) {
-		List<goodsVO> gvo = mapper.getPsnoList(psNo);
-		for(goodsVO vo : gvo) {
-			int gno = vo.getGno();
-			int result2 = mapper.deleteGCart(gno);
-			result2 += mapper.deleteGPay(gno);
-			result2 += mapper.deleteGLike(gno);
-			result2 += mapper.deleteGReply(gno);
-			result2 += mapper.deleteGCat(gno);
-			result2 += mapper.deleteGImgBanner(gno);
-			result2 += mapper.deleteGImgDetail(gno);
-			result2 += mapper.deleteGoodsStore(gno);
-		}
-		int result = mapper.deletePsCat(psNo);
+   // íŒì—…ìŠ¤í† ì–´ ì‚­ì œ í˜ì´ì§€ ì˜ì—­
+   // íŒì—…ìŠ¤í† ì–´ ì •ë³´ ì‚­ì œ   
+   @Override
+   @Transactional
+   public int deletePopStore(int psNo) {
+      List<goodsVO> gvo = mapper.getPsnoList(psNo);
+      for(goodsVO vo : gvo) {
+         int gno = vo.getGno();
+         int result2 = mapper.deleteGCart(gno);
+         result2 += mapper.deleteGPay(gno);
+         result2 += mapper.deleteGLike(gno);
+         result2 += mapper.deleteGReply(gno);
+         result2 += mapper.deleteGCat(gno);
+         result2 += mapper.deleteGImgBanner(gno);
+         result2 += mapper.deleteGImgDetail(gno);
+         result2 += mapper.deleteGoodsStore(gno);
+      }
+      int result = mapper.deletePsCat(psNo);
         result += mapper.deletePsImage(psNo);
         result += mapper.deletePsReply(psNo);
         result += mapper.deletePsLike(psNo);
         result += mapper.deletePopStore(psNo);
 
         return result;
-	}	
-	
-	// »óÇ°(±ÂÁî) µî·Ï ÆäÀÌÁö ¿µ¿ª
-	// »óÇ°(±ÂÁî) Á¤º¸ µî·Ï	
-	@Override
-	public List<popStoreVO> getAllPopStores() {
-		return mapper.getAllPopStores();
-	}
+   }   
+   
+   // ìƒí’ˆ(êµ¿ì¦ˆ) ë“±ë¡ í˜ì´ì§€ ì˜ì—­
+   // ìƒí’ˆ(êµ¿ì¦ˆ) ì •ë³´ ë“±ë¡   
+   @Override
+   public List<popStoreVO> getAllPopStores() {
+      return mapper.getAllPopStores();
+   }
 
-	@Transactional
-	@Override
-	public int insertGoodsStore(goodsVO gvo) {
-	    // 1. »óÇ° µî·Ï
-		log.warn("ÆÄÀÏÀÌ¸§ °¡Á®¿À±â " + gvo.getAttachList().get(0).getFileName());
-		log.warn(gvo.getAttachList().get(1).getFileName());
-	    int result1 = mapper.insertGoodsStore(gvo);
-	    log.warn("»óÇ° µî·Ï °á°ú: " + result1);	
+   @Transactional
+   @Override
+   public int insertGoodsStore(goodsVO gvo) {
+       // 1. ìƒí’ˆ ë“±ë¡
+      log.warn("íŒŒì¼ì´ë¦„ ê°€ì ¸ì˜¤ê¸° " + gvo.getAttachList().get(0).getFileName());
+      log.warn(gvo.getAttachList().get(1).getFileName());
+       int result1 = mapper.insertGoodsStore(gvo);
+       log.warn("ìƒí’ˆ ë“±ë¡ ê²°ê³¼: " + result1);   
 
-	    if (result1 > 0) {
+       if (result1 > 0) {
 
-	    	for (gImgVO img : gvo.getAttachList()) {
-	    		log.warn("gno´Â ? : " + gvo.getGno());
-	            img.setGno(gvo.getGno()); // gno¸¦ °¢ ÀÌ¹ÌÁö¿¡ ¼³Á¤
-	            // ¹è³Ê ÀÌ¹ÌÁö µî·Ï
-	            if (img.getUploadPath().contains("±ÂÁî ¹è³Ê »çÁø")) {
-	                int result2 = mapper.insertBannerImage(img);
-	                log.warn("¹è³Ê ÀÌ¹ÌÁö µî·Ï °á°ú: " + result2);
-	            }
-	            // »ó¼¼ ÀÌ¹ÌÁö µî·Ï
-	            else if (img.getUploadPath().contains("±ÂÁî »ó¼¼ »çÁø")) {
-	                int result3 = mapper.insertDetailImage(img);
-	                log.warn("»ó¼¼ ÀÌ¹ÌÁö µî·Ï °á°ú: " + result3);
-	            }
-	        }
-	    } else {
-	        throw new RuntimeException("»óÇ° µî·Ï ½ÇÆĞ");
-	    }
-	    
-	    gvo.getGcat().setGno(gvo.getGno()); // ½ÃÄö½º¸¦ xml¿¡¼­ Ã³¸®ÇÑ °Å¸¦ °®°í¿Â °Í
-	    
-	    int result4 = mapper.insertGcat(gvo.getGcat());	    
+          for (gImgVO img : gvo.getAttachList()) {
+             log.warn("gnoëŠ” ? : " + gvo.getGno());
+               img.setGno(gvo.getGno()); // gnoë¥¼ ê° ì´ë¯¸ì§€ì— ì„¤ì •
+               // ë°°ë„ˆ ì´ë¯¸ì§€ ë“±ë¡
+               if (img.getUploadPath().contains("êµ¿ì¦ˆ ë°°ë„ˆ ì‚¬ì§„")) {
+                   int result2 = mapper.insertBannerImage(img);
+                   log.warn("ë°°ë„ˆ ì´ë¯¸ì§€ ë“±ë¡ ê²°ê³¼: " + result2);
+               }
+               // ìƒì„¸ ì´ë¯¸ì§€ ë“±ë¡
+               else if (img.getUploadPath().contains("êµ¿ì¦ˆ ìƒì„¸ ì‚¬ì§„")) {
+                   int result3 = mapper.insertDetailImage(img);
+                   log.warn("ìƒì„¸ ì´ë¯¸ì§€ ë“±ë¡ ê²°ê³¼: " + result3);
+               }
+           }
+       } else {
+           throw new RuntimeException("ìƒí’ˆ ë“±ë¡ ì‹¤íŒ¨");
+       }
+       
+       gvo.getGcat().setGno(gvo.getGno()); // ì‹œí€€ìŠ¤ë¥¼ xmlì—ì„œ ì²˜ë¦¬í•œ ê±°ë¥¼ ê°–ê³ ì˜¨ ê²ƒ
+       
+       int result4 = mapper.insertGcat(gvo.getGcat());       
 
-	    return result1;
-	}
-	
-	// »óÇ°(±ÂÁî) ¼öÁ¤ ÆäÀÌÁö ¿µ¿ª
-	// »óÇ°(±ÂÁî) Á¤º¸ ¼öÁ¤	
-	@Override
-	public gImgVO getGImgBanner(int gno) {
-		return mapper.getGImgBanner(gno);
-	}
-	
-	@Override
-	public gImgVO getGImgDetail(int gno) {
-		return mapper.getGImgDetail(gno);
-	}
-	
-	@Override
-	public gCatVO getGCat(int gno) {
-		return mapper.getGCat(gno);
-	}
-	
-	@Transactional
-	@Override
-	public int updateGoodsStore(goodsVO gvo) {
+       return result1;
+   }
+   
+   // ìƒí’ˆ(êµ¿ì¦ˆ) ìˆ˜ì • í˜ì´ì§€ ì˜ì—­
+   // ìƒí’ˆ(êµ¿ì¦ˆ) ì •ë³´ ìˆ˜ì •   
+   @Override
+   public gImgVO getGImgBanner(int gno) {
+      return mapper.getGImgBanner(gno);
+   }
+   
+   @Override
+   public gImgVO getGImgDetail(int gno) {
+      return mapper.getGImgDetail(gno);
+   }
+   
+   @Override
+   public gCatVO getGCat(int gno) {
+      return mapper.getGCat(gno);
+   }
+   
+   @Transactional
+   @Override
+   public int updateGoodsStore(goodsVO gvo) {
 
-	    // 1. ±âº» »óÇ° Á¤º¸ ¾÷µ¥ÀÌÆ®
-	    int result = mapper.updateGoodsStore(gvo);
+       // 1. ê¸°ë³¸ ìƒí’ˆ ì •ë³´ ì—…ë°ì´íŠ¸
+       int result = mapper.updateGoodsStore(gvo);
 
-	    // 2. Ä«Å×°í¸® Á¤º¸ ¾÷µ¥ÀÌÆ®
-	    if (gvo.getGcat() != null) {
-	        gvo.getGcat().setGno(gvo.getGno());  // »óÇ° ¹øÈ£ ¼³Á¤
-	        result += mapper.updateGCat(gvo.getGcat());
-	    }
+       // 2. ì¹´í…Œê³ ë¦¬ ì •ë³´ ì—…ë°ì´íŠ¸
+       if (gvo.getGcat() != null) {
+           gvo.getGcat().setGno(gvo.getGno());  // ìƒí’ˆ ë²ˆí˜¸ ì„¤ì •
+           result += mapper.updateGCat(gvo.getGcat());
+       }
 
-	    // 3. ÀÌ¹ÌÁö ¸®½ºÆ®°¡ Á¸ÀçÇÒ °æ¿ì ¹è³Ê¿Í »ó¼¼ ÀÌ¹ÌÁö ±¸ºĞÇÏ¿© ¾÷µ¥ÀÌÆ® ¼öÇà
-	    if (gvo.getAttachList() != null && !gvo.getAttachList().isEmpty()) {
-	        for (gImgVO img : gvo.getAttachList()) {
-	            img.setGno(gvo.getGno());  // »óÇ° ¹øÈ£ ¼³Á¤
-	            if (img.getUploadPath().contains("±ÂÁî ¹è³Ê »çÁø")) {
-	                result += mapper.updateGImgBanner(img);  // ¹è³Ê ÀÌ¹ÌÁö ¾÷µ¥ÀÌÆ®
-	            } else if (img.getUploadPath().contains("±ÂÁî »ó¼¼ »çÁø")) {
-	                result += mapper.updateGImgDetail(img);  // »ó¼¼ ÀÌ¹ÌÁö ¾÷µ¥ÀÌÆ®
-	            }
-	        }
-	    }
+       // 3. ì´ë¯¸ì§€ ë¦¬ìŠ¤íŠ¸ê°€ ì¡´ì¬í•  ê²½ìš° ë°°ë„ˆì™€ ìƒì„¸ ì´ë¯¸ì§€ êµ¬ë¶„í•˜ì—¬ ì—…ë°ì´íŠ¸ ìˆ˜í–‰
+       if (gvo.getAttachList() != null && !gvo.getAttachList().isEmpty()) {
+           for (gImgVO img : gvo.getAttachList()) {
+               img.setGno(gvo.getGno());  // ìƒí’ˆ ë²ˆí˜¸ ì„¤ì •
+               if (img.getUploadPath().contains("êµ¿ì¦ˆ ë°°ë„ˆ ì‚¬ì§„")) {
+                   result += mapper.updateGImgBanner(img);  // ë°°ë„ˆ ì´ë¯¸ì§€ ì—…ë°ì´íŠ¸
+               } else if (img.getUploadPath().contains("êµ¿ì¦ˆ ìƒì„¸ ì‚¬ì§„")) {
+                   result += mapper.updateGImgDetail(img);  // ìƒì„¸ ì´ë¯¸ì§€ ì—…ë°ì´íŠ¸
+               }
+           }
+       }
 
-	    return result;
-	}
-	
-	// »óÇ°(±ÂÁî) »èÁ¦ ÆäÀÌÁö ¿µ¿ª
-	// »óÇ°(±ÂÁî) Á¤º¸ »èÁ¦
-	@Transactional
-	@Override
-	public int deleteGoodsStore(int gno) {
-			    
-		int result = mapper.deleteGCart(gno);
-		
-		result += mapper.deleteGPay(gno);
-		
-		result += mapper.deleteGLike(gno);
-		
-		result += mapper.deleteGReply(gno);
-		
-		result += mapper.deleteGCat(gno);
-		
+       return result;
+   }
+   
+   // ìƒí’ˆ(êµ¿ì¦ˆ) ì‚­ì œ í˜ì´ì§€ ì˜ì—­
+   // ìƒí’ˆ(êµ¿ì¦ˆ) ì •ë³´ ì‚­ì œ
+   @Transactional
+   @Override
+   public int deleteGoodsStore(int gno) {
+             
+      int result = mapper.deleteGCart(gno);
+      
+      result += mapper.deleteGPay(gno);
+      
+      result += mapper.deleteGLike(gno);
+      
+      result += mapper.deleteGReply(gno);
+      
+      result += mapper.deleteGCat(gno);
+      
         result += mapper.deleteGImgBanner(gno);
 
         result += mapper.deleteGImgDetail(gno);
@@ -307,82 +307,82 @@ public class AdminServiceImpl implements AdminService{
         result += mapper.deleteGoodsStore(gno);        
 
         return result; 
-	}
+   }
 
-	// Àü½ÃÈ¸ µî·Ï ÆäÀÌÁö ¿µ¿ª
-	// Àü½ÃÈ¸ Á¤º¸ µî·Ï	
-	@Transactional
-	@Override
-	public int insertExhibition(exhVO evo) {
-	    // 1. »óÇ° µî·Ï
-		log.warn("ÆÄÀÏÀÌ¸§ °¡Á®¿À±â " + evo.getAttachExhList().get(0).getFileName());
-		log.warn(evo.getAttachExhList().get(1).getFileName());
-	    int result1 = mapper.insertExhibition(evo);
-	    log.warn("Àü½ÃÈ¸ µî·Ï °á°ú: " + result1);
+   // ì „ì‹œíšŒ ë“±ë¡ í˜ì´ì§€ ì˜ì—­
+   // ì „ì‹œíšŒ ì •ë³´ ë“±ë¡   
+   @Transactional
+   @Override
+   public int insertExhibition(exhVO evo) {
+       // 1. ìƒí’ˆ ë“±ë¡
+      log.warn("íŒŒì¼ì´ë¦„ ê°€ì ¸ì˜¤ê¸° " + evo.getAttachExhList().get(0).getFileName());
+      log.warn(evo.getAttachExhList().get(1).getFileName());
+       int result1 = mapper.insertExhibition(evo);
+       log.warn("ì „ì‹œíšŒ ë“±ë¡ ê²°ê³¼: " + result1);
 
-	    if (result1 > 0) {
+       if (result1 > 0) {
 
-	    	for (exhImgVO exhImg : evo.getAttachExhList()) {
-	    		exhImg.setExhNo(evo.getExhNo()); // exhNo¸¦ °¢ ÀÌ¹ÌÁö¿¡ ¼³Á¤
-	    		log.warn("Àü½ÃÈ¸ ¹øÈ£ : " + evo.getExhNo());
-	            // ¹è³Ê ÀÌ¹ÌÁö µî·Ï
-	            if (exhImg.getUploadPath().contains("Àü½ÃÈ¸ ¹è³Ê »çÁø")) {
-	                int result2 = mapper.insertExhBannerImage(exhImg);
-	                log.warn("¹è³Ê ÀÌ¹ÌÁö µî·Ï °á°ú: " + result2);
-	            }
-	            // »ó¼¼ ÀÌ¹ÌÁö µî·Ï
-	            else if (exhImg.getUploadPath().contains("Àü½ÃÈ¸ »ó¼¼ »çÁø")) {
-	                int result3 = mapper.insertExhDetailImage(exhImg);
-	                log.warn("»ó¼¼ ÀÌ¹ÌÁö µî·Ï °á°ú: " + result3);
-	            }
-	        }
-	    } else {
-	        throw new RuntimeException("Àü½ÃÈ¸ µî·Ï ½ÇÆĞ");
-	    }
+          for (exhImgVO exhImg : evo.getAttachExhList()) {
+             exhImg.setExhNo(evo.getExhNo()); // exhNoë¥¼ ê° ì´ë¯¸ì§€ì— ì„¤ì •
+             log.warn("ì „ì‹œíšŒ ë²ˆí˜¸ : " + evo.getExhNo());
+               // ë°°ë„ˆ ì´ë¯¸ì§€ ë“±ë¡
+               if (exhImg.getUploadPath().contains("ì „ì‹œíšŒ ë°°ë„ˆ ì‚¬ì§„")) {
+                   int result2 = mapper.insertExhBannerImage(exhImg);
+                   log.warn("ë°°ë„ˆ ì´ë¯¸ì§€ ë“±ë¡ ê²°ê³¼: " + result2);
+               }
+               // ìƒì„¸ ì´ë¯¸ì§€ ë“±ë¡
+               else if (exhImg.getUploadPath().contains("ì „ì‹œíšŒ ìƒì„¸ ì‚¬ì§„")) {
+                   int result3 = mapper.insertExhDetailImage(exhImg);
+                   log.warn("ìƒì„¸ ì´ë¯¸ì§€ ë“±ë¡ ê²°ê³¼: " + result3);
+               }
+           }
+       } else {
+           throw new RuntimeException("ì „ì‹œíšŒ ë“±ë¡ ì‹¤íŒ¨");
+       }
 
-	    return result1;
-	}
+       return result1;
+   }
 
-	// Àü½ÃÈ¸ ¼öÁ¤ ÆäÀÌÁö ¿µ¿ª
-	// Àü½ÃÈ¸ Á¤º¸ ¼öÁ¤
-	@Override
-	public exhImgVO getExhImgBanner(int exhNo) {
-		return mapper.getExhImgBanner(exhNo);
-	}
-	
-	@Override
-	public exhImgVO getExhImgDetail(int exhNo) {
-		return mapper.getExhImgDetail(exhNo);
-	}
-	
-	@Override
-	public int updateExhibition(exhVO evo) {
-		// 1. ±âº» »óÇ° Á¤º¸ ¾÷µ¥ÀÌÆ®
-	    int result = mapper.updateExhibition(evo);
+   // ì „ì‹œíšŒ ìˆ˜ì • í˜ì´ì§€ ì˜ì—­
+   // ì „ì‹œíšŒ ì •ë³´ ìˆ˜ì •
+   @Override
+   public exhImgVO getExhImgBanner(int exhNo) {
+      return mapper.getExhImgBanner(exhNo);
+   }
+   
+   @Override
+   public exhImgVO getExhImgDetail(int exhNo) {
+      return mapper.getExhImgDetail(exhNo);
+   }
+   
+   @Override
+   public int updateExhibition(exhVO evo) {
+      // 1. ê¸°ë³¸ ìƒí’ˆ ì •ë³´ ì—…ë°ì´íŠ¸
+       int result = mapper.updateExhibition(evo);
 
-	    // 2. ÀÌ¹ÌÁö ¸®½ºÆ®°¡ Á¸ÀçÇÒ °æ¿ì ¹è³Ê¿Í »ó¼¼ ÀÌ¹ÌÁö ±¸ºĞÇÏ¿© ¾÷µ¥ÀÌÆ® ¼öÇà
-	    if (evo.getAttachExhList() != null && !evo.getAttachExhList().isEmpty()) {
-	        for (exhImgVO img : evo.getAttachExhList()) {
-	            img.setExhNo(evo.getExhNo());  // Àü½ÃÈ¸ ¹øÈ£ ¼³Á¤
-	            if (img.getUploadPath().contains("Àü½ÃÈ¸ ¹è³Ê »çÁø")) {
-	                result += mapper.updateExhBannerImage(img);  // ¹è³Ê ÀÌ¹ÌÁö ¾÷µ¥ÀÌÆ®
-	            } else if (img.getUploadPath().contains("Àü½ÃÈ¸ »ó¼¼ »çÁø")) {
-	                result += mapper.updateExhDetailImage(img);  // »ó¼¼ ÀÌ¹ÌÁö ¾÷µ¥ÀÌÆ®
-	            }
-	        }
-	    }
+       // 2. ì´ë¯¸ì§€ ë¦¬ìŠ¤íŠ¸ê°€ ì¡´ì¬í•  ê²½ìš° ë°°ë„ˆì™€ ìƒì„¸ ì´ë¯¸ì§€ êµ¬ë¶„í•˜ì—¬ ì—…ë°ì´íŠ¸ ìˆ˜í–‰
+       if (evo.getAttachExhList() != null && !evo.getAttachExhList().isEmpty()) {
+           for (exhImgVO img : evo.getAttachExhList()) {
+               img.setExhNo(evo.getExhNo());  // ì „ì‹œíšŒ ë²ˆí˜¸ ì„¤ì •
+               if (img.getUploadPath().contains("ì „ì‹œíšŒ ë°°ë„ˆ ì‚¬ì§„")) {
+                   result += mapper.updateExhBannerImage(img);  // ë°°ë„ˆ ì´ë¯¸ì§€ ì—…ë°ì´íŠ¸
+               } else if (img.getUploadPath().contains("ì „ì‹œíšŒ ìƒì„¸ ì‚¬ì§„")) {
+                   result += mapper.updateExhDetailImage(img);  // ìƒì„¸ ì´ë¯¸ì§€ ì—…ë°ì´íŠ¸
+               }
+           }
+       }
 
-	    return result;
-	}
+       return result;
+   }
 
-	// Àü½ÃÈ¸ »èÁ¦ ÆäÀÌÁö ¿µ¿ª
-	// Àü½ÃÈ¸ Á¤º¸ »èÁ¦
-	@Transactional
-	@Override
-	public int deleteExhibition(int exhNo) {
-		
-		int result = mapper.deleteExhImgBanner(exhNo);
-		
+   // ì „ì‹œíšŒ ì‚­ì œ í˜ì´ì§€ ì˜ì—­
+   // ì „ì‹œíšŒ ì •ë³´ ì‚­ì œ
+   @Transactional
+   @Override
+   public int deleteExhibition(int exhNo) {
+      
+      int result = mapper.deleteExhImgBanner(exhNo);
+      
         result += mapper.deleteExhImgDetail(exhNo);
         
         result += mapper.deleteExhLike(exhNo);
@@ -392,21 +392,21 @@ public class AdminServiceImpl implements AdminService{
         result += mapper.deleteExhibition(exhNo);
 
         return result;         
-	}
-		
-	// ¹®ÀÇ ¸®½ºÆ® È®ÀÎ ÆäÀÌÁö ¿µ¿ª
-	// ¹®ÀÇ ¸®½ºÆ® °¡Á®¿À±â
-	@Override
+   }
+      
+   // ë¬¸ì˜ ë¦¬ìŠ¤íŠ¸ í™•ì¸ í˜ì´ì§€ ì˜ì—­
+   // ë¬¸ì˜ ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸°
+   @Override
     public List<qnaVO> getQnaListByType(String qnaType, String qnaAnswer) {        
         return mapper.getQnaListByType(qnaType, qnaAnswer);
     }
 
-    // È¸¿ø Á¤º¸ ¼öÁ¤ ÆäÀÌÁö ¿µ¿ª
-	// È¸¿ø Á¤º¸ ¾÷µ¥ÀÌÆ®	
-	@Override
-	public int updateMem(signInVO svo) {
-		return mapper.updateMem(svo);
-	}	
-		
-		
+    // íšŒì› ì •ë³´ ìˆ˜ì • í˜ì´ì§€ ì˜ì—­
+   // íšŒì› ì •ë³´ ì—…ë°ì´íŠ¸   
+   @Override
+   public int updateMem(signInVO svo) {
+      return mapper.updateMem(svo);
+   }   
+      
+      
 }

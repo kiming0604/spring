@@ -50,5 +50,7 @@ public interface PurchaseService {
    
    public int getTotalPages(int userNo, int pageSize);
 
-   public int deleteCartItems(List<Integer> gnoList, int userNo);
+   public int deleteCartItems(int gno, int userNo);
+   
+
 }

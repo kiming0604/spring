@@ -53,7 +53,6 @@ public interface PurchaseMapper {
 
    public int getTotalItems(int userNo);
    
-   public int deleteCartItems(@Param("gnoList") List<Integer> gnoList, @Param("userNo") int userNo);
+   public int deleteCartItems(@Param("gno") int gno, @Param("userNo") int userNo);
 
-   
 }

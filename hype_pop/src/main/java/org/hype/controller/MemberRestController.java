@@ -96,15 +96,13 @@ public class MemberRestController {
                         + "<p>마지막 업데이트: 2024년 10월 18일</p>";
                 break;
             case "location":
-                content += "<div id='locationModal' class='modal'>" +
-                        "<div class='modal-content'>" +
-                        "<span class='close' onclick=\"closeModal('locationModal')\">&times;</span>" +
-                        "<div id='modalContent'>" +
-                        "<h1>위치기반 서비스 이용약관</h1>" +
-                        "<h2>제 1 조 (목적)</h2>" +
-                        "<p>이 약관은 hypepop(이하 “회사”)가 제공하는 위치기반서비스와 관련하여 회사와 개인위치정보주체와의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>" +
-                        // ... (Add remaining content here)
-                        "</div></div></div>";
+            	   content+= "<h1>위치기반 서비스 이용약관</h1>" +
+                           "<h2>제 1 조 (목적)</h2>" +
+                           "<p>이 약관은 hypepop(이하 '회사')가 제공하는 위치기반서비스와 관련하여 회사와 개인위치정보주체와의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>" +
+                           "<h2>제 2 조 (서비스의 제공)</h2>" +
+                           "<p>회사는 위치정보를 기반으로 다양한 서비스를 제공합니다. 위치정보는 사용자의 동의 하에만 수집됩니다.</p>" +
+                           "<h2>제 3 조 (개인위치정보의 이용)</h2>" +
+                           "<p>개인위치정보는 사용자가 동의한 목적으로만 사용되며, 동의 없이 제3자에게 제공되지 않습니다.</p>";
                 break;
             case "notification":
                 content += "<h2>마케팅 알림 동의</h2>"
@@ -297,25 +295,8 @@ public class MemberRestController {
       }
    }
    
-   //로그인(userNo 스토리지 저장)
-//   @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-//   @ResponseBody
-//   public ResponseEntity<Map<String, Object>> login(@RequestBody signInVO svo) {
-//       signInVO member = memberService.loginMember(svo);
-//
-//       Map<String, Object> response = new HashMap<>();
-//       if (member != null) {
-//           response.put("status", "success");
-//           response.put("userNo", member.getUserNo()); // userNo를 응답에 포함
-//           return ResponseEntity.ok(response);
-//       } else {
-//           response.put("status", "error");
-//           response.put("message", "로그인 오류입니다.");
-//           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-//       }
-//   }
 
-   
+  
    	//좋아요한 굿즈 이미지 가져오기
     @GetMapping("/goodsBannerImages/{fileName:.+}")
     @ResponseBody
@@ -363,6 +344,7 @@ public class MemberRestController {
     
     
     //좋아요 한 전시회 이미지 가져오기
+
     @GetMapping("/exhImges/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveExhImage(@PathVariable String fileName) throws MalformedURLException {
@@ -383,24 +365,4 @@ public class MemberRestController {
             .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
             .body(file);
     }
-    
-    //회원 탈퇴
-    @PostMapping(value = "/deleteUserData/{userNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Map<String, Object> deleteUserData(@PathVariable int userNo) {
-        Map<String, Object> response = new HashMap<>();
-        boolean success = memberService.deleteUserData(userNo);
-        
-        if (success) {
-            response.put("message", "회원 탈퇴가 완료되었습니다.");
-            response.put("success", true);
-        } else {
-            response.put("message", "회원 탈퇴 중 오류가 발생했습니다.");
-            response.put("success", false);
-        }
-        
-        return response;
-    }
-
-    
 }

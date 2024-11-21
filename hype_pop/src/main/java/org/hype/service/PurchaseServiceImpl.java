@@ -148,10 +148,12 @@ public class PurchaseServiceImpl implements PurchaseService {
         return (int) Math.ceil((double) totalItems / pageSize);
     }
     
+
+
 	@Override
-    public int deleteCartItems(List<Integer> gnoList, int userNo) {
-        return pmapper.deleteCartItems(gnoList, userNo);
-    }
+	   public int deleteCartItems(int gno, int userNo) {
+     return pmapper.deleteCartItems(gno, userNo);
+ }
     
     
 

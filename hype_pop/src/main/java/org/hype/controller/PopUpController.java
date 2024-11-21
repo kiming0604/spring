@@ -6,11 +6,13 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.likeVO;
 import org.hype.domain.mCatVO;
@@ -19,6 +21,7 @@ import org.hype.domain.pImgVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.psReplyVO;
 import org.hype.security.domain.CustomUser;
+import org.hype.service.GoodsService;
 import org.hype.service.PopUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -47,6 +50,8 @@ import lombok.extern.log4j.Log4j;
 public class PopUpController {
 	@Autowired
 	PopUpService service;
+	@Autowired
+	GoodsService gService;
 	
 	@RequestMapping(value = "/popUpMain", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -187,6 +192,12 @@ public class PopUpController {
         vo.setPsImg(imgVo);
         
         List<goodsVO> gvo = service.getGoodsInfoByName(storeName);
+        for (goodsVO goodsVo : gvo) {
+            List<gImgVO> gImgVo = new ArrayList<>();
+            gImgVO imgVo1 = gService.getImgByGno(goodsVo.getGno());
+            gImgVo.add(imgVo1);
+            goodsVo.setAttachList(gImgVo);
+        }
         
      
         

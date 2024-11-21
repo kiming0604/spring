@@ -229,7 +229,8 @@ button:hover {
 
 	<div class="container">
 		<h1>로그인</h1>
-		<form action="login" method="post">
+		<form action="/member/login" method="post">
+		<input type="hidden" id="redirect" name="redirect">  
 			<label for="username">아이디</label> <input type="text" id="userId"
 				name="userId" required placeholder="아이디를 입력하세요."> <label
 				for="password">비밀번호</label> <input type="password" id="userPw"
@@ -250,7 +251,8 @@ button:hover {
 		<div id="customAlert">인증코드를 전송 중입니다.</div>
 
 
-		
+
+	</div>
 
 	<!-- 아이디 찾기 모달 -->
 	<div id="searchIdModal" style="display: none;">

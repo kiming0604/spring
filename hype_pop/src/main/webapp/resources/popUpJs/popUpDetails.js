@@ -298,6 +298,8 @@ function fetchUserReviews(psNo, userNo) {
 document.addEventListener("DOMContentLoaded", function () {
 	// span 내의 평균 별점 값 가져오기
 	let averageRatingText = document.getElementById("averageRating").textContent;
+	
+	
 
 	// 텍스트 값을 숫자로 변환
 	let averageRating = parseFloat(averageRatingText);
@@ -310,6 +312,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	    document.getElementById("averageRating").textContent = roundedRating; // 결과를 화면에 반영
 	} else {
 	    console.error("평균 별점이 숫자가 아닙니다.");
+	}
+	// 굿즈 이미지 로직
+	for (let i = 1; i <= 3; i++) {
+	    const goodsItem = document.querySelector(`#goodsItem${i} .goodsInfo`);
+	    const fileNameInput = document.querySelector(`#fileName${i}`);
+	    
+	    if (goodsItem && fileNameInput) {
+	        const fileName = fileNameInput.value;
+	        setBackgroundImage(goodsItem, fileName);
+	    }
 	}
 	
 	const fileData = document.querySelector(".fileData");
@@ -698,25 +710,25 @@ function updatePagination(totalReviews) {
 
 document.querySelectorAll('.hitGoods span').forEach(item => {
     item.addEventListener('click', () => {
-        // 클릭한 상품의 부모 <td> 요소를 선택하여 숨겨진 입력을 찾기
-        const gnoInput = item.parentNode.querySelector('input[type="hidden"]'); 
+        // 클릭한 상품의 부모 div 요소를 선택하여 숨겨진 입력을 찾기
+        const gnoInput = item.closest('.goodsItem').querySelector('input[type="hidden"]'); 
         const gno = gnoInput.value; // 숨겨진 input 요소의 값 가져오기
         location.href = `/goodsStore/goodsDetails?gno=${gno}`;
     });
 });
+
 document.getElementById("toggleGoodsList").addEventListener("change", function() {
-    const goodsTable = document.getElementById("goodsTable");
+    const goodsList = document.getElementById("goodsList");
     const toggleText = this.nextSibling;
 
     if (this.checked) {
-        goodsTable.style.display = "table"; // 테이블 보이기
+        goodsList.style.display = "block"; // 상품 리스트 보이기
         toggleText.textContent = "상품 리스트 출력 ON"; // 텍스트 변경
     } else {
-        goodsTable.style.display = "none"; // 테이블 숨기기
+        goodsList.style.display = "none"; // 상품 리스트 숨기기
         toggleText.textContent = "상품 리스트 출력 OFF"; // 텍스트 변경
     }
 });
-
 
 //좋아요 상태 확인 함수
 function checkUserLiked(psNo, userNo) {
@@ -765,4 +777,22 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+function setBackgroundImage(item, fileName) {
+    if (!fileName) {
+        console.error("fileName이 존재하지 않습니다.");
+        return;
+    }
 
+    fetch(`/goodsStore/goodsBannerImages/${encodeURIComponent(fileName)}`)
+        .then(response => response.blob())
+        .then(blob => {
+            const imageUrl = URL.createObjectURL(blob);
+            item.style.backgroundImage = `url(${imageUrl})`;
+            item.style.backgroundSize = "cover";
+            item.style.backgroundPosition = "center center";
+            item.style.backgroundRepeat = "no-repeat";
+        })
+        .catch(error => {
+            console.error("이미지를 불러오는 중 오류 발생: ", error);
+        });
+}

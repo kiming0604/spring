@@ -84,16 +84,102 @@
     background-color: #555; /* 스크롤바가 호버될 때의 색상 */
 }
         
-        
+       .navbar {
+	background-color: #ff66b2; /* 진한 핑크 */
+	color: white;
+	padding: 10px;
+}
+
+.navbar ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.navbar li {
+	display: inline;
+	margin-right: 15px;
+}
+
+.navbar a {
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.navbar a:hover {
+	color: #ffe6f0; /* 연한 핑크로 변경 */
+}
+
+
+/* Navbar styles */
+.navbar {
+    background-color: #ffffff;
+    color: #333;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar li {
+    margin-right: 15px;
+}
+
+.navbar a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.navbar a:hover {
+    color: #0078ff;
+}
+
+/* Header styles */
+.purchase-header {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+.navbar ul li a {
+    line-height: 5; /* 텍스트 줄 간격을 늘려서 아래로 내려줌 */
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #666;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e5e5;
+} 
     </style>
 </head>
 <body onload="calculateTotal()">
 
-<!-- 내비게이션 바 -->
-<div class="navbar">
-    <h1>내비게이션 바</h1>
-</div>
-
+	      <nav class="navbar">
+         <ul>
+          <li>
+            <img src="/resources/images/mainLogo.png" alt="메인 로고" id="mainLogo">
+        </li>
+             <li><a href="/hypePop/popUpMain">홈으로</a></li>
+            <li><a href="/goodsStore/goodsSearch">굿즈스토어</a></li>
+            <li><a href="/member/myPage?userNo=2">마이페이지</a></li>
+         
+         </ul>
+      </nav>
 <!-- 장바구니 헤더 -->
 <div class="container">
     <div class="header">
@@ -154,9 +240,9 @@
 
 
 <!-- Footer -->
-<div class="footer">
-    <h1>footer</h1>    
-</div>
+<footer class="footer">
+        <p>© 2024 hypePop.</p>
+    </footer>
    <script type="text/javascript" src="/resources/purchaseJs/myCart.js"></script>
 
 </body>

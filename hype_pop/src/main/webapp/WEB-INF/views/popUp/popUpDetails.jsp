@@ -3,8 +3,7 @@
 	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> <!-- fn 라이브러리 추가 -->
 	<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v3s0wu5ddz"></script>
 <!-- 팝업스토어 배너 및 좋아요 수 -->
-<!-- 팝업스토어 배너 및 좋아요 수 -->
-<div class="popUpbanner">
+<!-- 팝업스토어 배너 및 좋아요 수 --><div class="popUpbanner">
     <div class="banner-container">
         <!-- 배너 이미지를 삽입하는 img 태그 -->
         <img id="popupBannerImage" >
@@ -129,31 +128,67 @@
     
 </div>
 <!-- 체크박스 추가 -->
-<label>
-    <input type="checkbox" id="toggleGoodsList"> 상품 리스트 출력
-</label>
-<!-- 인기 상품 배너 -->
-<table class="hitGoods" id="goodsTable" style="display: none;"> <!-- 기본적으로 보이지 않게 설정 -->
-    <tr>
-        <td>
-            <span id="popUpGoods1">인기상품 배너1</span>
-            <input type="hidden" id="gno1" name="gno1" value="${goodsInfo[0].gno}">
-        </td>
-        <td>
-            <span id="popUpGoods2">인기상품 배너2</span>
-            <input type="hidden" id="gno2" name="gno2" value="${goodsInfo[1].gno}">
-        </td>
-        <td>
-            <span id="popUpGoods3">인기상품 배너3</span>
-            <input type="hidden" id="gno3" name="gno3" value="${goodsInfo[2].gno}">
-        </td>
-    </tr>
-    <tr>
-        <td><span id="popUpGoodsInfo1">${goodsInfo[0].gname} - ${goodsInfo[0].gprice}원</span></td>
-        <td><span id="popUpGoodsInfo2">${goodsInfo[1].gname} - ${goodsInfo[1].gprice}원</span></td>
-        <td><span id="popUpGoodsInfo3">${goodsInfo[2].gname} - ${goodsInfo[2].gprice}원</span></td>
-    </tr>
-</table>
+<c:if test="${not empty goodsInfo}">
+    <label>
+        <input type="checkbox" id="toggleGoodsList"> 상품 리스트 출력
+    </label>
+    <div class="hitGoods" id="goodsList">
+        <div class="goodsItem" id="goodsItem1">
+            <c:if test="${not empty goodsInfo[0]}">
+                <div class="goodsInfo" id="goodsImg1">
+                    <input type="hidden" 
+                           value="${goodsInfo[0].attachList[0].uuid}_${goodsInfo[0].attachList[0].fileName}" 
+                           id="fileName1">
+                    <input type="hidden" id="gno1" name="gno1" value="${goodsInfo[0].gno}">
+                    <div class="goodsImage">
+                        <img src="이미지URL" alt="${goodsInfo[0].gname}">
+                    </div>
+                    <div class="goodsDetails">
+                        <span class="productName">${goodsInfo[0].gname}</span>
+                        <span class="productPrice">${goodsInfo[0].gprice}원</span>
+                    </div>
+                </div>
+            </c:if>
+        </div>
+        <div class="goodsItem" id="goodsItem2">
+            <c:if test="${not empty goodsInfo[1]}">
+                <div class="goodsInfo" id="goodsImg2">
+                    <input type="hidden" 
+                           value="${goodsInfo[1].attachList[0].uuid}_${goodsInfo[1].attachList[0].fileName}" 
+                           id="fileName2">
+                    <input type="hidden" id="gno2" name="gno2" value="${goodsInfo[1].gno}">
+                    <div class="goodsImage">
+                        <img src="이미지URL" alt="${goodsInfo[1].gname}">
+                    </div>
+                    <div class="goodsDetails">
+                        <span class="productName">${goodsInfo[1].gname}</span>
+                        <span class="productPrice">${goodsInfo[1].gprice}원</span>
+                    </div>
+                </div>
+            </c:if>
+        </div>
+        <div class="goodsItem" id="goodsItem3">
+            <c:if test="${not empty goodsInfo[2]}">
+                <div class="goodsInfo" id="goodsImg3">
+                    <input type="hidden" 
+                           value="${goodsInfo[2].attachList[0].uuid}_${goodsInfo[2].attachList[0].fileName}" 
+                           id="fileName3">
+                    <input type="hidden" id="gno3" name="gno3" value="${goodsInfo[2].gno}">
+                    <div class="goodsImage">
+                        <img src="이미지URL" alt="${goodsInfo[2].gname}">
+                    </div>
+                    <div class="goodsDetails">
+                        <span class="productName">${goodsInfo[2].gname}</span>
+                        <span class="productPrice">${goodsInfo[2].gprice}원</span>
+                    </div>
+                </div>
+            </c:if>
+        </div>
+    </div>
+</c:if>
+
+
+
 <div id="loginModal" class="modal">
    <div class="modal-content">
       <span class="close">&times;</span>

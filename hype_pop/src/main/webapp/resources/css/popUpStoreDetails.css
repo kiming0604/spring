@@ -748,6 +748,89 @@ button:disabled {
    cursor: not-allowed;
    opacity: 0.5;
 }
+/* 상품 리스트 전체 영역 스타일 */
+#goodsList {
+    display: none; /* 초기 상태는 숨김 */
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between; /* 상품 아이템 간 간격 조정 */
+    gap: 20px; /* 각 상품 간 간격 */
+    flex-wrap: wrap; /* 여러 줄로 배치 */
+}
+
+/* 개별 상품 아이템 스타일 */
+.goodsItem {
+    width: calc(33.33% - 20px); /* 3개의 아이템을 한 줄에 배치 */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.goodsItem:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 이미지 영역 */
+.goodsImage {
+    width: 100%;
+    height: 200px; /* 고정된 높이 */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eaeaea;
+}
+
+.goodsImage img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 이미지 비율 유지 */
+}
+
+/* 상품 정보 영역 */
+.goodsDetails {
+    padding: 15px;
+    text-align: center;
+}
+
+.productName {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.productPrice {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* 체크박스 라벨 스타일 */
+label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #333;
+}
+
+label input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+label::after {
+    content: attr(data-toggle-text); /* 체크박스 토글 상태 텍스트 */
+    margin-left: 5px;
+    color: #007bff;
+    font-weight: bold;
+}
+
 /* 반응형 스타일 */
 @media (max-width: 768px) {
     body {
