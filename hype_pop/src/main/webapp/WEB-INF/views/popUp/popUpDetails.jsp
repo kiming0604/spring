@@ -127,12 +127,14 @@
     </div>
     
 </div>
-<!-- 체크박스 추가 -->
+
+
+
 <c:if test="${not empty goodsInfo}">
     <label>
         <input type="checkbox" id="toggleGoodsList"> 상품 리스트 출력
     </label>
-    <div class="hitGoods" id="goodsList">
+    <div class="hitGoods" id="goodsList" style="display: none;">
         <div class="goodsItem" id="goodsItem1">
             <c:if test="${not empty goodsInfo[0]}">
                 <div class="goodsInfo" id="goodsImg1">
@@ -140,9 +142,7 @@
                            value="${goodsInfo[0].attachList[0].uuid}_${goodsInfo[0].attachList[0].fileName}" 
                            id="fileName1">
                     <input type="hidden" id="gno1" name="gno1" value="${goodsInfo[0].gno}">
-                    <div class="goodsImage">
-                        <img src="이미지URL" alt="${goodsInfo[0].gname}">
-                    </div>
+                    <img id="image1" src="" alt="상품 이미지" class="goodsImage">
                     <div class="goodsDetails">
                         <span class="productName">${goodsInfo[0].gname}</span>
                         <span class="productPrice">${goodsInfo[0].gprice}원</span>
@@ -157,9 +157,7 @@
                            value="${goodsInfo[1].attachList[0].uuid}_${goodsInfo[1].attachList[0].fileName}" 
                            id="fileName2">
                     <input type="hidden" id="gno2" name="gno2" value="${goodsInfo[1].gno}">
-                    <div class="goodsImage">
-                        <img src="이미지URL" alt="${goodsInfo[1].gname}">
-                    </div>
+                    <img id="image2" src="" alt="상품 이미지" class="goodsImage">
                     <div class="goodsDetails">
                         <span class="productName">${goodsInfo[1].gname}</span>
                         <span class="productPrice">${goodsInfo[1].gprice}원</span>
@@ -174,9 +172,7 @@
                            value="${goodsInfo[2].attachList[0].uuid}_${goodsInfo[2].attachList[0].fileName}" 
                            id="fileName3">
                     <input type="hidden" id="gno3" name="gno3" value="${goodsInfo[2].gno}">
-                    <div class="goodsImage">
-                        <img src="이미지URL" alt="${goodsInfo[2].gname}">
-                    </div>
+                    <img id="image3" src="" alt="상품 이미지" class="goodsImage">
                     <div class="goodsDetails">
                         <span class="productName">${goodsInfo[2].gname}</span>
                         <span class="productPrice">${goodsInfo[2].gprice}원</span>
@@ -186,8 +182,6 @@
         </div>
     </div>
 </c:if>
-
-
 
 <div id="loginModal" class="modal">
    <div class="modal-content">

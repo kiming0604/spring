@@ -1,4 +1,4 @@
-const userNo = 2;
+const userNo = 67;
 document.getElementById('addToCart').addEventListener('click', function() {
     const urlParams = new URLSearchParams(location.search);
     const gno = urlParams.get('gno'); // URL에서 gno 추출
@@ -207,3 +207,14 @@ function prepareCartData() {
 }
 
 
+//바로 결제 버튼 누르기
+document.getElementById("directPurchase").addEventListener("click", function () {
+    // 화면에 표시된 totalPrice 가져오기
+    const displayedPrice = document.getElementById("totalPrice").textContent.trim();
+
+    // 숫자만 추출 (예: '12345원' → '12345')
+    const numericPrice = displayedPrice.replace(/[^\d]/g, '');
+
+    // 페이지 이동 (GET 요청, totalPrice를 URL의 쿼리 파라미터로 전달)
+    window.location.href = `/purchase/payInfoPage?grandTotal=${numericPrice}&userNo=${userNo}`;
+});

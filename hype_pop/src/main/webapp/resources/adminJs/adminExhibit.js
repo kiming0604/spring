@@ -113,7 +113,7 @@ document.querySelector('#exhBannerImageFile').addEventListener('input', function
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result; // 파일의 Data URL
-                img.style.width = '150px'; // 이미지 크기 조절
+                img.style.maxWidth = '400px'; // 이미지 크기 조절
                 img.style.marginRight = '10px'; // 간격 조정
                 uploadedExBannerImagesDiv.appendChild(img); // 미리보기 div에 추가
             };
@@ -166,7 +166,7 @@ document.querySelector('#exhDetailImageFile').addEventListener('input', function
         reader.onload = function(e) {
             const img = document.createElement('img');
             img.src = e.target.result; // 파일의 Data URL
-            img.style.width = '150px'; // 이미지 크기 조절
+            img.style.maxWidth = '400px'; // 이미지 크기 조절
             img.style.marginRight = '10px'; // 간격 조정
             uploadedExDetailImagesDiv.appendChild(img); // 미리보기 div에 추가
         };
@@ -335,5 +335,6 @@ function exhDelete() {
 
 // 취소 및 리스트로 돌아가기 버튼 클릭시 메인페이지로 이동
 function backtoExhList() {
-	window.location.href = "/admin/adminPage";
+//	window.location.href = "/admin/adminPage";
+	loadExhibitions(currentPageForExh);
 }

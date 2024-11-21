@@ -502,42 +502,7 @@ label {
     background-color: #ccc; /* 비활성화된 버튼 배경색 */
     cursor: not-allowed; /* 비활성화 시 마우스 포인터 변경 */
 }
-/* 인기 상품 배너 */
-#goodsTable {
-    width: 100%; /* 전체 너비 */
-    border-collapse: collapse; /* 테이블 간격 제거 */
-    margin-top: 20px; /* 상단 여백 */
-}
 
-/* 테이블 본문 부분에 배경색과 텍스트 색상 적용 */
-#goodsTable tbody {
-    background-color: #ffffff; /* 배경색 흰색 */
-    color: #141414; /* 텍스트 색 검은색 */
-}
-
-#goodsTable td {
-    padding: 15px; /* 셀 패딩 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    border-radius: 8px; /* 테두리 둥글게 */
-    margin: 10px; /* 셀 간 여백 */
-}
-
-/* 상품 배너 스타일 */
-#goodsTable #popUpGoods1,
-#goodsTable #popUpGoods2,
-#goodsTable #popUpGoods3 {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: #00aff0; /* 상품 이름 색 */
-}
-
-/* 상품 정보 스타일 */
-#goodsTable #popUpGoodsInfo1,
-#goodsTable #popUpGoodsInfo2,
-#goodsTable #popUpGoodsInfo3 {
-    font-size: 1rem; /* 가격 텍스트 크기 */
-    color: #141414; /* 가격 텍스트 색 검은색 */
-}
 #popUpScoreAvg {
     position: absolute; /* 절대 위치 지정 */
     top: 25px; /* 부모의 상단에 배치 */
@@ -748,87 +713,63 @@ button:disabled {
    cursor: not-allowed;
    opacity: 0.5;
 }
-/* 상품 리스트 전체 영역 스타일 */
-#goodsList {
-    display: none; /* 초기 상태는 숨김 */
-    margin-top: 20px;
+
+/* 슬라이더 컨테이너 */
+.hitGoods {
     display: flex;
-    justify-content: space-between; /* 상품 아이템 간 간격 조정 */
-    gap: 20px; /* 각 상품 간 간격 */
-    flex-wrap: wrap; /* 여러 줄로 배치 */
-}
-
-/* 개별 상품 아이템 스타일 */
-.goodsItem {
-    width: calc(33.33% - 20px); /* 3개의 아이템을 한 줄에 배치 */
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.goodsItem:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* 이미지 영역 */
-.goodsImage {
+    align-items: center;  /* 세로 중앙 정렬 */
+    justify-content: center;  /* 가로 중앙 정렬 */
+    overflow: hidden; /* 요소가 밖으로 넘치지 않도록 설정 */
+    position: relative;
     width: 100%;
-    height: 200px; /* 고정된 높이 */
-    overflow: hidden;
+    max-width: 800px; /* 원하는 최대 너비 설정 */
+    margin: 0 auto; /* 슬라이더를 중앙 정렬 */
+    background-color: #00aff0; /* 배경색 설정 */
+    border-radius: 15px; /* 모서리 둥글게 */
+}
+
+/* 슬라이더 내부 요소 */
+.hitGoods > .goodsItem {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #eaeaea;
+    width: fit-content; /* 슬라이더 내용에 맞춰 크기 설정 */
 }
 
-.goodsImage img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* 이미지 비율 유지 */
-}
-
-/* 상품 정보 영역 */
-.goodsDetails {
-    padding: 15px;
+/* 슬라이더 아이템 스타일 */
+.goodsItem {
+    flex: 0 0 24%; /* 아이템 크기를 25%로 설정하되 마진을 고려해 24%로 수정 */
+    height: 200px; /* 높이를 정사각형으로 고정 */
+    margin-right: 1%; /* 아이템 간 마진 */
     text-align: center;
-}
-
-.productName {
-    display: block;
-    font-size: 1rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.productPrice {
-    font-size: 0.9rem;
-    color: #777;
-}
-
-/* 체크박스 라벨 스타일 */
-label {
     display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin-bottom: 15px;
-    font-size: 1rem;
-    color: #333;
+    flex-direction: column; /* 이름을 이미지 아래에 배치 */
+    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: flex-end; /* 이미지 아래에 텍스트를 배치 */
+    position: relative;
+    border: 1px solid #ccc; /* 테두리 */
+    box-sizing: border-box; /* 내부 패딩과 테두리를 포함한 크기 계산 */
 }
 
-label input[type="checkbox"] {
-    margin-right: 10px;
+
+
+/* 슬라이더 아이템 내 이미지 스타일 */
+.goodsImage {
+    width: 100%; /* 이미지를 슬라이더 아이템의 너비에 맞춤 */
+    height: 100%; /* 이미지를 슬라이더 아이템의 높이에 맞춤 */
+    object-fit: cover; /* 이미지 비율 유지하면서 영역에 맞게 크기 조정 */
 }
 
-label::after {
-    content: attr(data-toggle-text); /* 체크박스 토글 상태 텍스트 */
-    margin-left: 5px;
-    color: #007bff;
+/* 슬라이더 아이템 내 텍스트 스타일 */
+.goodsDetails {
+    font-size: 14px; /* 텍스트 크기 */
     font-weight: bold;
+    color: #fff; /* 텍스트 색상 */
+    background-color: rgba(0, 0, 0, 0.6); /* 배경을 반투명 검정으로 */
+    padding: 5px;
+    position: absolute;
+    bottom: 10px; /* 이미지 아래에 텍스트 배치 */
+    left: 50%;
+    transform: translateX(-50%); /* 수평 중앙 정렬 */
+    border-radius: 4px; /* 둥근 모서리 */
 }
 
 /* 반응형 스타일 */

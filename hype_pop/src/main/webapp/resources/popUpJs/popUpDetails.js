@@ -710,26 +710,36 @@ function updatePagination(totalReviews) {
 
 document.querySelectorAll('.hitGoods span').forEach(item => {
     item.addEventListener('click', () => {
-        // 클릭한 상품의 부모 div 요소를 선택하여 숨겨진 입력을 찾기
-        const gnoInput = item.closest('.goodsItem').querySelector('input[type="hidden"]'); 
-        const gno = gnoInput.value; // 숨겨진 input 요소의 값 가져오기
-        location.href = `/goodsStore/goodsDetails?gno=${gno}`;
+        // 클릭한 상품의 부모 .goodsItem 요소를 선택하여 해당 input[type="hidden"]을 찾기
+        const goodsItem = item.closest('.goodsItem'); // span의 상위 요소인 .goodsItem을 찾기
+        if (!goodsItem) {
+            console.error('상품 정보가 포함된 .goodsItem을 찾을 수 없습니다.');
+            return;
+        }
+
+        // .goodsItem 안에서 gno input을 찾아서 값을 가져오기
+        const gnoInput = goodsItem.querySelector('input[name^="gno"]'); // gno로 시작하는 input 요소 찾기
+        const gno = gnoInput ? gnoInput.value : null; // gno 값 가져오기
+
+        if (gno) {
+            location.href = `/goodsStore/goodsDetails?gno=${gno}`; // gno가 존재하면 상세 페이지로 이동
+        } else {
+            console.error('gno 값을 찾을 수 없습니다.');
+        }
     });
 });
-
 document.getElementById("toggleGoodsList").addEventListener("change", function() {
     const goodsList = document.getElementById("goodsList");
     const toggleText = this.nextSibling;
 
     if (this.checked) {
-        goodsList.style.display = "block"; // 상품 리스트 보이기
+        goodsList.style.display = "flex"; // 상품 리스트 보이기 (flex로 표시)
         toggleText.textContent = "상품 리스트 출력 ON"; // 텍스트 변경
     } else {
         goodsList.style.display = "none"; // 상품 리스트 숨기기
         toggleText.textContent = "상품 리스트 출력 OFF"; // 텍스트 변경
     }
 });
-
 //좋아요 상태 확인 함수
 function checkUserLiked(psNo, userNo) {
     fetch('/hypePop/checkUserLiked', {
@@ -777,22 +787,27 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
 function setBackgroundImage(item, fileName) {
     if (!fileName) {
         console.error("fileName이 존재하지 않습니다.");
         return;
     }
 
-    fetch(`/goodsStore/goodsBannerImages/${encodeURIComponent(fileName)}`)
-        .then(response => response.blob())
-        .then(blob => {
-            const imageUrl = URL.createObjectURL(blob);
-            item.style.backgroundImage = `url(${imageUrl})`;
-            item.style.backgroundSize = "cover";
-            item.style.backgroundPosition = "center center";
-            item.style.backgroundRepeat = "no-repeat";
-        })
-        .catch(error => {
-            console.error("이미지를 불러오는 중 오류 발생: ", error);
-        });
+    const imageElement = item.querySelector('img');  // 해당 상품의 이미지 태그 찾기
+
+    if (imageElement) {
+        // 이미지를 불러와서 src 속성에 설정
+        fetch(`/goodsStore/goodsBannerImages/${encodeURIComponent(fileName)}`)
+            .then(response => response.blob())
+            .then(blob => {
+                const imageUrl = URL.createObjectURL(blob);
+                imageElement.src = imageUrl;  // src에 이미지 URL 설정
+            })
+            .catch(error => {
+                console.error("이미지를 불러오는 중 오류 발생: ", error);
+            });
+    } else {
+        console.error("이미지 태그를 찾을 수 없습니다.");
+    }
 }
