@@ -506,14 +506,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // 스크롤 상태에 따라 버튼 보이기/숨기기 설정
     function checkScrollPosition() {
         if (window.scrollY === 0) {
-            scrollUpButton.disabled = true;
-            scrollDownButton.disabled = false;
+            scrollUpButton.style.display = 'none'; // 위 버튼 숨기기
+            scrollDownButton.style.display = 'block'; // 아래 버튼 보이기
         } else if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-            scrollUpButton.disabled = false;
-            scrollDownButton.disabled = true;
+            scrollUpButton.style.display = 'block'; // 위 버튼 보이기
+            scrollDownButton.style.display = 'none'; // 아래 버튼 숨기기
         } else {
-            scrollUpButton.disabled = false;
-            scrollDownButton.disabled = false;
+            scrollUpButton.style.display = 'block'; // 위 버튼 보이기
+            scrollDownButton.style.display = 'block'; // 아래 버튼 보이기
         }
     }
 
@@ -521,7 +521,27 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollUpButton.addEventListener("click", scrollToTop);
     scrollDownButton.addEventListener("click", scrollToBottom);
 
+    // 버튼 호버 시 불투명도 변경
+    scrollUpButton.addEventListener("mouseenter", function() {
+        scrollUpButton.style.opacity = 1; // 호버 시 불투명도 1로 설정
+    });
+    scrollUpButton.addEventListener("mouseleave", function() {
+        if (window.scrollY !== 0) {
+            scrollUpButton.style.opacity = 0.5; // 호버를 떼면 불투명도 0.5로 설정
+        }
+    });
+
+    scrollDownButton.addEventListener("mouseenter", function() {
+        scrollDownButton.style.opacity = 1; // 호버 시 불투명도 1로 설정
+    });
+    scrollDownButton.addEventListener("mouseleave", function() {
+        if (window.innerHeight + window.scrollY < document.body.offsetHeight) {
+            scrollDownButton.style.opacity = 0.5; // 호버를 떼면 불투명도 0.5로 설정
+        }
+    });
+
     // 페이지 로드 및 스크롤 시 버튼 상태 업데이트
     window.addEventListener("scroll", checkScrollPosition);
     checkScrollPosition(); // 초기 로딩 시 상태 설정
+
 });

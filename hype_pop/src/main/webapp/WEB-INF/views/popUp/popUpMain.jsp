@@ -107,3 +107,11 @@
 </div>
 
 <div id="map" style="width: 800px; height: 400px; margin: 30px auto; display: flex; justify-content: center;" ></div>
+
+
+<div class="scroll-btn">
+    <button id="scrollUp" aria-label="위로 이동"></button>
+    <button id="scrollDown" aria-label="아래로 이동"></button>
+</div>
+
+
