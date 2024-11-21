@@ -386,7 +386,7 @@ button:disabled {
 			<h1>관심사별 인기 목록</h1>
 			<h2>
 				<c:choose>
-					<c:when test="${categoryFour == 'healthbeauty'}">건강 & 뷰티</c:when>
+					<c:when test="${categoryFour == 'healthBeauty'}">건강 & 뷰티</c:when>
 					<c:when test="${categoryFour == 'game'}">게임</c:when>
 					<c:when test="${categoryFour == 'culture'}">문화</c:when>
 					<c:when test="${categoryFour == 'shopping'}">쇼핑</c:when>
@@ -424,7 +424,7 @@ button:disabled {
 			</div>
 			<h2>
 				<c:choose>
-					<c:when test="${categoryFive == 'healthbeauty'}">건강 & 뷰티</c:when>
+					<c:when test="${categoryFive == 'healthBeauty'}">건강 & 뷰티</c:when>
 					<c:when test="${categoryFive == 'game'}">게임</c:when>
 					<c:when test="${categoryFive == 'culture'}">문화</c:when>
 					<c:when test="${categoryFive == 'shopping'}">쇼핑</c:when>
@@ -461,7 +461,7 @@ button:disabled {
 			</div>
 			<h2>
 				<c:choose>
-					<c:when test="${categorySix == 'healthbeauty'}">건강 & 뷰티</c:when>
+					<c:when test="${categorySix == 'healthBeauty'}">건강 & 뷰티</c:when>
 					<c:when test="${categorySix == 'game'}">게임</c:when>
 					<c:when test="${categorySix == 'culture'}">문화</c:when>
 					<c:when test="${categorySix == 'shopping'}">쇼핑</c:when>

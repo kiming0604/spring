@@ -1,6 +1,6 @@
 $(document).ready(function() {
     IMP.init("imp41664822"); // 아임포트 초기화
-    const userNo = document.getElementById('userNo').value;
+    const userNo = 67;
     let cartItems = []; // 전역 변수로 cartItems 선언
 
 
@@ -50,7 +50,7 @@ $(document).ready(function() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert(data.message);
+             
                 } else {
                     alert('결제 데이터 전송 실패: ' + data.message);
                 }

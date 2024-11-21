@@ -561,7 +561,7 @@ button:disabled {
 </style>
 </head>
 <body>
-   <jsp:include page="layout/exhibitionHeader.jsp" />
+   <jsp:include page="layout/exhibitionDetailHeader.jsp" />
    <sec:authorize access="isAuthenticated()">
       <sec:authentication property="principal" var="pinfo" />
       <input type="hidden" id="userNo" value="${pinfo.member.userNo}">
@@ -624,7 +624,7 @@ button:disabled {
    </div>
 
    <div class="viewing-info" id="viewingInfo">
-      <p id="exhibitionInfo"></p>
+      <p id="exhibitionInfo">${exhibition.exhInfo}</p>
    </div>
 
    <div class="details-section" id="detailsSection">
@@ -706,7 +706,7 @@ button:disabled {
 
    <script type="text/javascript">
     // exhibitionInfo 값을 HTML로 안전하게 출력
-    var exhibitionInfo = "${fn:escapeXml(exhibition.exhInfo)}";
+    var exhibitionInfo = "${exhibition.exhInfo}";
 
     // 줄바꿈을 <br> 태그로 변환
     exhibitionInfo = exhibitionInfo.replace(/\n/g, "<br/>");

@@ -1,4 +1,37 @@
 const userNo = 67;
+
+// 각 cart-item에 대해 setImageSrc 함수를 실행합니다.
+const cartItems = document.querySelectorAll(".cart-item"); // .cart-item 클래스의 요소를 선택
+cartItems.forEach((cartItem) => {
+	setImageSrc(cartItem); // 각각의 cart-item에 대해 이미지를 설정
+});
+
+
+    // 이미지를 로드하여 src를 설정하는 함수
+    function setImageSrc(cartItem) {
+        const fileNames = cartItem.querySelectorAll("#fileName"); // 해당 cart-item 내의 모든 fileName 요소를 가져옴
+        
+        fileNames.forEach((fileNameElement) => {
+            const fileName = fileNameElement.value; // fileName을 가져옴
+            const imgElement = fileNameElement.closest('.cart-item').querySelector("img"); // 해당 cart-item 내의 img 요소 선택
+            
+            // 이미지 URL을 fetch로 로드하여 img src에 설정
+            fetch(`/goodsStore/goodsBannerImages/${encodeURIComponent(fileName)}`)
+                .then(response => response.blob())
+                .then(blob => {
+                    const imageUrl = URL.createObjectURL(blob); // 이미지 URL 생성
+                    imgElement.src = imageUrl; // img 요소의 src를 설정
+                })
+                .catch(error => {
+                    console.error("이미지를 불러오는 중 오류 발생: ", error);
+                });
+        });
+    }
+
+
+
+
+
 document.getElementById('addToCart').addEventListener('click', function() {
     const urlParams = new URLSearchParams(location.search);
     const gno = urlParams.get('gno'); // URL에서 gno 추출
@@ -12,6 +45,8 @@ document.getElementById('addToCart').addEventListener('click', function() {
     const gprice = parseFloat(document.getElementById('goodsPrice').textContent.split(': ')[1]); // 가격
     const cprice = parseInt(document.getElementById('totalPrice').textContent.replace(/,/g, ''), 10); // 총 가격 추출
     console.log(cprice);
+    
+
     
     const data = { gno, userNo, camount, cprice, gprice, gname };
     console.log("Sending data:", data);
@@ -207,14 +242,3 @@ function prepareCartData() {
 }
 
 
-//바로 결제 버튼 누르기
-document.getElementById("directPurchase").addEventListener("click", function () {
-    // 화면에 표시된 totalPrice 가져오기
-    const displayedPrice = document.getElementById("totalPrice").textContent.trim();
-
-    // 숫자만 추출 (예: '12345원' → '12345')
-    const numericPrice = displayedPrice.replace(/[^\d]/g, '');
-
-    // 페이지 이동 (GET 요청, totalPrice를 URL의 쿼리 파라미터로 전달)
-    window.location.href = `/purchase/payInfoPage?grandTotal=${numericPrice}&userNo=${userNo}`;
-});

@@ -54,234 +54,211 @@ public class MemberController {
 
 
 	// 로그인페이지로 이동
-	@GetMapping("/login")
-	public String login() {
-
-		return "member/login";
-	}
-
+    @GetMapping("/login")
+    @PreAuthorize("permitAll()")  
+    public String login() {
+        return "member/login";
+    }
 
 	
-	// 회원가입
-	@GetMapping("/join")
-	public String joinPage() {
-		log.info("join now");
-		return "member/joinPage";
-	}
+    @GetMapping("/join")
+    @PreAuthorize("permitAll()") 
+    public String joinPage() {
+        log.info("join now");
+        return "member/joinPage";
+    }
+    
+    @PostMapping("/join")
+    @PreAuthorize("permitAll()") 
+    public String join(@ModelAttribute signInVO svo, Model model)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        svo.setUserPw(pwencoder.encode(svo.getUserPw()));
+        log.warn("join!!!!!!!!!!!!!!!");
 
-	// 회원가입 처리
-	@PostMapping("/join")
-	public String join(@ModelAttribute signInVO svo, Model model)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		svo.setUserPw(pwencoder.encode(svo.getUserPw()));
-		log.warn("join!!!!!!!!!!!!!!!");
+        // bean 내부의 필드 값 확인 코드
+        Method[] methods = svo.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.getName().startsWith("get")) {
+                Object value = method.invoke(svo);
+                System.out.println(method.getName().substring(3) + ": " + value);
+            }
+        }
+        System.out.println("---------------------------------");
+        methods = svo.getUserInterest().getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.getName().startsWith("get")) {
+                Object value = method.invoke(svo.getUserInterest());
+                System.out.println(method.getName().substring(3) + ": " + value);
+            }
+        }
 
-		// bean 내부의 필드 값 확인 코드
-		Method[] methods = svo.getClass().getDeclaredMethods();
-		for (Method method : methods) {
-			// 메서드 이름이 'get'으로 시작하는지 확인
-			if (method.getName().startsWith("get")) {
-				// 메서드를 호출하여 값을 가져옴
-				Object value = method.invoke(svo);
-				System.out.println(method.getName().substring(3) + ": " + value);
-			}
-		}
-		System.out.println("---------------------------------");
-		methods = svo.getUserInterest().getClass().getDeclaredMethods();
-		for (Method method : methods) {
-			// 메서드 이름이 'get'으로 시작하는지 확인
-			if (method.getName().startsWith("get")) {
-				// 메서드를 호출하여 값을 가져옴
-				Object value = method.invoke(svo.getUserInterest());
-				System.out.println(method.getName().substring(3) + ": " + value);
-			}
-		}
-		// **아이디 중복 체크 추가**
-		if (mservice.checkDuplicateId(svo.getUserId())) {
-			model.addAttribute("errorMessage", "이미 존재하는 아이디입니다.");
-			return "member/joinForm"; // 중복 시 회원가입 폼으로 돌아가기
-		}
-		// 회원 가입
-		mservice.joinMember(svo);
+        if (mservice.checkDuplicateId(svo.getUserId())) {
+            model.addAttribute("errorMessage", "이미 존재하는 아이디입니다.");
+            return "member/joinForm"; // 중복 시 회원가입 폼으로 돌아가기
+        }
+        mservice.joinMember(svo);
 
-		return "member/login";
+        return "member/login";
+    }
 
-	}
+    @GetMapping("/myPage")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String myPage(Model model, @RequestParam("userNo") int userNo) {
+        signInVO userInfo = mservice.selectMyPageInfo(userNo);
+        mCatVO userInterests = mservice.selectMyInterest(userNo);
+        List<likedPopImgVO> pLikeList = mservice.pLikeList(userNo);
+        List<likedGoodsImgVO> gLikeList = mservice.gLikeList(userNo);
+        List<likedExhViewVO> eLikeList = mservice.eLikeList(userNo);
+        System.out.println("gLikeList :" + gLikeList);
 
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("/myPage")
-	public String myPage(Model model, @RequestParam("userNo") int userNo) {
-		signInVO userInfo = mservice.selectMyPageInfo(userNo);
-		mCatVO userInterests = mservice.selectMyInterest(userNo);
-		List<likedPopImgVO> pLikeList = mservice.pLikeList(userNo);
-		List<likedGoodsImgVO> gLikeList = mservice.gLikeList(userNo);
-		List<likedExhViewVO> eLikeList = mservice.eLikeList(userNo);
-		System.out.println("gLikeList :" + gLikeList);
+        model.addAttribute("userInfo", userInfo);
+        model.addAttribute("userInterests", userInterests);
+        model.addAttribute("pLikeList", pLikeList);
+        model.addAttribute("gLikeList", gLikeList);
+        model.addAttribute("eLikeList", eLikeList);
 
-		// 회원 정보
-		model.addAttribute("userInfo", userInfo);
-		// 유저의 관심사
-		model.addAttribute("userInterests", userInterests);
-		// 좋아요 한 팝업스토어
-		model.addAttribute("pLikeList", pLikeList);
-		// 좋아요 한 굿즈 스토어
-		model.addAttribute("gLikeList", gLikeList);
-		// 좋아요 한 전시회
-		model.addAttribute("eLikeList", eLikeList);
+        for (likedGoodsImgVO goods : gLikeList) {
+            System.out.println("gName: " + goods.getGname());
+            System.out.println("gNo: " + goods.getGno());
+            System.out.println("uploadPath: " + goods.getUploadPath());
+        }
 
-		for (likedGoodsImgVO goods : gLikeList) {
-			System.out.println("gName: " + goods.getGname());
-			System.out.println("gNo: " + goods.getGno());
-			System.out.println("uploadPath: " + goods.getUploadPath());
-			// 추가적으로 필요한 속성 출력
-		}
+        return "member/myPage";
+    }
 
-		return "member/myPage";
-	}
+    @PostMapping("/passwordChange")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String passwordChange(@RequestParam(value = "userNo") int userNo, @RequestParam("oldPw") String oldPw,
+                                  @RequestParam("newPw") String newPw) {
+        log.info("비밀번호 변경: userNo=" + userNo);
 
-	// 비밀번호 변경
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@PostMapping("/passwordChange")
-	public String passwordChange(@RequestParam(value = "userNo") int userNo, @RequestParam("oldPw") String oldPw,
-			@RequestParam("newPw") String newPw) {
-		log.info("비밀번호 변경: userNo=" + userNo);
-
-		if (mservice.selectOldPw(userNo, oldPw) > 0) {
-			mservice.updateNewPw(oldPw, newPw, userNo);
-			return "/member/myPage"; // 성공 메시지 추가 필요
-		}
-		// 실패 시 메시지 추가 필요
-		return "member/myPage";
-	}
+        if (mservice.selectOldPw(userNo, oldPw) > 0) {
+            mservice.updateNewPw(oldPw, newPw, userNo);
+            return "/member/myPage"; // 성공 메시지 추가 필요
+        }
+        return "member/myPage";
+    }
 
 	// 이메일 변경
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("/emailChange")
-	public String emailChange(@RequestParam(value = "userNo") int userNo, @RequestParam("newEmail") String newEmail,
-			Model model) {
-		log.info("이메일 변경: userNo=" + userNo);
-		log.info("이메일 변경: new Email=" + newEmail);
+    @GetMapping("/emailChange")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String emailChange(@RequestParam(value = "userNo") int userNo, @RequestParam("newEmail") String newEmail,
+                              Model model) {
+        log.info("이메일 변경: userNo=" + userNo);
+        log.info("이메일 변경: new Email=" + newEmail);
 
-		// 이메일 변경 성공 시
-		int updateCount = mservice.updateNewEmail(newEmail, userNo);
+        int updateCount = mservice.updateNewEmail(newEmail, userNo);
 
-		if (updateCount > 0) {
-			model.addAttribute("success", "이메일을 변경했습니다."); // 성공 메시지
-		} else {
-			model.addAttribute("error", "이메일 변경에 실패했습니다."); // 실패 메시지
-		}
+        if (updateCount > 0) {
+            model.addAttribute("success", "이메일을 변경했습니다.");
+        } else {
+            model.addAttribute("error", "이메일 변경에 실패했습니다.");
+        }
 
-		return "redirect:/member/myPage?userNo=" + userNo;
-	}
+        return "redirect:/member/myPage?userNo=" + userNo;
+    }
 
 	// 전화번호 변경
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("/phoneNumberChange")
-	public String phoneNumberChange(@RequestParam(value = "userNo") int userNo,
-			@RequestParam("oldPhoneNumber") String oldPhoneNumber,
-			@RequestParam("newPhoneNumber") String newPhoneNumber, Model model) {
-		log.info("비밀번호 변경: userNo=" + userNo);
+    @GetMapping("/phoneNumberChange")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String phoneNumberChange(@RequestParam(value = "userNo") int userNo,
+                                    @RequestParam("oldPhoneNumber") String oldPhoneNumber,
+                                    @RequestParam("newPhoneNumber") String newPhoneNumber, Model model) {
+        log.info("전화번호 변경: userNo=" + userNo);
 
-		if (mservice.selectOldPhoneNum(userNo, oldPhoneNumber) > 0) {
-			mservice.updateNewPhoneNum(oldPhoneNumber, newPhoneNumber, userNo);
-			model.addAttribute("success", "비밀번호를 변경했습니다.");
-			return "redirect:/member/myPage?userNo=" + userNo; // 성공 메시지 추가 필요
-		}
-		// 실패 시 메시지 추가 필요
-		model.addAttribute("error", "비밀번호 변경에 실패했습니다.");
-		return "redirect:/member/myPage?userNo=" + userNo;
-	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("/userReply")
-	public String userReply() {
-		System.out.println("userReply..");
-		return "/member/userReply";
-
-	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("/myCart")
-	public String myCart() {
-
-		System.out.println("myCart..");
-
-		return "/purchase/myCart";
-
-	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("/paymentList")
-	public String paymentList() {
-
-		System.out.println("paymentList..");
-
-		return "/purchase/paymentList";
-
-	}
+        if (mservice.selectOldPhoneNum(userNo, oldPhoneNumber) > 0) {
+            mservice.updateNewPhoneNum(oldPhoneNumber, newPhoneNumber, userNo);
+            model.addAttribute("success", "전화번호를 변경했습니다.");
+            return "redirect:/member/myPage?userNo=" + userNo;
+        }
+        model.addAttribute("error", "전화번호 변경에 실패했습니다.");
+        return "redirect:/member/myPage?userNo=" + userNo;
+    }
+    
+    @GetMapping("/userReply")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String userReply() {
+        System.out.println("userReply..");
+        return "/member/userReply";
+    }
+    
+    
+    @GetMapping("/myCart")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String myCart() {
+        System.out.println("myCart..");
+        return "/purchase/myCart";
+    }
+    
+    
+    @GetMapping("/paymentList")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String paymentList() {
+        System.out.println("paymentList..");
+        return "/purchase/paymentList";
+    }
 	
 	
-	//비밀번호 찾기 후 비밀번호 변경으로 이동
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("goPwChange")
-	public String goPwChange() {
-		return "/member/searchPw";
-	}
-	
+    @GetMapping("goPwChange")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String goPwChange() {
+        return "/member/searchPw";
+    }
+
 	// 비밀번호 변경
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@PostMapping("/pwChange")
-	public String pwChange(@RequestParam(value = "userNo") int userNo, 
-	                       @RequestParam("oldPw") String oldPw,
-	                       @RequestParam("newPw") String newPw, 
-	                       Model model) {
-	    log.info("비밀번호 변경: userNo=" + userNo);
+    @PostMapping("/pwChange")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String pwChange(@RequestParam(value = "userNo") int userNo, 
+                           @RequestParam("oldPw") String oldPw,
+                           @RequestParam("newPw") String newPw, 
+                           Model model) {
+        log.info("비밀번호 변경: userNo=" + userNo);
 
-	    if (mservice.selectOldPw(userNo, oldPw) > 0) {
-	        mservice.updateNewPw(oldPw, newPw, userNo);
-	        model.addAttribute("msg", "비밀번호가 변경되었습니다.");
-	        return "member/login"; // 로그인 페이지로 이동
-	    }
-	    
-	    // 실패 시 메시지 추가
-	    model.addAttribute("msg", "비밀번호 변경에 실패했습니다.");
-	    return "member/searchPw"; // 비밀번호 찾기 페이지로 이동
-	}
+        if (mservice.selectOldPw(userNo, oldPw) > 0) {
+            mservice.updateNewPw(oldPw, newPw, userNo);
+            model.addAttribute("msg", "비밀번호가 변경되었습니다.");
+            return "member/login";
+        }
+        
+        model.addAttribute("msg", "비밀번호 변경에 실패했습니다.");
+        return "member/searchPw";
+    }
 
 	//아이디 찾기 후 아이디 보여주는 화면 이동
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping("/checkMyId")
-	public String checkMyId(@RequestParam("userName") String userName, 
-	                        @RequestParam("userEmail") String userEmail, 
-	                        Model model) {
-	    log.info("Searching for userName: " + userName + " and userEmail: " + userEmail);
+    @GetMapping("/checkMyId")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String checkMyId(@RequestParam("userName") String userName, 
+                            @RequestParam("userEmail") String userEmail, 
+                            Model model) {
+        log.info("Searching for userName: " + userName + " and userEmail: " + userEmail);
 
-	    // 서비스에서 userName과 userEmail로 아이디를 조회
-	    String userId = mservice.checkMyId(userName, userEmail);
+        String userId = mservice.checkMyId(userName, userEmail);
 
-	    // userId를 모델에 담아 JSP로 전달
-	    model.addAttribute("userId", userId);
+        model.addAttribute("userId", userId);
 
-	    // 결과를 보여줄 JSP로 이동
-	    return "member/searchId";
-	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@PostMapping("/deleteUserData")
-	public boolean deleteUserData(int userNo) {
-		try {
-			mservice.deleteUserData(userNo);
-			return true; // 탈퇴 성공
-		} catch (Exception e) {
-			log.error("회원 탈퇴 중 오류 발생 - userNo: " + userNo, e);
-			return false; // 탈퇴 실패
-		}
-	}
+        return "member/searchId";
+    }
+    
+    @PostMapping("/deleteUserData")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public boolean deleteUserData(int userNo) {
+        try {
+            mservice.deleteUserData(userNo);
+            return true; // 탈퇴 성공
+        } catch (Exception e) {
+            log.error("회원 탈퇴 중 오류 발생 - userNo: " + userNo, e);
+            return false; // 탈퇴 실패
+        }
+    }
 	
 	
 	
-	@GetMapping("/goodBye")
-	public String goodBye() {
-
-		return "member/goodBye";
-		}
-	}
+    @GetMapping("/goodBye")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String goodBye() {
+        return "member/goodBye";
+    }
+}
 	
 
 	

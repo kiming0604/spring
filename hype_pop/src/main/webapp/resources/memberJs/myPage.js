@@ -194,8 +194,10 @@ function submitEmailChange() {
     console.log(f);
     const newEmail = f.newEmail.value.trim(); // 불필요한 공백 제거
     const checkNewEmail = f.checkNewEmail.value.trim(); // 불필요한 공백 제거
-    const userNo = f.userNo.value;
-    
+	const userNoElement = document.getElementById("userNo");
+	const userNo = userNoElement ? userNoElement.value : null;
+    console.log(userNo);
+
     if (!newEmail) {
         alert("새 이메일을 입력하세요.");
         console.log("No new email input"); // 
@@ -291,7 +293,8 @@ function slideRight(sliderId) {
 
 function removePopup(psNo) {
 	
-	const userNo = document.getElementById('userNo').value;
+	const userNoElement = document.getElementById("userNo");
+	const userNo = userNoElement ? userNoElement.value : null;
 	
     if (!confirm('정말로 삭제하시겠습니까?')) {
         return; // 사용자가 취소하면 함수를 종료
@@ -326,7 +329,8 @@ function removePopup(psNo) {
 
 function removeGoods(gno) {
 	
-	const userNo = document.getElementById('userNo').value;
+	const userNoElement = document.getElementById("userNo");
+	const userNo = userNoElement ? userNoElement.value : null;
 	
     if (!confirm('정말로 삭제하시겠습니까?')) {
         return; // 사용자가 취소하면 함수를 종료
@@ -361,7 +365,9 @@ function removeGoods(gno) {
 
 function removeExh(exhNo) {
 	
-	const userNo = document.getElementById('userNo').value;
+	const userNoElement = document.getElementById("userNo");
+	const userNo = userNoElement ? userNoElement.value : null;
+
 	
     if (!confirm('정말로 삭제하시겠습니까?')) {
         return; // 사용자가 취소하면 함수를 종료
@@ -398,7 +404,10 @@ function removeExh(exhNo) {
 
 // 내가 쓴 글 목록으로 가기
 function goToMyReply() {
-	location.href="/member/userReply?userNo=2";
+	const userNoElement = document.getElementById("userNo");
+	const userNo = userNoElement ? userNoElement.value : null;
+
+    location.href = `/member/userReply?userNo=${userNo}`;
 }
 
 
@@ -406,14 +415,16 @@ function goToMyReply() {
 
 // 장바구니로 가기
 function goToMyCart(){
-	
-	
-	location.href="/purchase/goCart?userNo=2";
+	const userNoElement = document.getElementById("userNo");
+	const userNo = userNoElement ? userNoElement.value : null;
+	location.href=`/purchase/goCart?userNo=${userNo}`;
 }
 
 
 // 내 결제 목록 가기
-function getPayList(userNo){
+function getPayList(){
+	const userNoElement = document.getElementById("userNo");
+	const userNo = userNoElement ? userNoElement.value : null;
 	
 	location.href=`/purchase/getPayList?userNo=${userNo}`;
 
@@ -483,6 +494,9 @@ function saveInterests() {
 	
 		
 	   const formData = new FormData();
+		const userNoElement = document.getElementById("userNo");
+		const userNo = userNoElement ? userNoElement.value : null;
+	
 
 	    // 관심사 데이터 수집 후 FormData에 추가
 	    formData.append("healthBeauty", document.querySelector('input[name="userInterest.healthBeauty"]').checked ? 1 : 0);
@@ -500,6 +514,7 @@ function saveInterests() {
 	    formData.append("collaboration", document.querySelector('input[name="userInterest.collaboration"]').checked ? 1 : 0);
 	    formData.append("entertainment", document.querySelector('input[name="userInterest.entertainment"]').checked ? 1 : 0);
 
+	    
 	    
 	    // 개별적으로 선택된 체크박스의 개수를 셈
 	    let selectedCount = 0;
@@ -527,7 +542,7 @@ function saveInterests() {
 
 	    
 	    // 서버로 POST 요청
-	    fetch('/member/api/updateUserInterests?userNo=2', {
+	    fetch(`/member/api/updateUserInterests?userNo=${userNo}`, {
 	        method: 'POST',
 	        body: formData
 	    })

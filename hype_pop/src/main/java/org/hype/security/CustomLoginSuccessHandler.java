@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hype.security.domain.CustomUser;
 import org.springframework.security.core.Authentication;
@@ -35,6 +36,9 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
         CustomUser customUser = (CustomUser) authentication.getPrincipal();
         Integer userNo = customUser.getMember().getUserNo();
         log.warn("Logged in userNo: " + userNo);
+        
+        HttpSession session = request.getSession();
+        session.setMaxInactiveInterval(10800);
 
         // 관리자 권한일 경우
         if (roleNames.contains("ROLE_ADMIN")) {
