@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -49,6 +50,7 @@ public class PartyController {
       return service.getAllParty();
    }
    
+   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
    @GetMapping("/boardInsert")
    public String goInsertBoard(Model model) {
       return "/party/insertBoard";
@@ -63,6 +65,7 @@ public class PartyController {
        return service.getExhName(searchText);
    }
    
+   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
    @PostMapping(value = "/insertBoard")
    public String insertBoard(PartyBoardVO vo) {
       int result = service.insertParty(vo);
@@ -70,6 +73,7 @@ public class PartyController {
       return "redirect:/party/partyBoard";
    }
    
+   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
    @GetMapping("/boardDetail")
    public String moveToDetail(@RequestParam int bno, Model model) {
       PartyBoardVO mvo = service.getOneParty(bno);

@@ -235,9 +235,10 @@ button:hover {
 				name="userId" required placeholder="아이디를 입력하세요."> <label
 				for="password">비밀번호</label> <input type="password" id="userPw"
 				name="userPw" required placeholder="비밀번호를 입력하세요.">
-
-
-
+            <div class="checkbox-group">
+                <input type="checkbox" id="rememberMe" name="remember-me">
+                <label for="rememberMe">로그인 상태 유지</label>
+            </div>
 			<button type="submit" class="btn btn-sec" id="loginBtn">로그인</button>
 
 		</form>

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -107,7 +108,7 @@ public class MemberController {
 
 	}
 
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/myPage")
 	public String myPage(Model model, @RequestParam("userNo") int userNo) {
 		signInVO userInfo = mservice.selectMyPageInfo(userNo);
@@ -139,6 +140,7 @@ public class MemberController {
 	}
 
 	// 비밀번호 변경
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@PostMapping("/passwordChange")
 	public String passwordChange(@RequestParam(value = "userNo") int userNo, @RequestParam("oldPw") String oldPw,
 			@RequestParam("newPw") String newPw) {
@@ -153,6 +155,7 @@ public class MemberController {
 	}
 
 	// 이메일 변경
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/emailChange")
 	public String emailChange(@RequestParam(value = "userNo") int userNo, @RequestParam("newEmail") String newEmail,
 			Model model) {
@@ -172,7 +175,7 @@ public class MemberController {
 	}
 
 	// 전화번호 변경
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/phoneNumberChange")
 	public String phoneNumberChange(@RequestParam(value = "userNo") int userNo,
 			@RequestParam("oldPhoneNumber") String oldPhoneNumber,
@@ -188,14 +191,14 @@ public class MemberController {
 		model.addAttribute("error", "비밀번호 변경에 실패했습니다.");
 		return "redirect:/member/myPage?userNo=" + userNo;
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/userReply")
 	public String userReply() {
 		System.out.println("userReply..");
 		return "/member/userReply";
 
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/myCart")
 	public String myCart() {
 
@@ -204,7 +207,7 @@ public class MemberController {
 		return "/purchase/myCart";
 
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/paymentList")
 	public String paymentList() {
 
@@ -216,12 +219,14 @@ public class MemberController {
 	
 	
 	//비밀번호 찾기 후 비밀번호 변경으로 이동
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("goPwChange")
 	public String goPwChange() {
 		return "/member/searchPw";
 	}
 	
 	// 비밀번호 변경
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@PostMapping("/pwChange")
 	public String pwChange(@RequestParam(value = "userNo") int userNo, 
 	                       @RequestParam("oldPw") String oldPw,
@@ -241,6 +246,7 @@ public class MemberController {
 	}
 
 	//아이디 찾기 후 아이디 보여주는 화면 이동
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/checkMyId")
 	public String checkMyId(@RequestParam("userName") String userName, 
 	                        @RequestParam("userEmail") String userEmail, 
@@ -256,7 +262,7 @@ public class MemberController {
 	    // 결과를 보여줄 JSP로 이동
 	    return "member/searchId";
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@PostMapping("/deleteUserData")
 	public boolean deleteUserData(int userNo) {
 		try {
