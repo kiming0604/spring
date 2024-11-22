@@ -11,7 +11,6 @@ newPasswordBtn.addEventListener('click', function() {
 document.querySelectorAll('.image-goodsItem').forEach(item => {
     // data-file-name 속성에서 파일 이름을 가져옴
     const fileName = item.getAttribute('data-file-name');
-    console.log(fileName);
     const imgElement = item.querySelector('img'); // 각 image-goodsItem 내부의 img 요소를 찾음
 
     // 이미지 파일이 존재할 경우에만 요청 수행
@@ -38,7 +37,6 @@ document.querySelectorAll('.image-goodsItem').forEach(item => {
 document.querySelectorAll('.image-popupItem').forEach(item => {
     // data-file-name 속성에서 파일 이름을 가져옴
     const fileName = item.getAttribute('data-file-name');
-    console.log(fileName);
     const imgElement = item.querySelector('img'); // 각 image-goodsItem 내부의 img 요소를 찾음
 
     // 이미지 파일이 존재할 경우에만 요청 수행
@@ -65,7 +63,6 @@ document.querySelectorAll('.image-popupItem').forEach(item => {
 document.querySelectorAll('.image-exhItem').forEach(item => {
     // data-file-name 속성에서 파일 이름을 가져옴
     const fileName = item.getAttribute('data-file-name');
-    console.log(fileName);
     const imgElement = item.querySelector('img'); // 각 image-goodsItem 내부의 img 요소를 찾음
 
     // 이미지 파일이 존재할 경우에만 요청 수행
@@ -153,14 +150,11 @@ function sendEmail() {
     
     // 버튼 비활성화
     newEmailBtn.disabled = true;
-    console.log('sendEmail....');
     fetch('/member/api/sendMail/' + userEmail)
     .then(response => response.text())
     .then(data => {
         if (data === 'ok') {
             alert('인증코드가 전송되었습니다.');
-            console.log(userEmail);
-
         } else {
             alert('이메일 전송에 실패했습니다. 다시 시도해주세요');
         }
@@ -189,18 +183,14 @@ function verifyEmailCode(){
 function submitEmailChange() {
 	
 	
-	console.log("submitEmailChange....");
     const f = document.getElementById('EmailChangeForm');
-    console.log(f);
     const newEmail = f.newEmail.value.trim(); // 불필요한 공백 제거
     const checkNewEmail = f.checkNewEmail.value.trim(); // 불필요한 공백 제거
 	const userNoElement = document.getElementById("userNo");
 	const userNo = userNoElement ? userNoElement.value : null;
-    console.log(userNo);
 
     if (!newEmail) {
         alert("새 이메일을 입력하세요.");
-        console.log("No new email input"); // 
         return false; // 이메일이 입력되지 않으면 전송 중지
     }
 
@@ -250,12 +240,10 @@ const checkNewPw = f.checkNewPw.value;
 function PhoneNumberChange() {
 	const f = document.getElementById('phoneNumberChange');
 	const userNumber = document.getElementById('userNumber').value;
- 	console.log("phoneNumberChange:"+f);
     const oldPhoneNumber = f.oldPhoneNumber.value;
     const newPhoneNumber = f.newPhoneNumber.value;
     const checkNewPhoneNumber = f.checkNewPhoneNumber.value;
-    const documentPhoneNum = 
-    console.log("oldPhoneNumber :" + oldPhoneNumber );
+  //  const documentPhoneNum = console.log("oldPhoneNumber :" + oldPhoneNumber );
     
     if (!oldPhoneNumber) {
         alert("전화번호를 입력하세요");
@@ -300,8 +288,6 @@ function removePopup(psNo) {
         return; // 사용자가 취소하면 함수를 종료
     }
 
-    console.log('removePopup...');
-    console.log(psNo);
     
     fetch(`/member/api/removePopup/${psNo}?userNo=${userNo}`, {
         method: 'DELETE', // DELETE 메서드 사용
@@ -313,7 +299,6 @@ function removePopup(psNo) {
     .then(data => {
         if (data === 'ok') {
             alert('데이터가 삭제됩니다.');
-            console.log(psNo);
            
             // 삭제된 팝업스토어를 화면에서 제거
             const popupItem = document.querySelector(`#popup-${psNo}`);
@@ -336,8 +321,6 @@ function removeGoods(gno) {
         return; // 사용자가 취소하면 함수를 종료
     }
 
-    console.log('removePopup...');
-    console.log(gno);
     
     fetch(`/member/api/removeGoods/${gno}?userNo=${userNo}`, {
         method: 'DELETE', // DELETE 메서드 사용
@@ -373,8 +356,6 @@ function removeExh(exhNo) {
         return; // 사용자가 취소하면 함수를 종료
     }
 
-    console.log('remove전시...');
-    console.log(gno);
     
     fetch(`/member/api/removeExh/${exhNo}?userNo=${userNo}`, {
         method: 'DELETE', // DELETE 메서드 사용
@@ -548,7 +529,6 @@ function saveInterests() {
 	    })
 	    .then(response => response.json())
 	    .then(data => {
-	        console.log("관심사 업데이트 결과:", data);
 	        
 	     // 관심사 업데이트 후, 해당 HTML 요소를 업데이트
 	        updateInterestDisplay(data.updatedInterests); 

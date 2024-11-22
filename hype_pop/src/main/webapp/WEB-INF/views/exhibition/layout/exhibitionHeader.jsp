@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -214,6 +214,11 @@ body {
 <body>
 	<!-- 오버레이 -->
 	<div class="overlay" id="overlay"></div>
+	<sec:authorize access="isAuthenticated()">
+		<sec:authentication property="principal" var="pinfo"/>
+   		<input type="hidden" id="userNo" value="${pinfo.member.userNo}">
+   		<input type="hidden" id="userId" value="${pinfo.member.userId}">
+	</sec:authorize>
 
 	<div class="popUpHeader">
 		<button id="mainLogoButton" onclick="showLogos()" class="noOverlay">
@@ -241,7 +246,7 @@ body {
 		<div onclick="location.href='/hypePop/popUpMain'">
 			<img src="/resources/images/popUpLogo.png" alt="팝업 스토어 로고">
 		</div>
-		<div onclick="location.href='/goodsStore/goodsMain'">
+		<div id="goodsLogo">
 			<img src="/resources/images/goodsLogo.png" alt="굿즈 스토어 로고">
 		</div>
 		<div onclick="location.href='/exhibition/exhibitionMain'">

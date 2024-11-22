@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <meta charset="UTF-8">
 <title>굿즈 스토어 상세 페이지</title>
 <style>
@@ -634,6 +635,11 @@ button:disabled {
     font-weight: bold; /* 활성화된 버튼의 텍스트 강조 */
     cursor: default; /* 클릭 불가능 표시 */
 }
+.editCommentInput{
+   width: 300px;
+   height: 25px;
+   margin-right:15px;
+}
 </style>
 </head>
 <body>
@@ -724,6 +730,4 @@ button:disabled {
 </body>
 <script type="text/javascript" src="/resources/goodsJs/gReply.js"></script>
 <script type="text/javascript" src="/resources/goodsJs/goodsDetail.js"></script>
-<script type="text/javascript" src="/resources/goodsJs/goodsHeader.js"></script>
-<script type="text/javascript" src="/resources/goodsJs/goodsNav.js"></script>
 <script type="text/javascript" src="/resources/purchaseJs/myCart.js"></script>

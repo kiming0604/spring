@@ -48,7 +48,6 @@ function submitResponse() {
                 action: 'sendInqueryNotification', // 알림 전송 동작
                 qnaNo: qnaNo  // qnaNo를 서버로 전송
             }));
-            console.log("WebSocket message sent for qnaNo:", qnaNo);
         } else {
             console.error("WebSocket is not open.");
         }

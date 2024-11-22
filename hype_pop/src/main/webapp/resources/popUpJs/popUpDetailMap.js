@@ -14,7 +14,6 @@ storeInfo = JSON.parse(storeInfo.replace(/&lt;/g, "<").replace(/&gt;/g, ">").rep
 if (navigator.geolocation) {
     if (localStorage.getItem("userLocation")) {
         const savedLocation = JSON.parse(localStorage.getItem("userLocation"));
-        console.log("저장된 위치 사용:", savedLocation);
         initMap(savedLocation.latitude, savedLocation.longitude);
     } else {
         // 사용자 위치 정보 동의를 받지 않은 경우

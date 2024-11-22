@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
@@ -88,18 +89,20 @@ input[type="text"], input[type="date"], input[type="file"] {
 #exhDetailImg:hover {
 	background-color: #0099cc; /* 호버 시 배경색 변경 */
 }
-#uploadedImages {
-    margin-top: 5px; /* 상단 여백 */
-    min-height: 70px; /* 최소 높이 */    
-    padding: 10px; /* 내부 여백 */
-}
 /* 필드 섹션 스타일 */
 #exhName, #address, #startDate, #endDate, 
 #watchTime, #watchAge, #price, #exhExp {
     padding: 2px;
 }
 /* 업로드된 이미지 섹션 */
-#uploadedImages {
+#uploadedBannerImages {
+	margin-top : 15px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#uploadedDetailImages {
+	margin-top : 15px;
     margin-bottom: 15px;
     display: flex;
     flex-wrap: wrap;

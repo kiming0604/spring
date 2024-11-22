@@ -2,7 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="sec"%>
+<head>
 <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v3s0wu5ddz"></script>
+
+
+</head>
 <div class="popUpRecommend"> 
     <h1>현재 인기있는 팝업스토어</h1>
     <div class="slider-container">

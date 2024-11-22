@@ -8,6 +8,33 @@ const amount = 10; // 한 페이지에 보여줄 리뷰 수
 checkUserLiked(psNo, userNo);
 fetchOtherReviews(psNo, userNo, page = 1);
 
+
+//모달 요소
+var modal = document.getElementById("loginModal");
+
+//모달 닫기 버튼
+var span = document.getElementsByClassName("close")[0];
+
+//모달 열기
+function openLoginModal() {
+	var modal = document.getElementById("loginModal");
+  modal.style.display = "flex"; // 모달을 보이게 설정
+}
+
+//모달 닫기
+span.onclick = function() {
+	var modal = document.getElementById("loginModal");
+  modal.style.display = "none"; // 모달을 숨김
+}
+
+//모달 외부를 클릭했을 때도 모달 닫기
+window.onclick = function(event) {
+	var modal = document.getElementById("loginModal");
+  if (event.target == modal) {
+      modal.style.display = "none";
+  }
+}
+
 function updateCancel() {
     const updateForm = document.getElementById('updateForm');
     updateForm.style.display = 'none';  // 수정 폼 숨기기
@@ -18,7 +45,6 @@ function updateCancel() {
 
 // 리뷰 작성 가능 여부 체크
 function canWriteReview(psNo, userNo) {
-	console.log("리뷰 작성 가능여부 체크중")
     return fetch('/reply/checkUserReview', {
         method: 'POST',
         headers: {
@@ -50,7 +76,6 @@ function loadUserReviews(reviews) {
 
     reviewList.innerHTML = ''; // 리뷰 목록 초기화
     
-    console.log("유저의 리뷰를 로드하는중");
 
     // 리뷰가 없을 때
     if (reviews.length === 0) {
@@ -221,7 +246,7 @@ function send(form) {
     const selectedRating = document.querySelector('#newReviewStars span.selected'); // 선택된 별점
     const psScore = window.selectedRating;
 
-    console.log(psScore);
+
 
     // userNo가 없으면 로그인 모달을 띄우고 함수 종료
     if (!userNo) {
@@ -269,7 +294,6 @@ function send(form) {
 
 // 리뷰 목록 가져오는 함수
 function fetchUserReviews(psNo, userNo) {
-	console.log("유저의 리뷰를 가져오는중")
     fetch('/reply/getUserReviews', {
         method: 'POST',
         headers: {
@@ -289,7 +313,6 @@ function fetchUserReviews(psNo, userNo) {
     	 fetchOtherReviews(psNo, userNo, page = 1); 
     })
     .catch(err => {
-        console.error('Error:', err);
         alert('리뷰를 가져오는 데 문제가 발생했습니다. 다시 시도해 주세요.');
     });
 }
@@ -304,7 +327,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	// 텍스트 값을 숫자로 변환
 	let averageRating = parseFloat(averageRatingText);
 
-	console.log("평균 별점 값: ", averageRating);  // 값이 제대로 출력되는지 확인
 
 	// 숫자 여부를 확인하고, 소수 첫째 자리까지 반올림
 	if (!isNaN(averageRating)) {
@@ -330,7 +352,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	    const fileName = fileData.value; // 이미 uuid와 filename이 결합된 값이므로 바로 사용
 	    const imgElement = document.querySelector(".popUpbanner img");
 
-	    console.log("파일 이름은 : " + fileName);  // 결합된 파일 이름을 로그로 출력
 
 	    if (fileName) {
 	        // 파일 이름 그대로 이미지 경로를 생성
@@ -471,8 +492,6 @@ document.querySelectorAll('#likeCount').forEach(button => {
         })
         .then(response => {
             if (response.ok) {
-                console.log("체크하는 곳에 보낸 는? : " + userNo);
-                console.log("체크하는 곳에 보낸 psNo? : " + psNo);
                 checkUserLiked(psNo, userNo); // 좋아요 상태 확인 및 이미지 변경
                 updateLikeCount(psNo)
             } else {
@@ -597,7 +616,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
 });
 
 function fetchOtherReviews(psNo, userNo, page = 1) {
-    console.log("유저의 리뷰를 가져오는 중");
+
 
     const reviewsList = document.getElementById('allReviewsList');
     reviewsList.innerHTML = ''; // 기존 리뷰 초기화
@@ -621,7 +640,6 @@ function fetchOtherReviews(psNo, userNo, page = 1) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
 
         // 로딩 메시지 제거
         reviewsList.innerHTML = '';
@@ -650,10 +668,10 @@ function fetchOtherReviews(psNo, userNo, page = 1) {
                     `;
                     reviewsList.innerHTML += reviewRow + commentRow;
                 });
-
-                // 페이지 업데이트
-                updatePagination(data.totalReviews);
             }
+
+            // 페이지 업데이트
+            updatePagination(data.totalReviews); // totalReviews를 업데이트 후 페이지네이션 처리
         } else {
             reviewsList.innerHTML = '<tr><td colspan="4" class="errorMessage">리뷰를 가져오는 중 오류가 발생했습니다.</td></tr>';
             console.error('가져온 데이터 형식이 올바르지 않습니다:', data);
@@ -665,16 +683,10 @@ function fetchOtherReviews(psNo, userNo, page = 1) {
     });
 }
 
-
-function changePage(page) {
-    if (page < 1 || page > totalPages) return; // 첫 페이지나 마지막 페이지를 넘지 않도록
-    currentPage = page; // 현재 페이지 업데이트
-    fetchOtherReviews(psNo, userNo, currentPage); // 새로운 페이지의 리뷰 가져오기
-    updatePagination(totalReviews); // 페이지네이션 업데이트
-}
-
 function updatePagination(totalReviews) {
-    const totalPages = Math.ceil(totalReviews / amount); // 전체 페이지 수 계산
+    // 리뷰 개수를 기준으로 전체 페이지 수 계산
+    const totalPages = Math.ceil(totalReviews / amount); 
+
     const paginationContainer = document.getElementById('pagination');
     const prevButton = document.getElementById('prevPage');
     const nextButton = document.getElementById('nextPage');
@@ -683,10 +695,15 @@ function updatePagination(totalReviews) {
     // 리뷰가 없을 때 페이지네이션 숨기기
     if (totalReviews === 0) {
         paginationContainer.style.display = 'none'; // 페이지네이션 숨기기
-        return;
-    } else {
-        paginationContainer.style.display = 'block'; // 페이지네이션 보이기
+        prevButton.style.display = 'none'; // 이전 버튼 숨기기
+        nextButton.style.display = 'none'; // 다음 버튼 숨기기
+        pageNumbers.style.display = 'none'; // 페이지 번호 숨기기
+        return; // 함수 종료
     }
+
+    // 리뷰가 있을 때 페이지네이션 보이기
+    paginationContainer.style.display = 'block'; // 페이지네이션 보이기
+    pageNumbers.style.display = 'block'; // 페이지 번호 보이기
 
     // 기존 페이지 번호 초기화
     pageNumbers.innerHTML = '';
@@ -708,6 +725,7 @@ function updatePagination(totalReviews) {
     nextButton.style.display = (currentPage === totalPages) ? 'none' : 'inline-block';
 }
 
+
 document.querySelectorAll('.hitGoods span').forEach(item => {
     item.addEventListener('click', () => {
         // 클릭한 상품의 부모 .goodsItem 요소를 선택하여 해당 input[type="hidden"]을 찾기
@@ -728,18 +746,24 @@ document.querySelectorAll('.hitGoods span').forEach(item => {
         }
     });
 });
-document.getElementById("toggleGoodsList").addEventListener("change", function() {
-    const goodsList = document.getElementById("goodsList");
-    const toggleText = this.nextSibling;
+const toggleGoodsList = document.getElementById("toggleGoodsList");
 
-    if (this.checked) {
-        goodsList.style.display = "flex"; // 상품 리스트 보이기 (flex로 표시)
-        toggleText.textContent = "상품 리스트 출력 ON"; // 텍스트 변경
-    } else {
-        goodsList.style.display = "none"; // 상품 리스트 숨기기
-        toggleText.textContent = "상품 리스트 출력 OFF"; // 텍스트 변경
-    }
-});
+if (toggleGoodsList) {
+    toggleGoodsList.addEventListener("change", function() {
+        const goodsList = document.getElementById("goodsList");
+        const toggleText = this.nextSibling;
+
+        if (!goodsList || !toggleText) return; // 널 체크
+
+        if (this.checked) {
+            goodsList.style.display = "flex"; // 상품 리스트 보이기 (flex로 표시)
+            toggleText.textContent = "상품 리스트 출력 ON"; // 텍스트 변경
+        } else {
+            goodsList.style.display = "none"; // 상품 리스트 숨기기
+            toggleText.textContent = "상품 리스트 출력 OFF"; // 텍스트 변경
+        }
+    });
+}
 //좋아요 상태 확인 함수
 function checkUserLiked(psNo, userNo) {
     fetch('/hypePop/checkUserLiked', {
@@ -751,7 +775,6 @@ function checkUserLiked(psNo, userNo) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("받은 데이터는 ? :", data); // { liked: true } 또는 { liked: false }
         
         const likeButton = document.getElementById('likeButton'); // 좋아요 버튼의 ID를 가져옴
         if (data.liked) { // true이면 좋아요가 눌린 상태
@@ -765,28 +788,6 @@ function checkUserLiked(psNo, userNo) {
     });
 }
 
-//모달 요소
-var modal = document.getElementById("loginModal");
-
-// 모달 닫기 버튼
-var span = document.getElementsByClassName("close")[0];
-
-// 모달 열기
-function openLoginModal() {
-    modal.style.display = "flex"; // 모달을 보이게 설정
-}
-
-// 모달 닫기
-span.onclick = function() {
-    modal.style.display = "none"; // 모달을 숨김
-}
-
-// 모달 외부를 클릭했을 때도 모달 닫기
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
 
 function setBackgroundImage(item, fileName) {
     if (!fileName) {

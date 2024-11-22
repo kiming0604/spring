@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
@@ -89,7 +90,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 60px;
+    padding-top: 78px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     z-index: 1001;
 }
@@ -99,9 +100,8 @@ body {
 }
 
 #logoContainer div {
-    padding: 15px;
     cursor: pointer;
-    width: 100%;
+    width: 80%;
     text-align: center;
     transition: background-color 0.3s;
 }
@@ -111,8 +111,9 @@ body {
 }
 
 #logoContainer img {
-    max-height: 50px;
-    width: auto;
+    max-width: 100%; /* 가로 영역에 맞게 이미지 크기 조정 */
+    max-height: 100%; /* 세로 영역에 맞게 이미지 크기 조정 */
+    object-fit: contain; /* 이미지가 찌그러지지 않도록 비율 유지 */
 }
 
 /* 오버레이 */
@@ -210,16 +211,17 @@ body {
 #searchBTN:hover {
     background-color: #007acc; /* 호버 시 색상 변경 */
 }
+
 </style>
 </head>
 <body>
     <!-- 오버레이 -->
     <div class="overlay" id="overlay"></div>
-   	<sec:authorize access="isAuthenticated()">
-		<sec:authentication property="principal" var="pinfo"/>
-   		<input type="hidden" id="userNo" value="${pinfo.member.userNo}">
-   		<input type="hidden" id="userId" value="${pinfo.member.userId}">
-	</sec:authorize>
+      <sec:authorize access="isAuthenticated()">
+      <sec:authentication property="principal" var="pinfo"/>
+         <input type="hidden" id="userNo" value="${pinfo.member.userNo}">
+         <input type="hidden" id="userId" value="${pinfo.member.userId}">
+   </sec:authorize>
     <div class="popUpHeader"> 
         <button id="mainLogoButton" onclick="showLogos()" class="noOverlay">
             <img src="/resources/images/mainLogo.png" alt="메인 로고" id="mainLogo">
@@ -238,13 +240,13 @@ body {
     <!-- 슬라이드 메뉴 -->
     <div id="logoContainer" class="noOverlay">
         <div onclick="location.href='/hypePop/popUpMain'">
-            <img src="/resources/images/popUpLogo.png" alt="팝업 스토어 로고">
+            <img src="/resources/images/popUpLogo.png" alt="팝업 스토어 로고" id="popLogo">
         </div>
         <div id="goodsLogo">
-            <img src="/resources/images/goodsLogo.png" alt="굿즈 스토어 로고">
+            <img src="/resources/images/goodsLogo.png" alt="굿즈 스토어 로고" id="goodsLogo">
         </div>
         <div onclick="location.href='/exhibition/exhibitionMain'">
-            <img src="/resources/images/exhibition.png" alt="전시관 로고">
+            <img src="/resources/images/exhibition.png" alt="전시관 로고" id="exLogo">
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>

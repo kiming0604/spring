@@ -22,7 +22,7 @@ window.onload = function() {
 };
 
 function fetchImage(category, fileName, imgElementId) {
-   const encodedFileName = encodeURIComponent(fileName);
+	const encodedFileName = encodeURIComponent(fileName);
     const imageUrl = `/admin/getImages/${encodedFileName}/${category}/`;    
 //    const imageUrl = `/admin/getImages/${fileName}/${category}/`;    
 
@@ -146,9 +146,9 @@ document.querySelector('#gDetailImageFile').addEventListener('input', function(e
 
 // 상품(굿즈) 등록 버튼 클릭 이벤트
 function goodsRegister() {
-   const form = document.forms[0];
-   
-   // FormData 객체 생성
+	const form = document.forms[0];
+	
+	// FormData 객체 생성
     const formData = new FormData(form);
 
     // 예외처리
@@ -194,7 +194,7 @@ function goodsRegister() {
         alert('설명글을 입력해주세요');
         return;
     }
-       
+	    
     // 폼 제출
     form.submit();
 }
@@ -202,48 +202,16 @@ function goodsRegister() {
 // **** 상품(굿즈) 수정/삭제 페이지 영역 ****
 // 수정하기 버튼 클릭 시 업데이트
 // 신규 이미지 선택 시 미리보기
-document.getElementById("gBannerImageFile").addEventListener("change", function(event) {
- const file = event.target.files[0];
- if (file) {
-     const reader = new FileReader();
-     reader.onload = function(e) {
-        const previewContainer = document.getElementById("uploadedBannerImages");
-         previewContainer.innerHTML = ''; // 이전 미리보기 내용 초기화
-         const img = document.createElement('img');
-         img.src = e.target.result;
-         img.width = 400; // 이미지 크기 조정 (필요시)
-         img.height = 500; // 이미지 크기 조정 (필요시)
-         previewContainer.appendChild(img); // 새로운 이미지 요소 추가
-     };
-     reader.readAsDataURL(file);
- }
-});
-document.getElementById("gDetailImageFile").addEventListener("change", function(event) {
-   const file = event.target.files[0];
-   if (file) {
-      const reader = new FileReader();
-        reader.onload = function(e) {
-            const previewContainer = document.getElementById("uploadedDetailImages");
-            previewContainer.innerHTML = ''; // 이전 미리보기 내용 초기화
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.width = 400; // 이미지 크기 조정 (필요시)
-            img.height = 500; // 이미지 크기 조정 (필요시)
-            previewContainer.appendChild(img); // 새로운 이미지 요소 추가
-        };
-      reader.readAsDataURL(file);
-   }
-});
 
 function goodsUpdate() {
-   const f = document.forms[0];
-   
-   const formData = new FormData(f);
-      
+	const f = document.forms[0];
+	
+	const formData = new FormData(f);
+		
     const gBannerImageFile = document.getElementById('gBannerImageFile');
     const gDetailImageFile = document.getElementById('gDetailImageFile');
     
-   // 예외처리
+	// 예외처리
     const checkboxes = f.querySelectorAll('input[type="checkbox"][name^="gcat"]');
     const selectedCategories = Array.from(checkboxes).filter(checkbox => checkbox.checked);
     if (selectedCategories.length === 0) {
@@ -289,7 +257,7 @@ function goodsUpdate() {
 
 // 삭제하기 버튼 클릭 시 업데이트
 function goodsDelete() {
-   if (confirm("정말 삭제하시겠습니까?")) {
+	if (confirm("정말 삭제하시겠습니까?")) {
         // 삭제 작업을 위한 폼 액션 설정
         document.getElementById("goodsForm").action = "/admin/gDelete";  // 삭제 요청 경로
         document.getElementById("goodsForm").submit();  // 폼 제출
@@ -298,7 +266,6 @@ function goodsDelete() {
 
 // 취소 및 리스트로 돌아가기 버튼 클릭시 메인페이지로 이동
 function backtoGList() {
-//   window.location.href = "/admin/adminPage";
-   loadGoodsStores(currentPageForGoods);
+	loadGoodsStores(currentPageForGoods);
 }
 

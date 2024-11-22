@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
@@ -82,13 +83,15 @@ input[type="text"], input[type="file"] {
 #gDetailImg:hover {
 	background-color: #0099cc; /* 호버 시 배경색 변경 */
 }
-#uploadedImages {
-    margin-top: 5px; /* 상단 여백 */
-    min-height: 70px; /* 최소 높이 */    
-    padding: 10px; /* 내부 여백 */
-}
 /* 업로드된 이미지 섹션 */
-#uploadedImages {
+#uploadedBannerImages {
+	margin-top : 15px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#uploadedDetailImages {
+	margin-top : 15px;
     margin-bottom: 15px;
     display: flex;
     flex-wrap: wrap;

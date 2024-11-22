@@ -46,7 +46,7 @@ function fetchImage(category, fileName, imgElementId) {
 // 파일 검증
 // 이미지인것만 올릴 수 있도록 변경
 const regex = new RegExp("(.*?)\\.(jpg|jpeg|png|gif|jfif|avif|webp)$");
-const MAX_SIZE = 5242880; // 5MB
+const MAX_SIZE = 10485760; 
 
 function checkFile(fileName, fileSize) {
  if (fileSize >= MAX_SIZE) {
@@ -71,28 +71,6 @@ document.querySelector('#exhDetailImg').addEventListener('click', function() {
 });
 
 // 배너 이미지 파일 미리보기 및 검증
-//document.querySelector('#exhBannerImageFile').addEventListener('input', function(event) {
-//    const files = event.target.files;
-//    const uploadedBannerImagesDiv = document.getElementById('uploadedExBannerImages');
-//    uploadedBannerImagesDiv.innerHTML = ''; // 기존 이미지 초기화
-//
-//    // 최대 한 개의 배너 이미지 파일만 선택하도록 제한
-//    const file = files[0]; // 첫 번째 파일만 선택
-//    if (file && checkFile(file.name, file.size)) {
-//        const reader = new FileReader();
-//        reader.onload = function(e) {
-//            const img = document.createElement('img');
-//            img.src = e.target.result;
-//            img.style.width = '150px';
-//            img.style.marginRight = '10px';
-//            uploadedBannerImagesDiv.appendChild(img);
-//        };
-//        reader.readAsDataURL(file);
-//    }
-//
-//    // input 값 초기화 (중복 방지)
-//    event.target.value = '';
-//});
 document.querySelector('#exhBannerImageFile').addEventListener('input', function(event) {
     const files = event.target.files;
     const uploadedExBannerImagesDiv = document.getElementById('uploadedExBannerImages');
@@ -125,29 +103,6 @@ document.querySelector('#exhBannerImageFile').addEventListener('input', function
 });
 
 // 상세 이미지 파일 미리보기 및 검증
-//document.querySelector('#exhDetailImageFile').addEventListener('input', function(event) {
-//    const files = event.target.files;
-//    const uploadedBannerImagesDiv = document.getElementById('uploadedExDetailImages');
-//    uploadedBannerImagesDiv.innerHTML = ''; // 기존 이미지 초기화
-//
-//    // 최대 한 개의 배너 이미지 파일만 선택하도록 제한
-//    const file = files[0]; // 첫 번째 파일만 선택
-//    if (file && checkFile(file.name, file.size)) {
-//        const reader = new FileReader();
-//        reader.onload = function(e) {
-//            const img = document.createElement('img');
-//            img.src = e.target.result;
-//            img.style.width = '150px';
-//            img.style.marginRight = '10px';
-//            uploadedBannerImagesDiv.appendChild(img);
-//        };
-//        reader.readAsDataURL(file);
-//    }
-//
-//    // input 값 초기화 (중복 방지)
-//    event.target.value = '';
-//});
-
 document.querySelector('#exhDetailImageFile').addEventListener('input', function(event) {
     const files = event.target.files;
     const uploadedExDetailImagesDiv = document.getElementById('uploadedExDetailImages');
@@ -335,6 +290,5 @@ function exhDelete() {
 
 // 취소 및 리스트로 돌아가기 버튼 클릭시 메인페이지로 이동
 function backtoExhList() {
-//	window.location.href = "/admin/adminPage";
 	loadExhibitions(currentPageForExh);
 }

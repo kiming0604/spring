@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 myReplyMsg += `<li dataRno=${myReply.greplyNo} class="myChat">`;
                 myReplyMsg += `<div class="chatHeader">`;
                 myReplyMsg += `<div class="userRating"></div>`;
-                myReplyMsg += `<strong class="primaryFont">내 댓글: ${userId}</strong><br/>`;
+                myReplyMsg += `<strong class="primaryFont">${userId}</strong><br/>`;
                 myReplyMsg += `<small class="pullRight">${displayTime(myReply.gupdateDate)}</small>`;
                 myReplyMsg += `<div class="kebabMenu">⋮</div>`;
                 myReplyMsg += `<div class="menuOptions" style="visibility: hidden;">`;

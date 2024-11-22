@@ -5,6 +5,7 @@
 
 <html>
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <style>
 /* 전체 레이아웃 */
 .container {

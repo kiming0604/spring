@@ -136,6 +136,7 @@ body {
     border-radius: 4px;
     background-color: #f0f0f0;
     color: #141414;
+    resize:none;
 }
 
 input[type="button"], input[type="submit"] {

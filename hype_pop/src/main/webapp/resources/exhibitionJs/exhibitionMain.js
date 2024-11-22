@@ -14,8 +14,6 @@
 	            return response.json();  
 	        })
 	        .then(data => {
-	            console.log(data);  
-
 	            const bannerContainer = document.querySelector('.banner');
 	            data.forEach((item, index) => {
 
@@ -102,7 +100,6 @@ function showBannerByIndex(index) {
  function applyFilter() {
 	    currentFilter = document.getElementById("filterSelect").value || '';
 	    searchQuery = document.getElementById("exhibitionSearchInput").value || '';
-	    console.log(searchQuery);
 
 	    currentPage = 1; 
 	    loadExhibitions(); 
@@ -157,31 +154,37 @@ function showBannerByIndex(index) {
                          </div>`;
                      exhibitionList.appendChild(li);
                  });
-             }
 
-             // '더보기' 버튼 표시 여부
-             if (!exhibitionData || exhibitionData.length === 0) {
-                 loadMoreButton.style.display = 'none';
-             } else {
+                 // '더보기' 버튼 표시 여부
                  loadMoreButton.style.display = 'block'; // 데이터가 있으면 표시
+             } else {
+                 // 전시회 데이터가 없을 경우 메시지 표시
+                 const noExhibitionMessage = document.createElement("p");
+                 noExhibitionMessage.textContent = "전시회가 없습니다.";
+                 noExhibitionMessage.style.textAlign = "center"; // 중앙 정렬
+                 noExhibitionMessage.style.marginTop = "20px"; // 여백 추가
+                 exhibitionList.appendChild(noExhibitionMessage);
+
+                 // '더보기' 버튼 숨김
+                 loadMoreButton.style.display = 'none';
              }
 
              // 배너 이미지 가져오기
              fetch('/exhibition/exhbannerImg')
-             .then(response => response.json())
-             .then(bannerData => {
-                 bannerData.forEach(banner => {
-                     const exhibitionElement = document.getElementById(`banner-${banner.exhNo}`);
-                     if (exhibitionElement) {
-                         // 배너 이미지 URL을 uuid_fileName 형식으로 설정
-                         const encodedImgUrl = encodeURIComponent(`${banner.uuid}_${banner.fileName}`);
-                         exhibitionElement.style.backgroundImage = `url('/exhibition/exhibitionsBannerImages/${encodedImgUrl}')`;
-                     }
+                 .then(response => response.json())
+                 .then(bannerData => {
+                     bannerData.forEach(banner => {
+                         const exhibitionElement = document.getElementById(`banner-${banner.exhNo}`);
+                         if (exhibitionElement) {
+                             // 배너 이미지 URL을 uuid_fileName 형식으로 설정
+                             const encodedImgUrl = encodeURIComponent(`${banner.uuid}_${banner.fileName}`);
+                             exhibitionElement.style.backgroundImage = `url('/exhibition/exhibitionsBannerImages/${encodedImgUrl}')`;
+                         }
+                     });
+                 })
+                 .catch(error => {
+                     console.error('Error loading banner images:', error);
                  });
-             })
-             .catch(error => {
-                 console.error('Error loading banner images:', error);
-             });
          })
          .catch(error => {
              console.error('Error loading exhibitions:', error);

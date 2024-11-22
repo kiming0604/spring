@@ -3,8 +3,11 @@ const searchIdBtn = document.getElementById('searchIdBtn');
 const customAlert = document.getElementById('customAlert');
 
 document.getElementById('redirect').value = document.referrer;
-console.log(document.getElementById('redirect').value);
-
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('error')) {
+    alert("아이디 또는 비밀번호가 잘못되었습니다.");
+    window.location.href = "/member/login";
+}
 
 
 //로그페이지 아이디 찾기 버튼 클릭
@@ -28,8 +31,6 @@ sendEmailBtn.addEventListener('click', function() {
    const userEmail = document.getElementById('userEmail').value;
    const userName = document.getElementById('userName').value;
 
-   console.log('sendEmail....');
-
    // 이메일 체크 비동기(post)
    fetch('/member/api/checkEmail', {
       method: 'POST',
@@ -46,15 +47,13 @@ sendEmailBtn.addEventListener('click', function() {
            setTimeout(function(){
            customAlert.style.display = 'none';
         }, 2000);
-         console.log(userEmail);
 
-         // 이메일 전송 비동기
+        비동기
          return fetch('/member/api/sendMail/' + userEmail)
             .then(response => response.text())
             .then(result => {
                if (result === 'ok') {
                   
-                  console.log(userEmail);
                } else {
                   alert('이메일 전송에 실패했습니다. 다시 시도해주세요');
                }
@@ -153,11 +152,9 @@ document.getElementById('confirmId').addEventListener('click', function() {
         method: 'GET',
     })
     .then(response => {
-        console.log('Response:', response); // 서버 응답 확인
         return response.text();
     })
     .then(text => {
-        console.log('Response Text:', text); // 변환된 데이터 확인
         alert(text); // 서버에서 받은 메시지를 알림으로 표시
     })
     .catch(err => {
@@ -174,10 +171,6 @@ document.getElementById('sendEmailBtnPw').addEventListener('click', function() {
    const userEmail = document.getElementById('userEmailPw').value;
    const userId= document.getElementById('userIdSearchPw').value;
    
-   console.log('userEmail:', userEmail);
-   console.log('userId:', userId);
-   
-   console.log('sendEmail....');
    // 이메일 체크 비동기(post)
    fetch('/member/api/checkEmailSeachPw', {
       method: 'POST',
@@ -194,7 +187,6 @@ document.getElementById('sendEmailBtnPw').addEventListener('click', function() {
            setTimeout(function(){
            customAlert.style.display = 'none';
         }, 2000);
-         console.log(userEmail);
 
          // 이메일 전송 비동기
          return fetch('/member/api/sendMail/' + userEmail)
@@ -202,7 +194,6 @@ document.getElementById('sendEmailBtnPw').addEventListener('click', function() {
             .then(result => {
                if (result === 'ok') {
                   
-                  console.log(userEmail);
                   alert('이메일 전송이 완료되었습니다.');
                } else {
                   alert('이메일 전송에 실패했습니다. 다시 시도해주세요');

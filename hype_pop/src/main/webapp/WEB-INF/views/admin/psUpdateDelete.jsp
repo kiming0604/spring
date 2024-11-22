@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
@@ -104,6 +105,7 @@ input[type="date"] {
 }
 /* 업로드된 이미지 섹션 */
 #uploadedImages {
+	margin-top : 15px;
     margin-bottom: 15px;
     display: flex;
     flex-wrap: wrap;
@@ -201,7 +203,7 @@ button:hover {
 	<button type="button" id="psCancel" onclick="backtoPsList();">취소 및 리스트로 돌아가기</button>	
     <button type="button" id="psDelete" onclick="popStoreDelete()">삭제</button>
     <button type="button" id="psUpdate" onclick="popStoreUpdate();">수정완료</button>
-    <button type="button" id="backToMainPage" onclick="backToMainPage();">메인 페이지</button>
+    <button type="button" id="backToMainPage" onclick="backToMainPage();">관리자 메인 페이지</button>
 	
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  
 <script type="text/javascript" src="/resources/adminJs/adminPopUp.js"></script>  

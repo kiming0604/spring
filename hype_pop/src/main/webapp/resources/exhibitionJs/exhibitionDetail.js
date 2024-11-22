@@ -62,7 +62,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 let userNoElement = document.getElementById("userNo");
 let userNo = userNoElement ? userNoElement.value : null;
-console.log(userNo);
 // 특정 섹션을 표시하고 나머지 섹션은 숨기기
 function showSection(visibleSectionId) {
     const sections = ['viewingInfo', 'detailsSection', 'replySection'];
@@ -191,7 +190,6 @@ function toggleHeart(element) {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            console.log(isActive ? "좋아요가 등록되었습니다." : "좋아요가 삭제되었습니다.");
 
             // 좋아요 개수 업데이트
             const countChange = isActive ? 1 : -1;

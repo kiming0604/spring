@@ -1,61 +1,37 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib uri = "http://www.springframework.org/security/tags" prefix = "sec" %>   
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <title>Insert title here</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            
-        }
-         .navBar {
-        display: flex;
-        justify-content: center;
-        background-color: #333;
-        padding: 10px;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        z-index: 100; /* 원하는 우선순위 값으로 설정 */
-    }
-        .navBar a {
-            color: white;
-            text-decoration: none;
-            padding: 14px 20px;
-            text-align: center;
-        }
-        .navBar a:hover {
-            background-color: #575757;
-            transition: background-color 0.3s;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>푸터 예제</title>
+<style>
+.footer-container {
+    background-color: #f8f8f8;
+    border-top: 1px solid #ccc;
+    text-align: center;
+    padding: 20px; /* 내부 여백 */
+    padding-bottom: 65px;
+    margin-top: 20px;
+}
+.footer-contact h4 {
+    margin-bottom: 10px;
+    padding: 5px;
+    color: black;
+}
+</style>
 </head>
 <body>
-      <sec:authorize access="isAuthenticated()">
-      <sec:authentication property="principal" var="phi"/>
-   </sec:authorize>
-    <div class="navBar">
-       <a href="/hypePop/search/noData">팝업스토어 전체 보기</a>
-       <a href="javascript:resetSearch();">굿즈 전체 보기</a>
-       <a href="/exhibition/exhibitionMain">전시회 메인 페이지</a>
-       <a href="/hypePop/calendar">캘린더</a>
-       <a href="/party/partyBoard">파티구하기</a>
-       <sec:authorize access="!isAuthenticated()">
-       <a href="/member/login">로그인</a>
-       </sec:authorize>
-       <sec:authorize access="isAuthenticated()">
-       <a href="/logout">로그아웃</a>
-       <a href="/member/myPage?userNo=${phi.member.userNo}">마이페이지</a>
-       </sec:authorize>
-       <a href="/hypePop/customerMain">고객센터</a>
+
+    <!-- 푸터 내용 -->
+    <div class="footer-container">
+	    <div class="footer-contact">
+	        <h4>Address. 서울특별시 종로구 종로12길 15, 2층/5층/8~10층(관철동 13-13) | E-mail. hypePop@hypepop.or.kr | 사업자등록번호 123-45-67890호</h4>
+	        <h4>Copyrights 2024 by HYPE. All right reserved.</h4>
+	    </div>
     </div>
+
+    <!-- 네비게이션 바 -->
+    <jsp:include page="exhibitionNavBar.jsp"/>
+
 </body>
-<script type="text/javascript">
-function resetSearch() {
-    localStorage.setItem('searchText', "");
-    location.href = "/goodsStore/goodsSearch";
-}
-</script>
 </html>

@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
     let userNoElement = document.getElementById("userNo");
     let userNo = userNoElement ? userNoElement.value : null;
-    console.log(userNo);
     const interestCheckbox = document.getElementById('myInterest');
     const likeCheckbox = document.getElementById('myLike');
     var isLoggedIn = (userNo !== null && userNo !== undefined && userNo !== '');

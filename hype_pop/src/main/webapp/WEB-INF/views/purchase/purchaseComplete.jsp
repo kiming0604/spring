@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
     <meta charset="UTF-8">
     <title>구매 완료</title>
     <style>

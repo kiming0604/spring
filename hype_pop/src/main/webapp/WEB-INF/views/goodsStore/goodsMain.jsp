@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
@@ -508,5 +509,4 @@ button:disabled {
 	<jsp:include page="layout/goodsNavBar.jsp" />
 </body>
 <script type="text/javascript" src="/resources/goodsJs/goodsMain.js"></script>
-<script type="text/javascript" src="/resources/goodsJs/goodsNav.js"></script>
 </html>

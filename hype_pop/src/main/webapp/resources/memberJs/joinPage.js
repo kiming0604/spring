@@ -190,8 +190,6 @@ function closePolicyModal() {
 }
 
 function policyModal(type) {
-    console.log("type: " + type);
-
     // REST Controller로 보내기
     fetch(`/member/api/getPolicyContent?type=${type}`, {
 		        method: 'GET',
@@ -210,7 +208,6 @@ function policyModal(type) {
         })
         .then(data => {
             // 모달 내용 업데이트
-        	console.log(data);
             document.getElementById('modalContent').innerHTML = data;
             openPolicyModal();
         })

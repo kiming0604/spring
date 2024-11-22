@@ -164,6 +164,17 @@ public class PurchaseController {
            return "/purchase/goodsPurchase"; // 寃곗젣 �떎�뙣 �떆 �떎�떆 寃곗젣 �럹�씠吏�濡� �씠�룞
         // }
     }
+    
+    @GetMapping("/payInfoPage")
+    public String payInfoPage(@RequestParam("grandTotal") int grandTotal, @RequestParam("userNo") int userNo, Model model) {
+        // 전달받은 grandTotal 값을 모델에 추가
+        model.addAttribute("grandTotal", grandTotal);
+        signInVO payInfo = pservice.getPayInfo(userNo);
+        model.addAttribute("getPayInfo", payInfo);
+
+        // 결제 정보 페이지로 이동
+        return "/purchase/payInfoPage";
+    }
 }
 
 

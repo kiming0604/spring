@@ -229,36 +229,39 @@ function handleReplyStatusChange(pageNum = 1, amount = 5) {
                 (isReplyChecked !== undefined ? `&answered=${isReplyChecked}` : '');
 
     fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            inquiryList.innerHTML = '';
-            totalPages = Math.ceil(data.totalCount / amount);
+    .then(response => response.json())
+    .then(data => {
+        inquiryList.innerHTML = '';
+        totalPages = Math.ceil(data.totalCount / amount);
 
-            if (data.inquiries.length === 0) {
-                inquiryList.innerHTML = '<p>문의 없음</p>';
-            } else {
-                data.inquiries.forEach(inquiry => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('inquiry');
+        if (data.inquiries.length === 0) {
+            inquiryList.innerHTML = '<p>문의 없음</p>';
+        } else {
+            data.inquiries.forEach(inquiry => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('inquiry');
 
-                    // 클릭 시 이동하는 이벤트 리스너
-                    listItem.addEventListener('click', function() {
-                        location.href = `/support/inquiryInfo?qnaNo=${inquiry.qnaNo}`;
-                    });
-
-                    const hasAnswer = inquiry.qnaAnswer ? '답변 완료' : '답변 대기 중';
-                    listItem.innerHTML = `
-                        <span class="inquiryType">${inquiry.qnaType}</span>
-                        <span class="inquiryTitle">${inquiry.qnaTitle}</span>
-                        <span class="inquiryRegDate">${new Date(inquiry.qnaRegDate).toLocaleDateString()}</span>
-                        <span class="answerStatus">${hasAnswer}</span>
-                    `;
-                    inquiryList.appendChild(listItem);
+                // 클릭 시 이동하는 이벤트 리스너
+                listItem.addEventListener('click', function() {
+                    location.href = `/support/inquiryInfo?qnaNo=${inquiry.qnaNo}`;
                 });
-            }
-            updateInquiryPagination();
-        })
-        .catch(error => console.error('Fetch error:', error));
+
+                // 답변 상태 설정
+                const hasAnswer = inquiry.qnaAnswer ? '답변 완료' : '답변 대기 중';
+                const answerColor = inquiry.qnaAnswer ? 'green' : 'red'; // 색상 설정
+
+                listItem.innerHTML = `
+                    <span class="inquiryType">${inquiry.qnaType}</span>
+                    <span class="inquiryTitle">${inquiry.qnaTitle}</span>
+                    <span class="inquiryRegDate">${new Date(inquiry.qnaRegDate).toLocaleDateString()}</span>
+                    <span class="answerStatus" style="color: ${answerColor};">${hasAnswer}</span>
+                `;
+                inquiryList.appendChild(listItem);
+            });
+        }
+        updateInquiryPagination();
+    })
+    .catch(error => console.error('Fetch error:', error));
 }
 
 window.onload = function() {

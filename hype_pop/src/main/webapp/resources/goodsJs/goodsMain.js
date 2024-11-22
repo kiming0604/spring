@@ -58,8 +58,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 	let userNoElement = document.getElementById("userNo");
 	let userNo = userNoElement ? userNoElement.value : null;
-	console.log(userNo);
-	
 	
     function setBackgroundImage(item) {
         const fileName = item.querySelector("#fileName").value;

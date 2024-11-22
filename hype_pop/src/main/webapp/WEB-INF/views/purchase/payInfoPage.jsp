@@ -14,6 +14,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <meta charset="UTF-8">
 <title>결제 정보 입력</title>
 <link rel="stylesheet"

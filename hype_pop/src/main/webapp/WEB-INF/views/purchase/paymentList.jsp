@@ -4,11 +4,10 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<link rel="icon" href="/resources/images/favicon.ico">
 <meta charset="UTF-8">
 <title>결제 목록</title>
 <style>
-
-
 body {
 	font-family: 'Noto Sans KR', Arial, sans-serif;
 	margin: 0;
@@ -167,7 +166,6 @@ body {
 	background-color: #005fcc;
 }
 
-
 .navbar ul li a {
 	line-height: 5; /* 텍스트 줄 간격을 늘려서 아래로 내려줌 */
 }
@@ -176,11 +174,11 @@ body {
 <body>
 	<jsp:include page="layout/popUpHeader.jsp" />
 	<div class="container">
-		
+
 		<header class="purchase-header">
 			<h2>결제 목록</h2>
 		</header>
-	
+
 
 		<section class="purchase-list" id="purchase-list-container">
 			<c:set var="previousOrderId" value="null" />
@@ -206,11 +204,18 @@ body {
 					<div class="item-image" id="item-${item.gno}"
 						data-file-name="${img.uuid}_${img.fileName}">
 						<input type="hidden" value="${img.uuid}_${img.fileName}"
-							id="fileName"> <img id="item-img-${item.gno}"
+							class="file-name" /> <img id="item-img-${item.gno}"
 							alt="${item.gname}" />
 					</div>
 				</c:forEach>
 			</c:if>
+			<c:if test="${empty item.gimg}">
+				<div class="item-image">
+					<img id="item-img-${item.gno}" alt="${item.gname}"
+						src="/path/to/default-image.jpg" />
+				</div>
+			</c:if>
+
 
 			<div class="item-details">
 				<h3 class="item-name">상품명: ${item.gname}</h3>
@@ -235,7 +240,17 @@ body {
 	<button id="loadMoreBtn" data-page="1"
 		style="display: block; margin: 20px auto;">더보기</button>
 	</div>
-	<br><br><br><br><br>	<br><br><br><br><br><br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 	<!-- container div 끝 -->
 	<jsp:include page="layout/popUpNavBar.jsp" />
 	<jsp:include page="layout/popUpFooter.jsp" />
