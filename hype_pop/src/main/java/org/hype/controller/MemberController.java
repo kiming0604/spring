@@ -44,23 +44,23 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/member/*")
 public class MemberController {
 
-	@Autowired
-	private MemberService mservice;
-	
+   @Autowired
+   private MemberService mservice;
+   
     @Autowired
     private PasswordEncoder pwencoder;
-	
+   
 
 
 
-	// 로그인페이지로 이동
+   // 濡쒓렇 씤 럹 씠吏 濡   씠 룞
     @GetMapping("/login")
     @PreAuthorize("permitAll()")  
     public String login() {
         return "member/login";
     }
 
-	
+   
     @GetMapping("/join")
     @PreAuthorize("permitAll()") 
     public String joinPage() {
@@ -75,7 +75,7 @@ public class MemberController {
         svo.setUserPw(pwencoder.encode(svo.getUserPw()));
         log.warn("join!!!!!!!!!!!!!!!");
 
-        // bean 내부의 필드 값 확인 코드
+        // bean  궡遺  쓽  븘 뱶 媛   솗 씤 肄붾뱶
         Method[] methods = svo.getClass().getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().startsWith("get")) {
@@ -93,8 +93,8 @@ public class MemberController {
         }
 
         if (mservice.checkDuplicateId(svo.getUserId())) {
-            model.addAttribute("errorMessage", "이미 존재하는 아이디입니다.");
-            return "member/joinForm"; // 중복 시 회원가입 폼으로 돌아가기
+            model.addAttribute("errorMessage", " 씠誘  議댁옱 븯 뒗  븘 씠 뵒 엯 땲 떎.");
+            return "member/joinForm"; // 以묐났  떆  쉶 썝媛  엯  뤌 쑝濡   룎 븘媛 湲 
         }
         mservice.joinMember(svo);
 
@@ -130,48 +130,48 @@ public class MemberController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String passwordChange(@RequestParam(value = "userNo") int userNo, @RequestParam("oldPw") String oldPw,
                                   @RequestParam("newPw") String newPw) {
-        log.info("비밀번호 변경: userNo=" + userNo);
+        log.info("鍮꾨 踰덊샇 蹂 寃 : userNo=" + userNo);
 
         if (mservice.selectOldPw(userNo, oldPw) > 0) {
             mservice.updateNewPw(oldPw, newPw, userNo);
-            return "/member/myPage"; // 성공 메시지 추가 필요
+            return "/member/myPage"; //  꽦怨  硫붿떆吏  異붽   븘 슂
         }
         return "member/myPage";
     }
 
-	// 이메일 변경
+   //  씠硫붿씪 蹂 寃 
     @GetMapping("/emailChange")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String emailChange(@RequestParam(value = "userNo") int userNo, @RequestParam("newEmail") String newEmail,
                               Model model) {
-        log.info("이메일 변경: userNo=" + userNo);
-        log.info("이메일 변경: new Email=" + newEmail);
+        log.info(" 씠硫붿씪 蹂 寃 : userNo=" + userNo);
+        log.info(" 씠硫붿씪 蹂 寃 : new Email=" + newEmail);
 
         int updateCount = mservice.updateNewEmail(newEmail, userNo);
 
         if (updateCount > 0) {
-            model.addAttribute("success", "이메일을 변경했습니다.");
+            model.addAttribute("success", " 씠硫붿씪 쓣 蹂 寃쏀뻽 뒿 땲 떎.");
         } else {
-            model.addAttribute("error", "이메일 변경에 실패했습니다.");
+            model.addAttribute("error", " 씠硫붿씪 蹂 寃쎌뿉  떎 뙣 뻽 뒿 땲 떎.");
         }
 
         return "redirect:/member/myPage?userNo=" + userNo;
     }
 
-	// 전화번호 변경
+   //  쟾 솕踰덊샇 蹂 寃 
     @GetMapping("/phoneNumberChange")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String phoneNumberChange(@RequestParam(value = "userNo") int userNo,
                                     @RequestParam("oldPhoneNumber") String oldPhoneNumber,
                                     @RequestParam("newPhoneNumber") String newPhoneNumber, Model model) {
-        log.info("전화번호 변경: userNo=" + userNo);
+        log.info(" 쟾 솕踰덊샇 蹂 寃 : userNo=" + userNo);
 
         if (mservice.selectOldPhoneNum(userNo, oldPhoneNumber) > 0) {
             mservice.updateNewPhoneNum(oldPhoneNumber, newPhoneNumber, userNo);
-            model.addAttribute("success", "전화번호를 변경했습니다.");
+            model.addAttribute("success", " 쟾 솕踰덊샇瑜  蹂 寃쏀뻽 뒿 땲 떎.");
             return "redirect:/member/myPage?userNo=" + userNo;
         }
-        model.addAttribute("error", "전화번호 변경에 실패했습니다.");
+        model.addAttribute("error", " 쟾 솕踰덊샇 蹂 寃쎌뿉  떎 뙣 뻽 뒿 땲 떎.");
         return "redirect:/member/myPage?userNo=" + userNo;
     }
     
@@ -197,36 +197,36 @@ public class MemberController {
         System.out.println("paymentList..");
         return "/purchase/paymentList";
     }
-	
-	
+   
+   
     @GetMapping("goPwChange")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String goPwChange() {
         return "/member/searchPw";
     }
 
-	// 비밀번호 변경
+   // 鍮꾨 踰덊샇 蹂 寃 
     @PostMapping("/pwChange")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String pwChange(@RequestParam(value = "userNo") int userNo, 
                            @RequestParam("oldPw") String oldPw,
                            @RequestParam("newPw") String newPw, 
                            Model model) {
-        log.info("비밀번호 변경: userNo=" + userNo);
+        log.info("비밀번호 변경 요청: userNo={}, oldPw={}, newPw={}"+ userNo+oldPw+ newPw);
 
-        if (mservice.selectOldPw(userNo, oldPw) > 0) {
+        boolean isOldPwValid = mservice.selectOldPw(userNo, oldPw) > 0;
+
+        if (isOldPwValid) {
             mservice.updateNewPw(oldPw, newPw, userNo);
-            model.addAttribute("msg", "비밀번호가 변경되었습니다.");
-            return "member/login";
+            model.addAttribute("msg", "鍮꾨 踰덊샇媛  蹂 寃쎈릺 뿀 뒿 땲 떎.");
+            return "member/searchPwSuccess";
         }
         
-        model.addAttribute("msg", "비밀번호 변경에 실패했습니다.");
+        model.addAttribute("msg", "鍮꾨 踰덊샇 蹂 寃쎌뿉  떎 뙣 뻽 뒿 땲 떎.");
         return "member/searchPw";
     }
 
-	//아이디 찾기 후 아이디 보여주는 화면 이동
+   // 븘 씠 뵒 李얘린  썑  븘 씠 뵒 蹂댁뿬二쇰뒗  솕硫   씠 룞
     @GetMapping("/checkMyId")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String checkMyId(@RequestParam("userName") String userName, 
                             @RequestParam("userEmail") String userEmail, 
                             Model model) {
@@ -244,27 +244,27 @@ public class MemberController {
     public boolean deleteUserData(int userNo) {
         try {
             mservice.deleteUserData(userNo);
-            return true; // 탈퇴 성공
+            return true; //  깉 눜  꽦怨 
         } catch (Exception e) {
-            log.error("회원 탈퇴 중 오류 발생 - userNo: " + userNo, e);
-            return false; // 탈퇴 실패
+            log.error(" 쉶 썝  깉 눜 以   삤瑜  諛쒖깮 - userNo: " + userNo, e);
+            return false; //  깉 눜  떎 뙣
         }
     }
-	
-	
-	
+   
+   
+   
     @GetMapping("/goodBye")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String goodBye() {
         return "member/goodBye";
     }
 }
-	
+   
 
-	
+   
 
 
-	
+   
 
 
     

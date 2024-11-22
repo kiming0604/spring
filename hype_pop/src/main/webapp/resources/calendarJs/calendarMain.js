@@ -40,7 +40,33 @@ document.addEventListener('DOMContentLoaded', function() {
             // 날짜를 달력에 추가
             calendarDays.insertAdjacentHTML('beforeend', `<td ${dayClass} ${todayClass} class="monthDate">${i}</td>`);
             
+        }   const scrollUpButton = document.getElementById("scrollUp");
+        const scrollDownButton = document.getElementById("scrollDown");
+
+        // 최상단으로 스크롤
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // 최하단으로 스크롤
+        function scrollToBottom() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // 스크롤 상태에 따라 버튼 보이기/숨기기 설정
+        function checkScrollPosition() {
+            if (window.scrollY === 0) {
+                scrollUpButton.style.display = 'none'; // 위 버튼 숨기기
+                scrollDownButton.style.display = 'block'; // 아래 버튼 보이기
+            } else if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                scrollUpButton.style.display = 'block'; // 위 버튼 보이기
+                scrollDownButton.style.display = 'none'; // 아래 버튼 숨기기
+            } else {
+                scrollUpButton.style.display = 'block'; // 위 버튼 보이기
+                scrollDownButton.style.display = 'block'; // 아래 버튼 보이기
+            }
+        }
+
         const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value);
         const noSelectedCat = selectedCategories.length === 0; 
         const isInterestChecked = document.getElementById('myInterest').checked;
@@ -341,7 +367,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // 초기 화면 로드시 데이터 불러오기
     loadCheckboxState(); // 체크박스 상태 복원 및 초기화
     updateCalendar();
+    
+    
 });
+
+
 
 // 로그인 모달을 표시하는 함수
 function showLoginModal() {
@@ -365,3 +395,4 @@ function showLoginModal() {
         }
     };
 }
+

@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> <!-- fn 라이브러리 추가 -->
-<head>
-<link rel="icon" href="/resources/images/favicon.ico">
-</head>
 	<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v3s0wu5ddz"></script>
 <!-- 팝업스토어 배너 및 좋아요 수 -->
 <!-- 팝업스토어 배너 및 좋아요 수 --><div class="popUpbanner">
